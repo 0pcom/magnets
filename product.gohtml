@@ -1,0 +1,31 @@
+{{define "product.gohtml"}}
+<!DOCTYPE html>
+<a class="action" href="/about">About</a>
+<br>
+<div id="content">
+<div class="Product">
+  <h1>{{.Name}}</h1>
+<div class="actions">
+<a class="action" href="/product/{{.PartNo}}/edit">edit</a>
+</div>
+<br>
+<div>
+</div>
+<br>
+Part Number: {{.PartNo}}
+<br>
+Price ${{.Price}}
+<br>
+Description:
+<br>
+{{.Description1}}</td>
+<br>
+Category: {{.Category}}
+<br>
+<td><a class="action" href="/products/delete/process?id={{.ID}}">Delete</a></td>
+</tr>
+
+
+</div>
+</div>
+{{end}}

@@ -1,0 +1,53 @@
+{{define "products.gohtml"}}
+<!DOCTYPE html>
+<a class="action" href="/about">About</a>
+<br>
+<div id="content">
+<div class="Products">
+<h1>Product Listing</h1>
+<div class="actions">
+<a class="action" href="/products/create">Create New Product</a>
+</div>
+<br>
+<div>
+<!--
+<p>Type something in the input field to search the table for name, email, or category:</p>
+-->
+</div>
+<br>
+<table class="table table-sm table-bordered ">
+<thead class="thead-dark">
+
+<tr>
+<th>ID</th>
+<th>name</th>
+<th>partno</th>
+<th>price</th>
+<th>description</th>
+<th>category</th>
+<th scope="col" colspan="3"> </th>
+</tr>
+
+</thead>
+
+<tbody id="myTable">
+{{range .}}
+<tr>
+<td>{{.ID}}</td>
+<td>{{.Name}}</td>
+<td>{{.PartNo}}</td>
+<td>${{.Price}}</td>
+<td>{{.Description1}}</td>
+<td>{{.Category}}</td>
+<td><a class="action" href="/product/{{.PartNo}}">View</a></td>
+<td><a class="action" href="/products/update?id={{.ID}}">Edit</a></td>
+<td><a class="action" href="/products/delete/process?id={{.ID}}">Delete</a></td>
+</tr>
+{{end}}
+</tbody>
+
+</table>
+
+</div>
+</div>
+{{end}}
