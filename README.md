@@ -24,7 +24,17 @@ cockroach node is started
 in a new terminal:
 ```
 make db-secure
+```
+
+Sync dependencies
+```
+go mod init
+go mod vendor -v
+```
+
+Run the application
+```
 go run main.go
 ```
 
-server starts on 127.0.0.1:8084/
+server starts on 127.0.0.1:8040/
