@@ -9,7 +9,7 @@ Tested on Archlinux
 ## Prerequisite
 
 ```
-yay -S cockroachdb-git go
+yay -S cockroachdb-git golang
 ```
 
 ## Run

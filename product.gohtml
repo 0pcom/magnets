@@ -1,19 +1,36 @@
 {{define "product.gohtml"}}
 <!DOCTYPE html>
-<a class="action" href="/about">About</a>
-<br>
+<link rel="stylesheet" href="https://cdn.snipcart.com/themes/v3.0.31/default/snipcart.css" />
+<script async src="https://cdn.snipcart.com/themes/v3.0.31/default/snipcart.js"></script>
+<div hidden id="snipcart" data-api-key="ZjMxZTEwMzEtMzFhZS00YjQyLTgxNDMtMTM4ZjVlZmFlMDY1NjM3MjkzMjU0MTU5NTQyMzU0"></div>
+<br><center>
+
 <div id="content">
 <div class="Product">
   <h1>{{.Name}}</h1>
-<div class="actions">
-<a class="action" href="/product/{{.PartNo}}/edit">edit</a>
-</div>
 <br>
 <div>
   <img src="/{{.Image1}}" alt="{{.Name}}">
 </div>
 <br>
-
+<div class="actions">
+  {{ if le .Qty 0 }}
+  <span>Out of stock</span>
+  {{ else }}
+  <button
+  class="snipcart-add-item"
+  data-item-id="{{ .PartNo }}"
+  data-item-name="{{.Name}}"
+  data-item-price="{{.Price}}"
+  data-item-image=""
+  data-item-url="/"
+  data-item-max-quantity="10"
+  data-item-description="{{.Description1}}">
+  Add to cart
+</button>
+{{end}}
+</div>
+<br>
 Part Number: {{.PartNo}}
 <br>
 Price ${{.Price}}
@@ -24,10 +41,30 @@ Description:
 <br>
 Category: {{.Category}}
 <br>
-<td><a class="action" href="/products/delete/process?id={{.ID}}">Delete</a></td>
 </tr>
 
 
 </div>
 </div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<a class="action" href="/about">About</a>
+</center>
+
 {{end}}

@@ -364,7 +364,7 @@ desc = "test entry to database"
 descp = &desc
 img := "gallery/test.jpg"
 imgp := &img
-product1 := Product{Name: "dummy", PartNo:"test", Description1:descp, Price:1.00, Image1:imgp}
+product1 := Product{Name: "dummy", PartNo:"test", Description1:descp, Price:1.00, Image1:imgp, Qty:10}
 err := Products(sess).InsertReturning(&product1)
 if err != nil {
     log.Fatal("sess.Save: ", err)

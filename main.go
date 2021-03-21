@@ -9,7 +9,7 @@ import (
 //	"os"
 //	"sort"
 //	"strings"
-	"github.com/0pcom/magnets1/gorilla"
+	"github.com/0pcom/magnets/gorilla"
 )
 
 const port = 8040
