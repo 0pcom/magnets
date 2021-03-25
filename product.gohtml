@@ -1,16 +1,22 @@
 {{define "product.gohtml"}}
 <!DOCTYPE html>
+<html lang="en">
+<head>
 <link rel="stylesheet" href="https://cdn.snipcart.com/themes/v3.0.31/default/snipcart.css" />
 <script async src="https://cdn.snipcart.com/themes/v3.0.31/default/snipcart.js"></script>
 <div hidden id="snipcart" data-api-key="ZjMxZTEwMzEtMzFhZS00YjQyLTgxNDMtMTM4ZjVlZmFlMDY1NjM3MjkzMjU0MTU5NTQyMzU0"></div>
-<br><center>
-
+<meta charset="UTF-8">
+<title>magnetosphere.net</title>
+</head>
+<body style="background-color:black;color:white;">
+<center>
+<br>
 <div id="content">
 <div class="Product">
-  <h1>{{.Name}}</h1>
+<h1>{{.Name}}</h1>
 <br>
 <div>
-  <img src="/{{.Image1}}" alt="{{.Name}}">
+<img src="/{{.Image1}}" alt="{{.Name}}">
 </div>
 <br>
 <div class="actions">
@@ -23,8 +29,8 @@
   data-item-name="{{.Name}}"
   data-item-price="{{.Price}}"
   data-item-image=""
-  data-item-url="/"
-  data-item-max-quantity="10"
+  data-item-url="/product/{{ .PartNo }}"
+  data-item-max-quantity="100"
   data-item-description="{{.Description1}}">
   Add to cart
 </button>
@@ -42,11 +48,10 @@ Description:
 Category: {{.Category}}
 <br>
 </tr>
-
-
 </div>
 </div>
 <br>
+<a href="/products">back to products</a>
 <br>
 <br>
 <br>
@@ -66,5 +71,6 @@ Category: {{.Category}}
 <br>
 <a class="action" href="/about">About</a>
 </center>
-
+</body>
+</html>
 {{end}}

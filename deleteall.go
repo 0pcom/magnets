@@ -1,11 +1,11 @@
 // Routing based on the gorilla/mux router
 
-package gorilla
+package main
 
 import (
 //	"crypto/sha1"
 	"fmt"
-	"html/template"
+//	"html/template"
 //	"io"
 	"log"
 	"net/http"
@@ -14,8 +14,8 @@ import (
 	//"strconv"
 //	"strings"
 	//"sort"
-	"time"
-	"github.com/gorilla/mux"
+//	"time"
+//	"github.com/gorilla/mux"
 )
 
 import (
@@ -29,7 +29,7 @@ var partno Product
 var category string
 var products []Product
 
-func init() {
+func main() {
 	// /* cockroachdb stuff using upper/db database access layer */ //
 	fmt.Printf("Initializing cockroachDB connection\n")
 	sess, err := cockroachdb.Open(settings)		//establish the session
@@ -40,7 +40,7 @@ func init() {
 
 	//test actions on database
 	//createTables(sess)
-	//deleteAll(sess)
+	deleteAll(sess)
 	//createTestProd(sess)
 
 	// Find().All() maps all the records from the products collection.
@@ -51,104 +51,9 @@ func init() {
 		log.Fatal("productsCol.Find: ", err)
 	}
 
-	r := mux.NewRouter()
-	r.PathPrefix("/img/").Handler(http.StripPrefix("/img/", http.FileServer(http.Dir("./img"))))
-	r.HandleFunc("/", frontPage).Methods("GET")
-	r.HandleFunc("/about", aboutPage).Methods("GET")
-		r.HandleFunc("/time", timeFunc).Methods("GET")
-	//	r.HandleFunc("/gallery", galleryFunc).Methods("GET")
-		r.HandleFunc("/products", findProducts).Methods("GET")
-		r.HandleFunc("/product/{slug}", findProduct).Methods("GET")
-		//r.HandleFunc("/gallery/{slug}", ).Methods("GET")
-	Serve = r
+
 }
 
-// /* timepage  */ //
-
-func monthDayYear(t time.Time) string {
-	return t.Format("Monday January 2, 2006 15:04:05")
-}
-
-func timeFunc(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html")
-	var fm = template.FuncMap{ "fdateMDY": monthDayYear,	}
-	tp1 := template.Must(template.New("").Funcs(fm).ParseFiles("time.gohtml"))
-	if err := tp1.ExecuteTemplate(w, "time.gohtml", time.Now()); err != nil {
-		log.Fatalln(err)
-	}
-}
-
-// /* products page */ //
-func findProducts(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html")
-	tpl0 := template.Must(template.New("").ParseFiles("products.gohtml"))
-	tpl0.ExecuteTemplate(w, "products.gohtml", products)	//fmt.Fprint(w, "products\n")
-}
-
-// /* individual product page */ //
-
-func findProduct(w http.ResponseWriter, r *http.Request) {	//, product string
-	slug := mux.Vars(r)["slug"]
-
-	for i := range products {
-		if products[i].PartNo == slug {
-			partno = products[i]
-			break
-				// Found!
-		}
-}
-if partno.Name == "" {
-	fmt.Fprint(w, "No product found for partno:\n", slug)
-} else {
-	w.Header().Set("Content-Type", "text/html")
-	tpl1 := template.Must(template.New("").ParseFiles("product.gohtml"))
-	//fmt.Fprint(w, "products\n", partno.Name)
-	tpl1.ExecuteTemplate(w, "product.gohtml", partno)
-}
-}
-
-
-// /* About Page  */ //
-func aboutPage(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html")
-	var fm = template.FuncMap{ "fdateMDY": monthDayYear,	}
-	tp1 := template.Must(template.New("").Funcs(fm).ParseFiles("about.gohtml"))
-	if err := tp1.ExecuteTemplate(w, "about.gohtml", time.Now()); err != nil {
-		log.Fatalln(err)
-	}
-}
-
-// /* Front Page */ //
-
-func frontPage(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html")
-	var fm = template.FuncMap{ "fdateMDY": monthDayYear,	}
-	tp1 := template.Must(template.New("").Funcs(fm).ParseFiles("index.gohtml"))
-	if err := tp1.ExecuteTemplate(w, "index.gohtml", time.Now()); err != nil {
-		log.Fatalln(err)
-	}
-}
-
-
-
-
-// /*  */ //
-
-
-
-func NewRouter() *mux.Router {
-router := mux.NewRouter().StrictSlash(true)
-
-// Choose the folder to serve
-staticDir := "/static/"
-
-// Create the route
-router.
-	PathPrefix(staticDir).
-	Handler(http.StripPrefix(staticDir, http.FileServer(http.Dir("."+staticDir))))
-
-return router
-}
 
 
 // /* database stuff */ //
@@ -232,7 +137,7 @@ func (a *Product) Store(sess db.Session) db.Store {
 return Products(sess)
 }
 
-///*
+
 
 // createTables creates all the tables that are neccessary to run this example.
 func createTables(sess db.Session) error {
@@ -296,7 +201,7 @@ return nil
 }
 
 ///*	database test stuff	*///
-///*
+
 func deleteAll(sess db.Session) {
 fmt.Printf("Clearing tables\n")
 //clear tables ; testing
@@ -315,7 +220,7 @@ func createTestProd(sess db.Session) {
 fmt.Printf("Creating test product 'dummy'\n")
 desc = "test entry to database"
 descp = &desc
-img := "img/test.jpg"
+img := "gallery/test.jpg"
 imgp := &img
 product1 := Product{Name: "dummy", PartNo:"test", Description1:descp, Price:1.00, Image1:imgp, Qty:10}
 err := Products(sess).InsertReturning(&product1)
@@ -330,4 +235,3 @@ if err != nil {
 }
 
 }
-//*/
