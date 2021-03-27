@@ -9,30 +9,31 @@ Tested on Archlinux
 ## Prerequisite
 
 ```
-yay -S cockroachdb-git go
+yay -S cockroachdb go
 ```
+it's recommended to use cockroachdb-bin
 
-## Run
+## Database initialization
 
 in a terminal:
 ```
 make secure
 ```
 
-cockroach node is started 
+cockroach node is started
 
-in a new terminal:
+in a new terminal or tab:
 ```
 make db-secure
 ```
 
-Sync dependencies
+## Sync dependencies
 ```
 go mod init
 go mod vendor -v
 ```
 
-Run the application
+## Run the application
 ```
 go run main.go
 ```

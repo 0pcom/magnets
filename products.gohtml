@@ -27,13 +27,14 @@
 <thead class="thead-dark">
 
 <tr>
-<th></th>
-<th>name</th>
-<th>partno</th>
+  <th>partno</th>
+<!-- <th>name</th> -->
 <th>price</th>
 <th>description</th>
-<th>category</th>
-<th scope="col" colspan="3"> </th>
+<th></th>
+<!-- <th>category</th> -->
+<!-- <th></th> -->
+<!-- <th scope="col" colspan="3"> </th> -->
 </tr>
 
 </thead>
@@ -41,12 +42,11 @@
 <tbody id="myTable">
 {{range .}}
 <tr>
-<td><a class="action" href="/product/{{.PartNo}}">View</a></td>
-<td>{{.Name}}</td>
-<td>{{.PartNo}}</td>
+<td><a class="action" href="/product/{{.PartNo}}">{{.PartNo}}</a></td>
+<!-- <td>{{.Name}}</td> -->
 <td>${{.Price}}</td>
 <td>{{.Description1}}</td>
-<td>{{.Category}}</td>
+<!-- <td>{{.Category}}</td> -->
 <td>{{ if le .Qty 0 }}
     <span>Out of stock</span>
 {{ else }}

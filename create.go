@@ -6,6 +6,7 @@ import (
 	"fmt"
 //	"html/template"
 	"log"
+	//"github.com/shopspring/decimal"
 //	"net/http"
 //	"bufio"
 //	"fmt"
@@ -32,7 +33,7 @@ func main() {
 	defer sess.Close()
 
 	//test actions on database
-	createTables(sess)
+//	createTables(sess)
 	//deleteAll(sess)
 	createProd(sess)
 
@@ -46,100 +47,6 @@ func main() {
 }
 
 
-var _id uint64
-var _name string
-var _partno string
-var _desc1 string
-var _desc1p *string
-var _desc2 string
-var _desc2p *string
-var _img string
-var _imgp *string
-var _qty int64
-//var _qtyp *int64
-var _col1 string
-var _col1p *string
-var _col2 string
-var _col2p *string
-var _mpn string
-var _mpnp *string
-var _mfn string
-var _mfnp *string
-var _enab bool
-var _enabp *bool
-var _price float64
-var _pricep *float64
-var _msrp float64
-var _msrpp *float64
-var _cost float64
-var _costp *float64
-var _mino int64
-var _minop *int64
-var _maxo int64
-var _maxop *int64
-var _loc string
-var _locp *string
-var _cat string
-var _catp *string
-var _scat string
-var _scatp *string
-var _typ string
-var _typp *string
-var _ptyp string
-var _ptypp *string
-var _tech string
-var _techp *string
-var _mat string
-var _matp *string
-var _val float64
-var _valp *float64
-var _valu string
-var _valup *string
-var _vol float64
-var _volp *float64
-var _amp float64
-var _ampp *float64
-var _wat float64
-var _watp *float64
-var _tmp float64
-var _tmpp *float64
-var _tmpu string
-var _tmpup *string
-var _src string
-var _srcp *string
-var _dat string
-var _datp *string
-var _doc string
-var _docp *string
-var _ref string
-var _refp *string
-var _att string
-var _attp *string
-var _con string
-var _conp *string
-var _not string
-var _notp *string
-var _wrn string
-var _wrnp *string
-var _d1 float64
-var _d1p *float64
-var _d2 float64
-var _d2p *float64
-var _d3 float64
-var _d3p *float64
-var _wtlb float64
-var _wtlbp *float64
-var _wtoz float64
-var _wtozp *float64
-var _metat string
-var _metatp *string
-var _metad string
-var _metadp *string
-var _metak string
-var _metakp *string
-
-
-
 func createProd(sess db.Session) {
 	productsTable := sess.Collection("products")
 
@@ -150,103 +57,30 @@ func createProd(sess db.Session) {
 	}
 
 	// Print the queried information.
-	fmt.Printf("Records in the %q collection:\n", productsTable.Name())
-	for i := range products {
-		fmt.Printf("record #%d: %#v\n", i, products[i])
-	}
+//	fmt.Printf("Records in the %q collection:\n", productsTable.Name())
+//	for i := range products {
+//		fmt.Printf("record #%d: %#v\n", i, products[i])
+//	}
 
 fmt.Printf("Creating product\n")
+p1 := Product{}
+p1.Price = 1
+p1.Qty = 5000
+p1.PartNo = "cap1500uf6p3e"
+p1.Value = 1500
+p1.ValUnit = "μF"
+p1.VoltsRating = 6.3
+p1.TempRating = 105.0
+p1.TempUnit = "°C"
+p1.PackageType = "Radial"
+p1.Materials = "Aluminum"
+p1.SubCategory = "Electrolytic"
+p1.Category = "Capacitor"
+p1.Image1 = "cap1500uf6e.jpg"
+p1.Name = fmt.Sprintf("%.0f", p1.Value) + p1.ValUnit + " " + fmt.Sprintf("%.1f", p1.VoltsRating) + "V"
+p1.Description1 = p1.Name + " " + fmt.Sprintf("%.0f", p1.TempRating) + " " + p1.TempUnit + " " + p1.PackageType + " " + p1.Materials + " " + p1.SubCategory + " " + p1.Category
 
-	_price = 1
-	_qty = 5000
-	//_qty1 := strconv.Itoa(_qty)
-	_name = fmt.Sprintf("%.2f", _val, 'f', -1, 64) + _valu + " " + fmt.Sprintf("%.2f", _vol, 'f', -1, 64) + "V"
-	_partno = "cap1500uf6e"
-	_val = 1500
-	_valu = "μF"
-	_vol = 6.3
-	_tmp = 105
-	_tmpu = "C"
-	//_typ = ""
-	_ptyp = "Radial"
-	_mat = "Aluminum"
-	_scat = "Electrolytic"
-	_cat = "Capacitor"
-	_desc1 = 	fmt.Sprintf("%.2f", _val, 'f', -1, 64) + _valu + " " + fmt.Sprintf("%.2f", _vol, 'f', -1, 64) + "V " + fmt.Sprintf("%.2f", _tmp, 'f', -1, 64) + "°" + _tmpu + " " + _ptyp + _mat + _scat + _cat
-	_img = "cap1500uf6e.jpg"
-
-	fmt.Printf("Price: $ %.2f\n", _price)
-	fmt.Printf("quantity: $%d\n", _qty)
-	fmt.Printf("Product Name: %s\n", _name)
-	fmt.Printf("PartNo: %s\n", _partno)
-	fmt.Printf("Value: $ %.2f\n", _val)
-	fmt.Printf("Value Unit: %s\n", _valu)
-	fmt.Printf("Voltage: $ %.2f\n", _vol)
-	fmt.Printf("Temperature: $ %.2f\n", _tmp)
-	fmt.Printf("Temperature Unit: %s\n", _tmpu)
-	fmt.Printf("Package Type: %s\n", _ptyp)
-	fmt.Printf("Materials: %s\n", _mat)
-	fmt.Printf("subcategory: %s\n", _scat)
-	fmt.Printf("category: %s\n", _cat)
-	fmt.Printf("description: %s\n", _desc1)
-  fmt.Printf("image path: %s\n", _img)
-
-
-	_valp = &_val
-	_valup = &_valu
-	_volp = &_vol
-	_tmpp = &_tmp
-	_tmpup = &_tmpu
-	_ptypp = &_ptyp
-	_matp = &_mat
-	_scatp = &_scat
-	_catp = &_cat
-	_scatp = &_scat
-	_desc1p = &_desc1
-	_imgp = &_img
-
-
-/*
-	fmt.Printf("Product Name: ")
-  _name, _ := reader.ReadString('\n')
-  fmt.Printf("Product Name: %s\n", _name)
-	fmt.Printf("PartNo: ")
-  _partno, _ := reader.ReadString('\n')
-  fmt.Printf("PartNo: %s\n", _partno)
-	fmt.Printf("category: ")
-	_cat, _ := reader.ReadString('\n')
-	_catp = &_cat
-	fmt.Printf("category: %s\n", _cat)
-	fmt.Printf("price: $")
-	_, err = fmt.Scanf("%f", &_price)
-	if err != nil {
-		fmt.Println(err)
-	}
-	//  fmt.Printf("You have entered : %f \n", _price)
-	//	_p1, _ := reader.ReadString('\n')
-	//	_price, _ := strconv.ParseFloat(_p1, 64)
-	fmt.Printf("Price: $ %.2f\n", _price)
-	//fmt.Printf("price %f", _price)
-	fmt.Printf("quantity: ")
-	_, err = fmt.Scanf("%d", &_qty)
-	if err != nil {
-		fmt.Println(err)
-	}
-	//	_qty1, _ := reader.ReadString('\n')
-	//	_qty, _ := strconv.ParseInt(_qty1, 0, 64)
-
-	fmt.Printf("quantity: $%d\n", _qty)
-	fmt.Printf("description: ")
-  _desc1, _ := reader.ReadString('\n')
-	_desc1p = &_desc1
-  fmt.Printf("description: %s\n", _desc1)
-	fmt.Printf("image path: ")
-  _img, _ := reader.ReadString('\n')
-	_imgp = &_img
-  fmt.Printf("image path: %s\n", _img)
-*/
-	product1 := Product{Name: _name, PartNo: _partno, Price: _price, Description1: _desc1p, Image1: _imgp, Qty: _qty, Description2: _desc2p, Color1: _col1p, Color2: _col2p, MfgPartNo: _mpnp, MfgName: _mfnp, Enable: _enabp, Msrp: _msrpp, Cost: _costp, MinOrder: _minop, MaxOrder: _maxop, Location: _locp, Category: _catp, SubCategory: _scatp, Type: _typp, PackageType: _ptypp, Technology: _techp, Value: _valp, ValUnit: _valup, VoltsRating: _volp, AmpsRating: _ampp, WattsRating: _watp, Sourceinfo: _srcp, Datasheet: _datp, Docs: _docp, Reference: _refp, Attributes: _attp, Condition: _conp, Note: _notp, Warning: _wrnp, Length: _d1p, Width: _d2p, Height: _d3p, WeightLb: _wtlbp, WeightOz: _wtozp, MetaTitle: _metatp,  MetaDesc: _metadp, MetaKeywords: _metakp, TempRating: _tmpp, TempUnit: _tmpup}
-	err = Products(sess).InsertReturning(&product1)
+	err = Products(sess).InsertReturning(&p1)
 	if err != nil {
 		log.Fatal("sess.Save: ", err)
 	}
@@ -281,6 +115,7 @@ Options: map[string]string{
 },
 }
 
+
 // Products is a handy way to represent a collection.
 func Products(sess db.Session) db.Store {
 return sess.Collection("products")
@@ -309,12 +144,13 @@ MaxOrder int64 `db:"maxorder,omitempty" json:"maxorder,omitempty"`
 Location string `db:"location" json:"location"`
 Category string `db:"category" json:"category"`
 SubCategory string `db:"subcategory" json:"subcategory"`
-Type *string  `db:"type,omitempty" json:"type,omitempty"`
+Type string  `db:"type,omitempty" json:"type,omitempty"`
 PackageType string  `db:"packagetype,omitempty" json:"packagetype,omitempty"`
 Technology string  `db:"technology,omitempty" json:"technology,omitempty"`
 Materials string  `db:"materials,omitempty" json:"materials,omitempty"`
 Value float64 `db:"value,omitempty" json:"value,omitempty"`
 ValUnit string  `db:"valunit,omitempty" json:"valunit,omitempty"`
+Tolerance float64 `db:"tolerance,omitempty" json:"tolerance,omitempty"`
 VoltsRating float64 `db:"voltsrating,omitempty" json:"voltsrating,omitempty"`
 AmpsRating float64 `db:"ampsrating,omitempty" json:"ampsrating,omitempty"`
 WattsRating float64 `db:"wattsrating,omitempty" json:"temprating,omitempty"`
@@ -343,6 +179,8 @@ MetaKeywords string `db:"metakeywords,omitempty" json:"metakeywords,omitempty"`
 //todo: add extra control fields
 }
 
+
+
 //var Collection1 string
 // Collection is required in order to create a relation between the Product
 // struct and the "products" table.
@@ -350,64 +188,65 @@ func (a *Product) Store(sess db.Session) db.Store {
 return Products(sess)
 }
 
-
 ///*
+
 // createTables creates all the tables that are neccessary to run this example.
 func createTables(sess db.Session) error {
 fmt.Printf("Creating 'products' table\n")
 _, err := sess.SQL().Exec(`
   CREATE TABLE IF NOT EXISTS products (
-    ID SERIAL PRIMARY KEY,
-    image1 STRING,
-    image2 STRING,
-    image3 STRING,
-    thumb STRING,
-    name STRING,
-    partno STRING,
-    mfgpartno STRING,
-    mfgname STRING,
-    quantity INT,
-    unlimitqty BOOL,
-    enable BOOL,
-    price FLOAT,
-    msrp FLOAT,
-    cost FLOAT,
-    minorder INT,
-    maxorder INT,
-    location STRING,
-		category STRING,
-		subcategory STRING,
-    type STRING,
-    packagetype STRING,
-    technology STRING,
-		materials STRING,
-    value FLOAT,
-    valunit STRING,
-    voltsrating FLOAT,
-    ampsrating FLOAT,
-		wattsrating FLOAT,
-		temprating FLOAT,
-		tempunit STRING,
-    description1 STRING,
-    description2 STRING,
-		color1 STRING,
-		color2 STRING,
-    sourceinfo STRING,
-    datasheet STRING,
-    docs STRING,
-    reference STRING,
-    attributes STRING,
-    condition STRING,
-    note STRING,
-    warning STRING,
-    length FLOAT,
-    width FLOAT,
-    height FLOAT,
-    weightlb FLOAT,
-    weightoz FLOAT,
-    metatitle STRING,
-    metadesc STRING,
-    metakeywords STRING
+    ID SERIAL PRIMARY KEY UNIQUE NOT NULL,
+    image1 STRING NULL DEFAULT '',
+    image2 STRING NULL DEFAULT '',
+    image3 STRING NULL DEFAULT '',
+    thumb STRING NULL DEFAULT '',
+    name STRING NOT NULL,
+    partno STRING UNIQUE NOT NULL,
+    mfgpartno STRING NULL DEFAULT '',
+    mfgname STRING NULL DEFAULT '',
+    quantity INT DEFAULT 0,
+    unlimitqty BOOL DEFAULT FALSE,
+    enable BOOL DEFAULT TRUE,
+    price FLOAT DEFAULT 0.00,
+    msrp FLOAT DEFAULT 0.00,
+    cost FLOAT DEFAULT 0.00,
+    minorder INT DEFAULT 1,
+    maxorder INT DEFAULT 100,
+    location STRING NULL DEFAULT '',
+		category STRING NULL DEFAULT '',
+		subcategory STRING NULL DEFAULT '',
+    type STRING NULL DEFAULT '',
+    packagetype STRING NULL DEFAULT '',
+    technology STRING NULL DEFAULT '',
+		materials STRING NULL DEFAULT '',
+    value FLOAT DEFAULT 0.0,
+    valunit STRING NULL DEFAULT '',
+		tolerance DECIMAL(3,2) DEFAULT 0.00,
+    voltsrating FLOAT DEFAULT 0.0,
+    ampsrating FLOAT DEFAULT 0.0,
+		wattsrating FLOAT DEFAULT 0.0,
+		temprating FLOAT DEFAULT 0.0,
+		tempunit STRING NULL DEFAULT '',
+    description1 STRING NULL DEFAULT '',
+    description2 STRING NULL DEFAULT '',
+		color1 STRING NULL DEFAULT '',
+		color2 STRING NULL DEFAULT '',
+    sourceinfo STRING NULL DEFAULT '',
+    datasheet STRING NULL DEFAULT '',
+    docs STRING NULL DEFAULT '',
+    reference STRING NULL DEFAULT '',
+    attributes STRING NULL DEFAULT '',
+    condition STRING NULL DEFAULT '',
+    note STRING NULL DEFAULT '',
+    warning STRING NULL DEFAULT '',
+    length FLOAT DEFAULT 0.0,
+    width FLOAT DEFAULT 0.0,
+    height FLOAT DEFAULT 0.0,
+    weightlb FLOAT DEFAULT 0.0,
+    weightoz FLOAT DEFAULT 0.0,
+    metatitle STRING NULL DEFAULT '',
+    metadesc STRING NULL DEFAULT '',
+    metakeywords STRING NULL DEFAULT ''
   )
   `)
 
@@ -416,6 +255,40 @@ if err != nil {
 }
 return nil
 }
+
+///*	database test stuff	*///
+///*
+func deleteAll(sess db.Session) {
+fmt.Printf("Clearing tables\n")
+//clear tables ; testing
+err := Products(sess).Truncate()
+if err != nil {
+  log.Fatal("Truncate: ", err)
+}
+}
+
+func createTestProd(sess db.Session) {
+fmt.Printf("Creating test product 'dummy'\n")
+_desc := "test entry to database"
+_img := "test.jpg"
+//product1 := Product{}
+//product1.setDefaults()
+//fmt.Println(product1)
+product1 := Product{Name: "dummy", PartNo:"test", Description1: _desc, Price:1.00, Image1: _img, Qty: 10}
+err := Products(sess).InsertReturning(&product1)
+if err != nil {
+    log.Fatal("sess.Save: ", err)
+}
+fmt.Printf("Creating second test product 'dummy2'\n")
+//product1.setDefaults()
+product1 = Product{Name: "dummy2", PartNo:"test1", Description1: _desc, Price: 1.00, Qty: 100}
+err = Products(sess).InsertReturning(&product1)
+if err != nil {
+    log.Fatal("sess.Save: ", err)
+}
+
+}
+
 //*/
 ///*	database test stuff	*///
 /*

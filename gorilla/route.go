@@ -39,9 +39,9 @@ func init() {
 	defer sess.Close()
 
 	//test actions on database
-	createTables(sess)
-	deleteAll(sess)
-	createTestProd(sess)
+	//createTables(sess)
+	//deleteAll(sess)
+	//createTestProd(sess)
 
 	// Find().All() maps all the records from the products collection.
 	productsCol := Products(sess)
@@ -161,7 +161,6 @@ Options: map[string]string{
   "sslcert":     "certs/client.madmin.crt",
 },
 }
-
 // Products is a handy way to represent a collection.
 func Products(sess db.Session) db.Store {
 return sess.Collection("products")
@@ -190,12 +189,13 @@ MaxOrder int64 `db:"maxorder,omitempty" json:"maxorder,omitempty"`
 Location string `db:"location" json:"location"`
 Category string `db:"category" json:"category"`
 SubCategory string `db:"subcategory" json:"subcategory"`
-Type *string  `db:"type,omitempty" json:"type,omitempty"`
+Type string  `db:"type,omitempty" json:"type,omitempty"`
 PackageType string  `db:"packagetype,omitempty" json:"packagetype,omitempty"`
 Technology string  `db:"technology,omitempty" json:"technology,omitempty"`
 Materials string  `db:"materials,omitempty" json:"materials,omitempty"`
 Value float64 `db:"value,omitempty" json:"value,omitempty"`
 ValUnit string  `db:"valunit,omitempty" json:"valunit,omitempty"`
+Tolerance float64 `db:"tolerance,omitempty" json:"tolerance,omitempty"`
 VoltsRating float64 `db:"voltsrating,omitempty" json:"voltsrating,omitempty"`
 AmpsRating float64 `db:"ampsrating,omitempty" json:"ampsrating,omitempty"`
 WattsRating float64 `db:"wattsrating,omitempty" json:"temprating,omitempty"`
@@ -240,57 +240,58 @@ func createTables(sess db.Session) error {
 fmt.Printf("Creating 'products' table\n")
 _, err := sess.SQL().Exec(`
   CREATE TABLE IF NOT EXISTS products (
-    ID SERIAL PRIMARY KEY,
-    image1 STRING,
-    image2 STRING,
-    image3 STRING,
-    thumb STRING,
-    name STRING,
-    partno STRING,
-    mfgpartno STRING,
-    mfgname STRING,
-    quantity INT,
-    unlimitqty BOOL,
-    enable BOOL,
-    price FLOAT,
-    msrp FLOAT,
-    cost FLOAT,
-    minorder INT,
-    maxorder INT,
-    location STRING,
-		category STRING,
-		subcategory STRING,
-    type STRING,
-    packagetype STRING,
-    technology STRING,
-		materials STRING,
-    value FLOAT,
-    valunit STRING,
-    voltsrating FLOAT,
-    ampsrating FLOAT,
-		wattsrating FLOAT,
-		temprating FLOAT,
-		tempunit STRING,
-    description1 STRING,
-    description2 STRING,
-		color1 STRING,
-		color2 STRING,
-    sourceinfo STRING,
-    datasheet STRING,
-    docs STRING,
-    reference STRING,
-    attributes STRING,
-    condition STRING,
-    note STRING,
-    warning STRING,
-    length FLOAT,
-    width FLOAT,
-    height FLOAT,
-    weightlb FLOAT,
-    weightoz FLOAT,
-    metatitle STRING,
-    metadesc STRING,
-    metakeywords STRING
+    ID SERIAL PRIMARY KEY UNIQUE NOT NULL,
+    image1 STRING NULL DEFAULT '',
+    image2 STRING NULL DEFAULT '',
+    image3 STRING NULL DEFAULT '',
+    thumb STRING NULL DEFAULT '',
+    name STRING NOT NULL,
+    partno STRING UNIQUE NOT NULL,
+    mfgpartno STRING NULL DEFAULT '',
+    mfgname STRING NULL DEFAULT '',
+    quantity INT DEFAULT 0,
+    unlimitqty BOOL DEFAULT FALSE,
+    enable BOOL DEFAULT TRUE,
+    price FLOAT DEFAULT 0.00,
+    msrp FLOAT DEFAULT 0.00,
+    cost FLOAT DEFAULT 0.00,
+    minorder INT DEFAULT 1,
+    maxorder INT DEFAULT 100,
+    location STRING NULL DEFAULT '',
+		category STRING NULL DEFAULT '',
+		subcategory STRING NULL DEFAULT '',
+    type STRING NULL DEFAULT '',
+    packagetype STRING NULL DEFAULT '',
+    technology STRING NULL DEFAULT '',
+		materials STRING NULL DEFAULT '',
+    value FLOAT DEFAULT 0.0,
+    valunit STRING NULL DEFAULT '',
+		tolerance DECIMAL(3,2) DEFAULT 0.00,
+    voltsrating FLOAT DEFAULT 0.0,
+    ampsrating FLOAT DEFAULT 0.0,
+		wattsrating FLOAT DEFAULT 0.0,
+		temprating FLOAT DEFAULT 0.0,
+		tempunit STRING NULL DEFAULT '',
+    description1 STRING NULL DEFAULT '',
+    description2 STRING NULL DEFAULT '',
+		color1 STRING NULL DEFAULT '',
+		color2 STRING NULL DEFAULT '',
+    sourceinfo STRING NULL DEFAULT '',
+    datasheet STRING NULL DEFAULT '',
+    docs STRING NULL DEFAULT '',
+    reference STRING NULL DEFAULT '',
+    attributes STRING NULL DEFAULT '',
+    condition STRING NULL DEFAULT '',
+    note STRING NULL DEFAULT '',
+    warning STRING NULL DEFAULT '',
+    length FLOAT DEFAULT 0.0,
+    width FLOAT DEFAULT 0.0,
+    height FLOAT DEFAULT 0.0,
+    weightlb FLOAT DEFAULT 0.0,
+    weightoz FLOAT DEFAULT 0.0,
+    metatitle STRING NULL DEFAULT '',
+    metadesc STRING NULL DEFAULT '',
+    metakeywords STRING NULL DEFAULT ''
   )
   `)
 
@@ -311,23 +312,20 @@ if err != nil {
 }
 }
 
-//var _desc string
-//var descp *string
-//var _img string
-//var imgp *string
-
 func createTestProd(sess db.Session) {
 fmt.Printf("Creating test product 'dummy'\n")
 _desc := "test entry to database"
-//descp = &desc
 _img := "test.jpg"
-//imgp := &img
+//product1 := Product{}
+//product1.setDefaults()
+//fmt.Println(product1)
 product1 := Product{Name: "dummy", PartNo:"test", Description1: _desc, Price:1.00, Image1: _img, Qty: 10}
 err := Products(sess).InsertReturning(&product1)
 if err != nil {
     log.Fatal("sess.Save: ", err)
 }
 fmt.Printf("Creating second test product 'dummy2'\n")
+//product1.setDefaults()
 product1 = Product{Name: "dummy2", PartNo:"test1", Description1: _desc, Price: 1.00, Qty: 100}
 err = Products(sess).InsertReturning(&product1)
 if err != nil {
@@ -335,4 +333,63 @@ if err != nil {
 }
 
 }
+
 //*/
+/*
+//set default values - does not detect existing values
+func(prod *Product) setDefaults(){
+prod.Image1 = ""
+prod.Image2 = ""
+prod.Image3 = ""
+prod.Thumb = ""
+prod.Name = ""
+prod.PartNo = ""
+prod.MfgPartNo = ""
+prod.MfgName = ""
+prod.Qty = 0
+prod.UnlimitQty = false
+prod.Enable = true
+prod.Price = 0.00
+prod.Msrp = 0.00
+prod.Cost = 0.00
+//prod.Sold = 0
+prod.MinOrder = 0
+prod.MaxOrder = 100
+prod.Location = ""
+prod.Category = ""
+prod.SubCategory = ""
+prod.Type = ""
+prod.PackageType = ""
+prod.Technology = ""
+prod.Materials = ""
+prod.Value = 0.0
+prod.ValUnit = ""
+prod.VoltsRating = 0.0
+prod.AmpsRating = 0.0
+prod.WattsRating = 0.0
+prod.TempRating = 0.0
+prod.TempUnit = ""
+prod.Description1 = ""
+prod.Description2 = ""
+prod.Color1 = ""
+prod.Color2 = ""
+prod.Sourceinfo = ""
+prod.Datasheet = ""
+prod.Docs = ""
+prod.Reference = ""
+prod.Attributes = ""
+prod.Condition = ""
+prod.Note = ""
+prod.Warning = ""
+prod.Length = 0.0
+prod.Width = 0.0
+prod.Height = 0.0
+prod.WeightLb = 0.0
+prod.WeightOz = 0.0
+prod.MetaTitle = ""
+prod.MetaDesc = ""
+prod.MetaKeywords = ""
+//todo: add extra control fields
+}
+
+*/
