@@ -11,7 +11,7 @@ import (
 //	"fmt"
 //	"os"
 //	"time"
-	"strconv"
+//	"strconv"
 	"github.com/upper/db/v4"
 	"github.com/upper/db/v4/adapter/cockroachdb"
 )
@@ -142,17 +142,25 @@ var _metakp *string
 
 func createProd(sess db.Session) {
 	productsTable := sess.Collection("products")
-	// Use Find to create a result set (db.Result).
-	res := productsTable.Find()
-	//count the products to get the ID of the next one
-	//_index, err := res.Count()
-	//add one to index for ID
-	fmt.Printf("Creatinte product\n")
+
+	products := []Product{}
+	err = productsTable.Find().All(&products)
+	if err != nil {
+		log.Fatal("productsTable.Find: ", err)
+	}
+
+	// Print the queried information.
+	fmt.Printf("Records in the %q collection:\n", productsTable.Name())
+	for i := range products {
+		fmt.Printf("record #%d: %#v\n", i, products[i])
+	}
+
+fmt.Printf("Creating product\n")
 
 	_price = 1
 	_qty = 5000
-	_qty1 = strconv.Itoa(_qty)
-	_name = strconv.Ftoa(_val, 'g', -1) + _valu + " " + strconv.Ftoa(_vol, 'g', -1) + "V "
+	//_qty1 := strconv.Itoa(_qty)
+	_name = fmt.Sprintf("%.2f", _val, 'f', -1, 64) + _valu + " " + fmt.Sprintf("%.2f", _vol, 'f', -1, 64) + "V"
 	_partno = "cap1500uf6e"
 	_val = 1500
 	_valu = "μF"
@@ -164,7 +172,7 @@ func createProd(sess db.Session) {
 	_mat = "Aluminum"
 	_scat = "Electrolytic"
 	_cat = "Capacitor"
-	_desc1 = 	strconv.Ftoa(_val, 'g', -1) + _valu + " " + strconv.Ftoa(_vol, 'g', -1) + "V " + strconv.Ftoa(_tmp, 'g', -1) + "°" + _tmpu + " " + _ptyp + _mat + _scat + _cat
+	_desc1 = 	fmt.Sprintf("%.2f", _val, 'f', -1, 64) + _valu + " " + fmt.Sprintf("%.2f", _vol, 'f', -1, 64) + "V " + fmt.Sprintf("%.2f", _tmp, 'f', -1, 64) + "°" + _tmpu + " " + _ptyp + _mat + _scat + _cat
 	_img = "cap1500uf6e.jpg"
 
 	fmt.Printf("Price: $ %.2f\n", _price)
@@ -237,7 +245,7 @@ func createProd(sess db.Session) {
 	_imgp = &_img
   fmt.Printf("image path: %s\n", _img)
 */
-	product1 := Product{Name: _name, PartNo: _partno, Price: _price, Description1: _desc1p, Image1: _imgp, Qty: _qty, Description2: _desc2p, Color1: _col1p, Color2: _col2p, MfgPartNo: _mpnp, MfgName: _mfnp, Enable: _enabp, Msrp: _msrpp, Cost: _costp, MinOrder: _minop, MaxOrder: _maxop, Location: _locp, Category: _catp, Type: _typp, PackageType: _ptypp, Technology: _techp, Value: _valp, ValUnit: _valup, VoltsRating: _volp, AmpsRating: _ampp, WattsRating: _watp, Sourceinfo: _srcp, Datasheet: _datp, Docs: _docp, Reference: _refp, Attributes: _attp, Condition: _conp, Note: _notp, Warning: _wrnp, Length: _d1p, Width: _d2p, Height: _d3p, WeightLb: _wtlbp, WeightOz: _wtozp, MetaTitle: _metatp,  MetaDesc: _metadp, MetaKeywords: _metakp, TempRating: _tmpp, TempUnit: _tmpup}
+	product1 := Product{Name: _name, PartNo: _partno, Price: _price, Description1: _desc1p, Image1: _imgp, Qty: _qty, Description2: _desc2p, Color1: _col1p, Color2: _col2p, MfgPartNo: _mpnp, MfgName: _mfnp, Enable: _enabp, Msrp: _msrpp, Cost: _costp, MinOrder: _minop, MaxOrder: _maxop, Location: _locp, Category: _catp, SubCategory: _scatp, Type: _typp, PackageType: _ptypp, Technology: _techp, Value: _valp, ValUnit: _valup, VoltsRating: _volp, AmpsRating: _ampp, WattsRating: _watp, Sourceinfo: _srcp, Datasheet: _datp, Docs: _docp, Reference: _refp, Attributes: _attp, Condition: _conp, Note: _notp, Warning: _wrnp, Length: _d1p, Width: _d2p, Height: _d3p, WeightLb: _wtlbp, WeightOz: _wtozp, MetaTitle: _metatp,  MetaDesc: _metadp, MetaKeywords: _metakp, TempRating: _tmpp, TempUnit: _tmpup}
 	err = Products(sess).InsertReturning(&product1)
 	if err != nil {
 		log.Fatal("sess.Save: ", err)
@@ -250,7 +258,11 @@ func createProd(sess db.Session) {
 //	if err != nil {
 //		log.Fatal("sess.Save: ", err)
 //	}
-
+// Print the queried information.
+fmt.Printf("Records in the %q collection:\n", productsTable.Name())
+for i := range products {
+	fmt.Printf("record #%d: %#v\n", i, products[i])
+}
 }
 
 // /* database stuff */ //
@@ -277,58 +289,57 @@ return sess.Collection("products")
 // Product is used to represent a single record in the "products" table.
 type Product struct {
 ID	uint64	`db:"ID,omitempty" json:"ID,omitempty"`
-Image1 *string `db:"image1,omitempty" json:"image1,omitempty"`
-Image2 *string `db:"image2,omitempty" json:"image2,omitempty"`
-Image3 *string `db:"image3,omitempty" json:"image3,omitempty"`
-Thumb *string `db:"thumb,omitempty" json:"thumb,omitempty"`
+Image1 string `db:"image1,omitempty" json:"image1,omitempty"`
+Image2 string `db:"image2,omitempty" json:"image2,omitempty"`
+Image3 string `db:"image3,omitempty" json:"image3,omitempty"`
+Thumb string `db:"thumb,omitempty" json:"thumb,omitempty"`
 Name	string `db:"name" json:"name"`
 PartNo string `db:"partno" json:"partno"`
-MfgPartNo *string `db:"mfgpartno,omitempty" json:"mfgpartno,omitempty"`
-MfgName *string `db:"mfgname,omitempty" json:"mfgname,omitempty"`
+MfgPartNo string `db:"mfgpartno,omitempty" json:"mfgpartno,omitempty"`
+MfgName string `db:"mfgname,omitempty" json:"mfgname,omitempty"`
 Qty	int64  `db:"quantity" json:"quantity"`
-UnlimitQty *bool `db:"unlimitqty,omitempty" json:"unlimitqty,omitempty"`
-Enable  *bool `db:"enable,omitempty" json:"enable,omitempty"`
+UnlimitQty bool `db:"unlimitqty,omitempty" json:"unlimitqty,omitempty"`
+Enable  bool `db:"enable,omitempty" json:"enable,omitempty"`
 Price float64  `db:"price" json:"price"`
-Msrp *float64  `db:"msrp,omitempty" json:"msrp,omitempty"`
-Cost *float64  `db:"cost,omitempty" json:"cost,omitempty"`
+Msrp float64  `db:"msrp,omitempty" json:"msrp,omitempty"`
+Cost float64  `db:"cost,omitempty" json:"cost,omitempty"`
 //Sold 	int64  `db:"soldqty,omitempty" json:"soldqty,omitempty"`
-MinOrder *int64 `db:"minorder" json:"minorder"`
-MaxOrder *int64 `db:"maxorder,omitempty" json:"maxorder,omitempty"`
-Location *string `db:"location" json:"location"`
-Category *string `db:"category" json:"category"`
-SubCategory *string `db:"subcategory" json:"subcategory"`
+MinOrder int64 `db:"minorder" json:"minorder"`
+MaxOrder int64 `db:"maxorder,omitempty" json:"maxorder,omitempty"`
+Location string `db:"location" json:"location"`
+Category string `db:"category" json:"category"`
+SubCategory string `db:"subcategory" json:"subcategory"`
 Type *string  `db:"type,omitempty" json:"type,omitempty"`
-PackageType *string  `db:"packagetype,omitempty" json:"packagetype,omitempty"`
-Technology *string  `db:"technology,omitempty" json:"technology,omitempty"`
-Materials *string  `db:"materials,omitempty" json:"materials,omitempty"`
-Value *float64 `db:"value,omitempty" json:"value,omitempty"`
-ValUnit *string  `db:"valunit,omitempty" json:"valunit,omitempty"`
-VoltsRating *float64 `db:"voltsrating,omitempty" json:"voltsrating,omitempty"`
-AmpsRating *float64 `db:"ampsrating,omitempty" json:"ampsrating,omitempty"`
-WattsRating *float64 `db:"wattsrating,omitempty" json:"temprating,omitempty"`
-TempRating *float64 `db:"temprating,omitempty" json:"temprating,omitempty"`
-TempUnit *string `db:"tempunit,omitempty" json:"tempunit,omitempty"`
-Description1 *string `db:"description1,omitempty" json:"description1,omitempty"`
-Description2 *string `db:"description2,omitempty" json:"description2,omitempty"`
-Color1 *string `db:"color1,omitempty" json:"color1,omitempty"`
-Color2 *string `db:"color2,omitempty" json:"color2,omitempty"`
-Sourceinfo *string `db:"sourceinfo,omitempty" json:"sourceinfo,omitempty"`
-Datasheet *string `db:"datasheet,omitempty" json:"datasheet,omitempty"`
-Docs *string `db:"docs,omitempty" json:"docs,omitempty"`
-Reference *string `db:"reference,omitempty" json:"reference,omitempty"`
-Attributes *string `db:"attributes,omitempty" json:"attributes,omitempty"`
-Condition *string `db:"condition,omitempty" json:"condition,omitempty"`
-Note *string `db:"note,omit    category STRING,
-empty" json:"note,omitempty"`
-Warning  *string `db:"warning,omitempty" json:"warning,omitempty"`
-Length *float64 `db:"length,omitempty,omitempty" json:"length,omitempty"`
-Width *float64 `db:"width,omitempty" json:"width,omitempty"`
-Height *float64 `db:"height,omitempty" json:"height,omitempty"`
-WeightLb *float64 `db:"weightlb,omitempty" json:"weightlb,omitempty"`
-WeightOz *float64 `db:"weightoz,omitempty" json:"weightoz,omitempty"`
-MetaTitle *string `db:"metatitle,omitempty" json:"metatitle,omitempty"`
-MetaDesc *string `db:"metadesc,omitempty" json:"metadesc,omitempty"`
-MetaKeywords *string `db:"metakeywords,omitempty" json:"metakeywords,omitempty"`
+PackageType string  `db:"packagetype,omitempty" json:"packagetype,omitempty"`
+Technology string  `db:"technology,omitempty" json:"technology,omitempty"`
+Materials string  `db:"materials,omitempty" json:"materials,omitempty"`
+Value float64 `db:"value,omitempty" json:"value,omitempty"`
+ValUnit string  `db:"valunit,omitempty" json:"valunit,omitempty"`
+VoltsRating float64 `db:"voltsrating,omitempty" json:"voltsrating,omitempty"`
+AmpsRating float64 `db:"ampsrating,omitempty" json:"ampsrating,omitempty"`
+WattsRating float64 `db:"wattsrating,omitempty" json:"temprating,omitempty"`
+TempRating float64 `db:"temprating,omitempty" json:"temprating,omitempty"`
+TempUnit string `db:"tempunit,omitempty" json:"tempunit,omitempty"`
+Description1 string `db:"description1,omitempty" json:"description1,omitempty"`
+Description2 string `db:"description2,omitempty" json:"description2,omitempty"`
+Color1 string `db:"color1,omitempty" json:"color1,omitempty"`
+Color2 string `db:"color2,omitempty" json:"color2,omitempty"`
+Sourceinfo string `db:"sourceinfo,omitempty" json:"sourceinfo,omitempty"`
+Datasheet string `db:"datasheet,omitempty" json:"datasheet,omitempty"`
+Docs string `db:"docs,omitempty" json:"docs,omitempty"`
+Reference string `db:"reference,omitempty" json:"reference,omitempty"`
+Attributes string `db:"attributes,omitempty" json:"attributes,omitempty"`
+Condition string `db:"condition,omitempty" json:"condition,omitempty"`
+Note string `db:"note,omitempty" json:"note,omitempty"`
+Warning  string `db:"warning,omitempty" json:"warning,omitempty"`
+Length float64 `db:"length,omitempty,omitempty" json:"length,omitempty"`
+Width float64 `db:"width,omitempty" json:"width,omitempty"`
+Height float64 `db:"height,omitempty" json:"height,omitempty"`
+WeightLb float64 `db:"weightlb,omitempty" json:"weightlb,omitempty"`
+WeightOz float64 `db:"weightoz,omitempty" json:"weightoz,omitempty"`
+MetaTitle string `db:"metatitle,omitempty" json:"metatitle,omitempty"`
+MetaDesc string `db:"metadesc,omitempty" json:"metadesc,omitempty"`
+MetaKeywords string `db:"metakeywords,omitempty" json:"metakeywords,omitempty"`
 //todo: add extra control fields
 }
 

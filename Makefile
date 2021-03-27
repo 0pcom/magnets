@@ -1,8 +1,8 @@
-#clean:
-#	rm -rf cockroach-data certs private
+clean:
+	rm -rf cockroach-data certs private
 
-#secure: clean
-#	mkdir -p certs private && \
+secure: clean
+	mkdir -p certs private && \
 	cockroach cert create-ca --certs-dir=certs --ca-key=private/ca.key && \
 	#cockroach cert create-node mainframe --certs-dir=certs --ca-key=private/ca.key && \
 	cockroach cert create-node localhost --certs-dir=certs --ca-key=private/ca.key && \
