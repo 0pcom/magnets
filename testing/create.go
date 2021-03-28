@@ -1,35 +1,29 @@
 // Routing based on the gorilla/mux router
 
-package gorilla
+package main
 
 import (
-//	"crypto/sha1"
 	"fmt"
-	"html/template"
-//	"io"
+//	"html/template"
 	"log"
-	"net/http"
+	//"github.com/shopspring/decimal"
+//	"net/http"
+//	"bufio"
+//	"fmt"
 //	"os"
-//	"path/filepath"
-	//"strconv"
-//	"strings"
-	//"sort"
-	"time"
-	"github.com/gorilla/mux"
-)
-
-import (
+//	"time"
+//	"strconv"
 	"github.com/upper/db/v4"
-"github.com/upper/db/v4/adapter/cockroachdb"
+	"github.com/upper/db/v4/adapter/cockroachdb"
 )
-var Serve http.Handler
+//var Serve http.Handler
 
 //var partnoinput string
-var partno Product
-var category string
+//var partno Product
+//var category string
 var products []Product
 
-func init() {
+func main() {
 	// /* cockroachdb stuff using upper/db database access layer */ //
 	fmt.Printf("Initializing cockroachDB connection\n")
 	sess, err := cockroachdb.Open(settings)		//establish the session
@@ -39,9 +33,9 @@ func init() {
 	defer sess.Close()
 
 	//test actions on database
-	createTables(sess)
+//	createTables(sess)
 	//deleteAll(sess)
-	//createTestProd(sess)
+	createProd(sess)
 
 	// Find().All() maps all the records from the products collection.
 	productsCol := Products(sess)
@@ -50,101 +44,60 @@ func init() {
 	if err != nil {
 		log.Fatal("productsCol.Find: ", err)
 	}
-
-	r := mux.NewRouter()
-	r.PathPrefix("/img/").Handler(http.StripPrefix("/img/", http.FileServer(http.Dir("./img"))))
-	r.HandleFunc("/", frontPage).Methods("GET")
-	r.HandleFunc("/about", aboutPage).Methods("GET")
-		r.HandleFunc("/time", timeFunc).Methods("GET")
-	//	r.HandleFunc("/gallery", galleryFunc).Methods("GET")
-		r.HandleFunc("/products", findProducts).Methods("GET")
-		r.HandleFunc("/product/{slug}", findProduct).Methods("GET")
-		//r.HandleFunc("/gallery/{slug}", ).Methods("GET")
-	Serve = r
 }
 
-// /* timepage  */ //
 
-func monthDayYear(t time.Time) string {
-	return t.Format("Monday January 2, 2006 15:04:05")
-}
+func createProd(sess db.Session) {
+	productsTable := sess.Collection("products")
 
-func timeFunc(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html")
-	var fm = template.FuncMap{ "fdateMDY": monthDayYear,	}
-	tp1 := template.Must(template.New("").Funcs(fm).ParseFiles("time.gohtml"))
-	if err := tp1.ExecuteTemplate(w, "time.gohtml", time.Now()); err != nil {
-		log.Fatalln(err)
+	products := []Product{}
+	err = productsTable.Find().All(&products)
+	if err != nil {
+		log.Fatal("productsTable.Find: ", err)
 	}
-}
 
-// /* products page */ //
-func findProducts(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html")
-	tpl0 := template.Must(template.New("").ParseFiles("products.gohtml"))
-	tpl0.ExecuteTemplate(w, "products.gohtml", products)	//fmt.Fprint(w, "products\n")
-}
+	// Print the queried information.
+//	fmt.Printf("Records in the %q collection:\n", productsTable.Name())
+//	for i := range products {
+//		fmt.Printf("record #%d: %#v\n", i, products[i])
+//	}
 
-// /* individual product page */ //
+fmt.Printf("Creating product\n")
+p1 := Product{}
+p1.Price = 1
+p1.Qty = 5000
+p1.PartNo = "cap1500uf6p3e"
+p1.Value = 1500
+p1.ValUnit = "μF"
+p1.VoltsRating = 6.3
+p1.TempRating = 105.0
+p1.TempUnit = "°C"
+p1.PackageType = "Radial"
+p1.Materials = "Aluminum"
+p1.SubCategory = "Electrolytic"
+p1.Category = "Capacitor"
+p1.Image1 = "cap1500uf6e.jpg"
+p1.Name = fmt.Sprintf("%.0f", p1.Value) + p1.ValUnit + " " + fmt.Sprintf("%.1f", p1.VoltsRating) + "V"
+p1.Description1 = p1.Name + " " + fmt.Sprintf("%.0f", p1.TempRating) + " " + p1.TempUnit + " " + p1.PackageType + " " + p1.Materials + " " + p1.SubCategory + " " + p1.Category
 
-func findProduct(w http.ResponseWriter, r *http.Request) {	//, product string
-	slug := mux.Vars(r)["slug"]
-
-	for i := range products {
-		if products[i].PartNo == slug {
-			partno = products[i]
-			break
-				// Found!
-		}
-}
-if partno.Name == "" {
-	fmt.Fprint(w, "No product found for partno:\n", slug)
-} else {
-	w.Header().Set("Content-Type", "text/html")
-	tpl1 := template.Must(template.New("").ParseFiles("product.gohtml"))
-	//fmt.Fprint(w, "products\n", partno.Name)
-	tpl1.ExecuteTemplate(w, "product.gohtml", partno)
-}
-}
-
-
-// /* About Page  */ //
-func aboutPage(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html")
-	var fm = template.FuncMap{ "fdateMDY": monthDayYear,	}
-	tp1 := template.Must(template.New("").Funcs(fm).ParseFiles("about.gohtml"))
-	if err := tp1.ExecuteTemplate(w, "about.gohtml", time.Now()); err != nil {
-		log.Fatalln(err)
+	err = Products(sess).InsertReturning(&p1)
+	if err != nil {
+		log.Fatal("sess.Save: ", err)
 	}
+	//special chars:
+	//	μ°
+//	fmt.Printf("Creating second test product 'dummy2'\n")
+//	product1 = Product{Name: "dummy2", PartNo:"test1", Description1:descp, Price:1.00}
+//	err = Products(sess).InsertReturning(&product1)
+//	if err != nil {
+//		log.Fatal("sess.Save: ", err)
+//	}
+// Print the queried information.
+fmt.Printf("Records in the %q collection:\n", productsTable.Name())
+for i := range products {
+	fmt.Printf("record #%d: %#v\n", i, products[i])
 }
-
-// /* Front Page */ //
-
-func frontPage(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html")
-	var fm = template.FuncMap{ "fdateMDY": monthDayYear,	}
-	tp1 := template.Must(template.New("").Funcs(fm).ParseFiles("index.gohtml"))
-	if err := tp1.ExecuteTemplate(w, "index.gohtml", time.Now()); err != nil {
-		log.Fatalln(err)
-	}
 }
-
-// /*  */ //
-
-func NewRouter() *mux.Router {
-router := mux.NewRouter().StrictSlash(true)
-
-// Choose the folder to serve
-staticDir := "/static/"
-
-// Create the route
-router.
-	PathPrefix(staticDir).
-	Handler(http.StripPrefix(staticDir, http.FileServer(http.Dir("."+staticDir))))
-
-return router
-}
-
 
 // /* database stuff */ //
 
@@ -161,6 +114,8 @@ Options: map[string]string{
   "sslcert":     "certs/client.madmin.crt",
 },
 }
+
+
 // Products is a handy way to represent a collection.
 func Products(sess db.Session) db.Store {
 return sess.Collection("products")
@@ -335,61 +290,14 @@ if err != nil {
 }
 
 //*/
+///*	database test stuff	*///
 /*
-//set default values - does not detect existing values
-func(prod *Product) setDefaults(){
-prod.Image1 = ""
-prod.Image2 = ""
-prod.Image3 = ""
-prod.Thumb = ""
-prod.Name = ""
-prod.PartNo = ""
-prod.MfgPartNo = ""
-prod.MfgName = ""
-prod.Qty = 0
-prod.UnlimitQty = false
-prod.Enable = true
-prod.Price = 0.00
-prod.Msrp = 0.00
-prod.Cost = 0.00
-//prod.Sold = 0
-prod.MinOrder = 0
-prod.MaxOrder = 100
-prod.Location = ""
-prod.Category = ""
-prod.SubCategory = ""
-prod.Type = ""
-prod.PackageType = ""
-prod.Technology = ""
-prod.Materials = ""
-prod.Value = 0.0
-prod.ValUnit = ""
-prod.VoltsRating = 0.0
-prod.AmpsRating = 0.0
-prod.WattsRating = 0.0
-prod.TempRating = 0.0
-prod.TempUnit = ""
-prod.Description1 = ""
-prod.Description2 = ""
-prod.Color1 = ""
-prod.Color2 = ""
-prod.Sourceinfo = ""
-prod.Datasheet = ""
-prod.Docs = ""
-prod.Reference = ""
-prod.Attributes = ""
-prod.Condition = ""
-prod.Note = ""
-prod.Warning = ""
-prod.Length = 0.0
-prod.Width = 0.0
-prod.Height = 0.0
-prod.WeightLb = 0.0
-prod.WeightOz = 0.0
-prod.MetaTitle = ""
-prod.MetaDesc = ""
-prod.MetaKeywords = ""
-//todo: add extra control fields
+func deleteAll(sess db.Session) {
+fmt.Printf("Clearing tables\n")
+//clear tables ; testing
+err := Products(sess).Truncate()
+if err != nil {
+  log.Fatal("Truncate: ", err)
 }
-
+}
 */

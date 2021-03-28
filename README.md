@@ -39,3 +39,23 @@ go run main.go
 ```
 
 server starts on 127.0.0.1:8040/
+
+
+## Production
+
+requires caddy
+
+```
+yay -S caddy
+```
+
+reverse proxy to port 80 from 8040
+
+```
+sudo caddy reverse-proxy --from magnetosphere.net --to localhost:8040
+
+```
+
+## Add nodes / cluster setup
+Nodes are an access point to the database
+https://www.cockroachlabs.com/docs/stable/deploy-cockroachdb-on-premises.html#recommendations
