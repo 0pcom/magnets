@@ -35,7 +35,7 @@ certs2: #clean2
 certs3: #clean3
 	cp -r certs certs3
 	cockroach cert create-node --overwrite --certs-dir=certs3 --ca-key=private/ca.key localhost fairchild 127.0.0.1 192.168.2.146
-	bsdtar -czvf certs2.tar.gz certs2
+	bsdtar -czvf certs3.tar.gz certs3
 
 #start cluster in foreground;
 start0:	#mainframe connecting to magnetosphere
