@@ -1,3 +1,5 @@
+clean: clean0 clean1 clean2 clean3
+
 clean0:
 	rm -rf cockroach-data certs private
 
@@ -10,7 +12,7 @@ clean2:
 clean3:
 	rm -rf certs3
 
-certs: clean0 clean1 clean2 clean3 certs0 certs1 certs2 certs3
+certs: clean certs0 certs1 certs2 certs3
 	echo
 
 certs0: #clean0
@@ -42,18 +44,19 @@ start0:	#mainframe connecting to magnetosphere
 	cockroach start \
 	--certs-dir=certs \
 	--advertise-addr=192.168.2.130 \
-	--join=192.168.2.118 \
+	--join=192.168.2.118,192.168.2.130 \
 	--cache=.25 \
-	--max-sql-memory=.25 \
+	--max-sql-memory=.25 #\
 #	--background
 
 start1:	#instance on webserver
 	cockroach start \
 	--certs-dir=certs \
 	--advertise-addr=192.168.2.118 \
-	--join=192.168.2.130 \
+	--join=192.168.2.130,192.168.2.118 \
 	--cache=.25 \
-	--max-sql-memory=.25 \
+	--max-sql-memory=.25 #\
+#	--background
 
 start2:	#third node is computer
 	cockroach start \
@@ -61,16 +64,16 @@ start2:	#third node is computer
 	--advertise-addr=192.168.2.117 \
 	--join=192.168.2.118 \
 	--cache=.25 \
-	--max-sql-memory=.25 \
+	--max-sql-memory=.25 #\
 #	--background
 
 start3:	#fourth node is fairchild
 	cockroach start \
 	--certs-dir=certs \
-	--advertise-addr=192.168.2.147 \
+	--advertise-addr=192.168.2.146 \
 	--join=192.168.2.118 \
 	--cache=.25 \
-	--max-sql-memory=.25 \
+	--max-sql-memory=.25 #\
 #	--background
 
 #start cluster in background; for production
@@ -111,8 +114,8 @@ prod3:	#fourth node is fairchild
 	--background
 
 #init is run after start for initializing nodes in a cluster
-init:
-	cockroach init --certs-dir=certs --host=192.168.2.118,192.168.2.130,192.168.2.117,192.198.2.147
+init:	#PUT THE LAN IP ADDRESS OF THE LOCAL NODE
+	cockroach init --certs-dir=certs --host=192.168.2.130
 
 #single node for local testing / non cluster implementation
 single-node:
@@ -122,7 +125,7 @@ insecure: clean
 	cockroach start-single-node --insecure
 
 db-secure:
-	cockroach sql --certs-dir=certs -e  'CREATE USER IF NOT EXISTS madmin WITH PASSWORD "g00dyear"; CREATE DATABASE IF NOT EXISTS product; GRANT ALL ON DATABASE product TO madmin;'
+	cockroach sql --certs-dir=certs -e  'CREATE USER IF NOT EXISTS madmin WITH PASSWORD "g00dyear"; CREATE DATABASE IF NOT EXISTS product; GRANT ALL ON DATABASE product TO madmin; USE product;'
 
 db-insecure:
 	cockroach sql --insecure -e 'CREATE USER IF NOT EXISTS madmin WITH PASSWORD "g00dyear"; CREATE DATABASE IF NOT EXISTS product; GRANT ALL ON DATABASE product TO madmin;'
