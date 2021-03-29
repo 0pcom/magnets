@@ -1,3 +1,0 @@
-id,image1,image2,image3,thumb,name,partno,mfgpartno,mfgname,quantity,unlimitqty,enable,price,msrp,cost,minorder,maxorder,location,category,subcategory,type,packagetype,technology,materials,value,valunit,tolerance,voltsrating,ampsrating,wattsrating,temprating,tempunit,description1,description2,color1,color2,sourceinfo,datasheet,docs,reference,attributes,condition,note,warning,length,width,height,weightlb,weightoz,metatitle,metadesc,metakeywords
-645479967368773633,test.jpg,,,,dummy,test,,,10,false,true,1,0,0,0,100,,,,,,,,0,,0.00,0,0,0,0,,test entry to database,,,,,,,,,,,,0,0,0,0,0,,,
-645479967390269441,,,,,dummy2,test1,,,100,false,true,1,0,0,0,100,,,,,,,,0,,0.00,0,0,0,0,,test entry to database,,,,,,,,,,,,0,0,0,0,0,,,
