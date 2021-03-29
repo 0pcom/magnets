@@ -6,15 +6,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"fmt"
 	"html/template"
-	"log"
-	"net/http"
 	"time"
 	"github.com/gorilla/mux"
-)
-
-import (
 	"github.com/upper/db/v4"
 	"github.com/upper/db/v4/adapter/cockroachdb"
 )
@@ -22,57 +16,53 @@ import (
 const port = 8040
 
 func main() {
-
 	fmt.Printf("listening on http://127.0.0.1:%d using gorilla router\n", port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), Serve))
 }
-
-
-// Routing based on the gorilla/mux router
-//package gorilla
+//package gorilla	// Routing based on the gorilla/mux router
 var Serve http.Handler
-
-//var partnoinput string
 var partno Product
 var category string
 var products []Product
 
-func init() {
-	// /* cockroachdb stuff using upper/db database access layer */ //
+func init() {		// /* cockroachdb stuff using upper/db database access layer */ //
 	fmt.Printf("Initializing cockroachDB connection\n")
 	sess, err := cockroachdb.Open(settings)		//establish the session
 	if err != nil {
 		log.Fatal("cockroachdb.Open: ", err)
 	}
 	defer sess.Close()
-
 	//test actions on database
-	createTables(sess)
-	//deleteAll(sess)
+	//dropTables(sess)
+	//createTables(sess)
+	deleteAll(sess)
 	//createTestProd(sess)
-
-	// Find().All() maps all the records from the products collection.
+	importCSV(sess)
+//	exportCSV(sess)
 	productsCol := Products(sess)
 	products = []Product{}
-	err = productsCol.Find().All(&products)
+	err = productsCol.Find().All(&products) 	// Find().All() maps all the records from the products collection.
 	if err != nil {
 		log.Fatal("productsCol.Find: ", err)
+	}
+
+	log.Printf("products:")
+	for i := range products {
+		fmt.Printf("product #%d: %#v\n", i, products[i])
+//			fmt.Printf("\tproducts[%d]: %d\n", products[i].ID, products[i].PartNo)
 	}
 
 	r := mux.NewRouter()
 	r.PathPrefix("/img/").Handler(http.StripPrefix("/img/", http.FileServer(http.Dir("./img"))))
 	r.HandleFunc("/", frontPage).Methods("GET")
 	r.HandleFunc("/about", aboutPage).Methods("GET")
-		r.HandleFunc("/time", timeFunc).Methods("GET")
-	//	r.HandleFunc("/gallery", galleryFunc).Methods("GET")
-		r.HandleFunc("/products", findProducts).Methods("GET")
-		r.HandleFunc("/product/{slug}", findProduct).Methods("GET")
-		//r.HandleFunc("/gallery/{slug}", ).Methods("GET")
+	r.HandleFunc("/time", timeFunc).Methods("GET")
+	r.HandleFunc("/products", findProducts).Methods("GET")
+	r.HandleFunc("/product/{slug}", findProduct).Methods("GET")
 	Serve = r
 }
 
 // /* timepage  */ //
-
 func monthDayYear(t time.Time) string {
 	return t.Format("Monday January 2, 2006 15:04:05")
 }
@@ -85,19 +75,15 @@ func timeFunc(w http.ResponseWriter, r *http.Request) {
 		log.Fatalln(err)
 	}
 }
-
 // /* products page */ //
 func findProducts(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	tpl0 := template.Must(template.New("").ParseFiles("products.gohtml"))
 	tpl0.ExecuteTemplate(w, "products.gohtml", products)	//fmt.Fprint(w, "products\n")
 }
-
 // /* individual product page */ //
-
 func findProduct(w http.ResponseWriter, r *http.Request) {	//, product string
 	slug := mux.Vars(r)["slug"]
-
 	for i := range products {
 		if products[i].PartNo == slug {
 			partno = products[i]
@@ -110,12 +96,9 @@ if partno.Name == "" {
 } else {
 	w.Header().Set("Content-Type", "text/html")
 	tpl1 := template.Must(template.New("").ParseFiles("product.gohtml"))
-	//fmt.Fprint(w, "products\n", partno.Name)
 	tpl1.ExecuteTemplate(w, "product.gohtml", partno)
 }
 }
-
-
 // /* About Page  */ //
 func aboutPage(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
@@ -125,9 +108,7 @@ func aboutPage(w http.ResponseWriter, r *http.Request) {
 		log.Fatalln(err)
 	}
 }
-
 // /* Front Page */ //
-
 func frontPage(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	var fm = template.FuncMap{ "fdateMDY": monthDayYear,	}
@@ -136,47 +117,34 @@ func frontPage(w http.ResponseWriter, r *http.Request) {
 		log.Fatalln(err)
 	}
 }
-
 // /*  */ //
-
 func NewRouter() *mux.Router {
 router := mux.NewRouter().StrictSlash(true)
-
-// Choose the folder to serve
-staticDir := "/static/"
-
-// Create the route
-router.
+staticDir := "/static/"	// Choose the folder to serve
+router.	// Create the route
 	PathPrefix(staticDir).
 	Handler(http.StripPrefix(staticDir, http.FileServer(http.Dir("."+staticDir))))
-
 return router
 }
-
-
 // /* database stuff */ //
-
 var err error
-//var sitedata basedata.
 var settings = cockroachdb.ConnectionURL{
 Host:     "localhost",
 Database: "product",
 User:     "madmin",
-Options: map[string]string{
-  // Secure node.
+Options: map[string]string{ // Secure node.
   "sslrootcert": "certs/ca.crt",
   "sslkey":      "certs/client.madmin.key",
   "sslcert":     "certs/client.madmin.crt",
 },
 }
-// Products is a handy way to represent a collection.
-func Products(sess db.Session) db.Store {
+
+func Products(sess db.Session) db.Store {	// Products is a handy way to represent a collection.
 return sess.Collection("products")
 }
 
-// Product is used to represent a single record in the "products" table.
-type Product struct {
-ID	uint64	`db:"ID,omitempty" json:"ID,omitempty"`
+type Product struct {	// Product is used to represent a single record in the "products" table.
+Id	int64	`db:"id,omitempty" json:"id,omitempty"`
 Image1 string `db:"image1,omitempty" json:"image1,omitempty"`
 Image2 string `db:"image2,omitempty" json:"image2,omitempty"`
 Image3 string `db:"image3,omitempty" json:"image3,omitempty"`
@@ -191,7 +159,6 @@ Enable  bool `db:"enable,omitempty" json:"enable,omitempty"`
 Price float64  `db:"price" json:"price"`
 Msrp float64  `db:"msrp,omitempty" json:"msrp,omitempty"`
 Cost float64  `db:"cost,omitempty" json:"cost,omitempty"`
-//Sold 	int64  `db:"soldqty,omitempty" json:"soldqty,omitempty"`
 MinOrder int64 `db:"minorder" json:"minorder"`
 MaxOrder int64 `db:"maxorder,omitempty" json:"maxorder,omitempty"`
 Location string `db:"location" json:"location"`
@@ -229,26 +196,42 @@ WeightOz float64 `db:"weightoz,omitempty" json:"weightoz,omitempty"`
 MetaTitle string `db:"metatitle,omitempty" json:"metatitle,omitempty"`
 MetaDesc string `db:"metadesc,omitempty" json:"metadesc,omitempty"`
 MetaKeywords string `db:"metakeywords,omitempty" json:"metakeywords,omitempty"`
-//todo: add extra control fields
-}
+}	//todo: add extra control fields
 
-
-
-//var Collection1 string
-// Collection is required in order to create a relation between the Product
-// struct and the "products" table.
-func (a *Product) Store(sess db.Session) db.Store {
+func (a *Product) Store(sess db.Session) db.Store {// Collection is required in order to create a relation between the Product struct and the "products" table.
 return Products(sess)
 }
 
-///*
+func dropTables(sess db.Session) error {
+	fmt.Printf("Dropping 'products' table\n")
+	_, err := sess.SQL().Exec(`
+		DROP TABLE product.products
+		`)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+func importCSV(sess db.Session) error {
+	fmt.Printf("Importing CSV from http://127.0.0.1:8079/export01.csv\n")
+	_, err := sess.SQL().Exec(`
+		IMPORT INTO product.products
+		CSV DATA (
+			'http://127.0.0.1:8079/export01.csv'
+			);
+			WITH skip = '1';
+			`)
+	if err != nil {
+		return err
+	}
+	return nil
+}
 
-// createTables creates all the tables that are neccessary to run this example.
-func createTables(sess db.Session) error {
+func createTables(sess db.Session) error {	// createTables creates all the tables that are neccessary to run this example.
 fmt.Printf("Creating 'products' table\n")
 _, err := sess.SQL().Exec(`
   CREATE TABLE IF NOT EXISTS products (
-    ID SERIAL PRIMARY KEY UNIQUE NOT NULL,
+    id INT8 DEFAULT unique_rowid(),
     image1 STRING NULL DEFAULT '',
     image2 STRING NULL DEFAULT '',
     image3 STRING NULL DEFAULT '',
@@ -299,10 +282,12 @@ _, err := sess.SQL().Exec(`
     weightoz FLOAT DEFAULT 0.0,
     metatitle STRING NULL DEFAULT '',
     metadesc STRING NULL DEFAULT '',
-    metakeywords STRING NULL DEFAULT ''
+    metakeywords STRING NULL DEFAULT '',
+    CONSTRAINT "primary" PRIMARY KEY (partno ASC, id ASC),
+		FAMILY "primary" (id, image1, image2, image3, thumb, name, partno, mfgpartno, mfgname, quantity, unlimitqty, enable, price, msrp, cost, minorder, maxorder, location, category, subcategory, type, packagetype, technology, materials, value, valunit, tolerance, voltsrating, ampsrating, wattsrating, temprating, tempunit, description1, description2, color1, color2, sourceinfo, datasheet, docs, reference, attributes, condition, note, warning, length, width, height, weightlb, weightoz, metatitle, metadesc, metakeywords)
+
   )
   `)
-
 if err != nil {
   return err
 }
@@ -310,7 +295,6 @@ return nil
 }
 
 ///*	database test stuff	*///
-///*
 func deleteAll(sess db.Session) {
 fmt.Printf("Clearing tables\n")
 //clear tables ; testing
@@ -324,26 +308,21 @@ func createTestProd(sess db.Session) {
 fmt.Printf("Creating test product 'dummy'\n")
 _desc := "test entry to database"
 _img := "test.jpg"
-//product1 := Product{}
-//product1.setDefaults()
-//fmt.Println(product1)
 product1 := Product{Name: "dummy", PartNo:"test", Description1: _desc, Price:1.00, Image1: _img, Qty: 10}
 err := Products(sess).InsertReturning(&product1)
 if err != nil {
     log.Fatal("sess.Save: ", err)
 }
 fmt.Printf("Creating second test product 'dummy2'\n")
-//product1.setDefaults()
 product1 = Product{Name: "dummy2", PartNo:"test1", Description1: _desc, Price: 1.00, Qty: 100}
 err = Products(sess).InsertReturning(&product1)
 if err != nil {
     log.Fatal("sess.Save: ", err)
 }
-
 }
 
-//*/
 /*
+//product1.setDefaults()
 //set default values - does not detect existing values
 func(prod *Product) setDefaults(){
 prod.Image1 = ""
@@ -397,7 +376,5 @@ prod.WeightOz = 0.0
 prod.MetaTitle = ""
 prod.MetaDesc = ""
 prod.MetaKeywords = ""
-//todo: add extra control fields
 }
-
 */
