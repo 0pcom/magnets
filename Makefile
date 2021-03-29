@@ -125,7 +125,10 @@ insecure: clean
 	cockroach start-single-node --insecure
 
 db-secure:
-	cockroach sql --certs-dir=certs -e  'CREATE USER IF NOT EXISTS madmin WITH PASSWORD "g00dyear"; CREATE DATABASE IF NOT EXISTS product; GRANT ALL ON DATABASE product TO madmin; USE product;'
+	cockroach sql --certs-dir=certs -e  'CREATE USER IF NOT EXISTS madmin WITH PASSWORD "g00dyear"; CREATE DATABASE IF NOT EXISTS product; GRANT ALL ON DATABASE product TO madmin; GRANT ADMIN TO madmin; USE product;'
 
 db-insecure:
 	cockroach sql --insecure -e 'CREATE USER IF NOT EXISTS madmin WITH PASSWORD "g00dyear"; CREATE DATABASE IF NOT EXISTS product; GRANT ALL ON DATABASE product TO madmin;'
+
+export:
+	cockroach sql --certs-dir=certs -e "SELECT * from product.products;" --format=csv > export01.csv
