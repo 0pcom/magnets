@@ -11,6 +11,8 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/upper/db/v4"
 	"github.com/upper/db/v4/adapter/cockroachdb"
+	"os/exec"
+	"os"
 )
 
 const port = 8040
@@ -34,11 +36,14 @@ func init() {		// /* cockroachdb stuff using upper/db database access layer */ /
 	defer sess.Close()
 	//test actions on database
 	//dropTables(sess)
-	//createTables(sess)
-	deleteAll(sess)
+	createTableIfNotExists(sess)
+	//deleteAll(sess)
 	//createTestProd(sess)
-	importCSV(sess)
-//	exportCSV(sess)
+	//importCSV(sess)
+	//exportCSV()
+
+
+	/*
 	productsCol := Products(sess)
 	products = []Product{}
 	err = productsCol.Find().All(&products) 	// Find().All() maps all the records from the products collection.
@@ -60,6 +65,7 @@ func init() {		// /* cockroachdb stuff using upper/db database access layer */ /
 	r.HandleFunc("/products", findProducts).Methods("GET")
 	r.HandleFunc("/product/{slug}", findProduct).Methods("GET")
 	Serve = r
+*/
 }
 
 // /* timepage  */ //
@@ -227,7 +233,17 @@ func importCSV(sess db.Session) error {
 	return nil
 }
 
-func createTables(sess db.Session) error {	// createTables creates all the tables that are neccessary to run this example.
+//correct way from bash shell:
+//cockroach sql --certs-dir=certs -e "SELECT * from product.products;" --format=csv > export01.csv
+func exportCSV() { //the extremely lazy way
+output, err := exec.Command("make", "export").CombinedOutput()
+if err != nil {
+  os.Stderr.WriteString(err.Error())
+}
+fmt.Println(string(output))
+}
+
+func createTableIfNotExists(sess db.Session) error {	// createTables creates all the tables that are neccessary to run this example.
 fmt.Printf("Creating 'products' table\n")
 _, err := sess.SQL().Exec(`
   CREATE TABLE IF NOT EXISTS products (
