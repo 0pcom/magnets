@@ -43,7 +43,7 @@ func init() {		// /* cockroachdb stuff using upper/db database access layer */ /
 	//exportCSV()
 
 
-	/*
+
 	productsCol := Products(sess)
 	products = []Product{}
 	err = productsCol.Find().All(&products) 	// Find().All() maps all the records from the products collection.
@@ -65,7 +65,7 @@ func init() {		// /* cockroachdb stuff using upper/db database access layer */ /
 	r.HandleFunc("/products", findProducts).Methods("GET")
 	r.HandleFunc("/product/{slug}", findProduct).Methods("GET")
 	Serve = r
-*/
+
 }
 
 // /* timepage  */ //
