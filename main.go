@@ -12,6 +12,7 @@ import (
 	"github.com/upper/db/v4/adapter/cockroachdb"
 	"os/exec"
 	"os"
+	"strconv"
 	flags "github.com/spf13/pflag"
 )
 
@@ -26,8 +27,10 @@ const port = 8040
 		droptables	bool
 		testprod	bool
 		createpartno	string
+		create100	bool
 		importcsv	bool
 		printinventory	bool
+		vprintinventory	bool
 		exportcsv	bool
 		helpmenu	bool
 	)
@@ -39,8 +42,10 @@ const port = 8040
 		flags.BoolVarP(&createtables, "createtables", "c", false, "Create the tables if they do not exist")
 		flags.BoolVarP(&testprod, "testprod", "t", false, "create test product")
 		flags.StringVarP(&createpartno, "createpartno", "C", "", "Create a part by providing the part number")
+		flags.BoolVarP(&create100, "create100", "y", false, "Create 100 parts with sequential part numbers")
 		flags.BoolVarP(&exportcsv, "exportcsv", "e", false, "Export a csv to export01.csv")
 		flags.BoolVarP(&printinventory, "printinventory", "p", false, "Print the inventory to the terminal")
+		flags.BoolVarP(&vprintinventory, "vprintinventory", "v", false, "More verbose printinventory")
 		flags.BoolVarP(&importcsv, "importcsv", "i", false, "Import csv from http://127.0.0.1:8079/export01.csv")
 		flags.BoolVarP(&runapp, "run", "r", false, "run the web app")
 		flags.BoolVarP(&helpmenu, "help", "h", false, "show this help menu")
@@ -90,10 +95,9 @@ if helpmenu {
 		createProduct(sess, createpartno)
 		cmdargs = 1
 	}
-	// /* export csv */ //
-	if exportcsv {
-		fmt.Println("Exporting csv to export01.csv")
-		exportCSV()
+	if create100 {
+		fmt.Println("creating 100 parts")
+		createHundred(sess)
 		cmdargs = 1
 	}
 	// /* print inventory */ //
@@ -101,10 +105,31 @@ if helpmenu {
 		defineproducts(sess)
 		log.Printf("products:")
 		for i := range products {
-			fmt.Printf("product #%d: %#v\n", i, products[i])
-	//			fmt.Printf("\tproducts[%d]: %d\n", products[i].ID, products[i].PartNo)
+			//fmt.Printf("product #%d: %#v\n", i, products[i])
+				fmt.Printf("product[%d]:\n", products[i].Id)
+				fmt.Printf("\tpartno:		");	fmt.Printf("%s\n", products[i].PartNo)
+				if products[i].Image1 != "" {	fmt.Printf("\tImage1:		");	fmt.Printf("%s\n", products[i].Image1)	}
+				if products[i].Name != "" {	fmt.Printf("\tName:		");	fmt.Printf("%s\n", products[i].Name)	}
+				fmt.Printf("\tQty:		"); fmt.Printf("%d\n", products[i].Qty)
+				fmt.Printf("\tPrice:		"); fmt.Printf("%.2f\n", products[i].Price)
+				fmt.Printf("\tEnable:		"); fmt.Printf("%t\n", products[i].Enable)
 	cmdargs = 1
 		}
+	}
+	// /* more verbosely print inventory */ //
+	if vprintinventory {
+		defineproducts(sess)
+		log.Printf("products:")
+		for i := range products {
+			fmt.Printf("product #%d: %#v\n", i, products[i])
+			cmdargs = 1
+				}
+			}
+	// /* export csv */ //
+	if exportcsv {
+		fmt.Println("Exporting csv to export01.csv")
+		exportCSV()
+		cmdargs = 1
 	}
 	// /* import csv */ //
 	if importcsv {
@@ -135,6 +160,7 @@ helpmenu1()
 
 func helpmenu1() {
 	fmt.Printf("Usage: magnets -dDctCepirh\n")
+	fmt.Printf("\tSuggested Demo: magnets -ctpr\n")
 	flags.PrintDefaults()
 }
 
@@ -309,71 +335,15 @@ func dropTables(sess db.Session) error {
 	return nil
 }
 
+//todo: improve importing
 func importCSV(sess db.Session) error {
 	fmt.Printf("Importing CSV from http://127.0.0.1:8079/export01.csv\n")
-	_, err := sess.SQL().Exec(`
-		IMPORT INTO product.products (
-	    id INT8 PRIMARY KEY,
-	    image1 STRING NULL,
-	    image2 STRING NULL,
-	    image3 STRING NULL,
-	    thumb STRING NULL,
-	    name STRING NOT NULL,
-	    partno STRING UNIQUE NOT NULL,
-	    mfgpartno STRING NULL,
-	    mfgname STRING NULL,
-	    quantity INT,
-	    unlimitqty BOOL,
-	    enable BOOL,
-	    price FLOAT,
-	    msrp FLOAT,
-	    cost FLOAT,
-	    minorder INT,
-	    maxorder INT,
-	    location STRING NULL,
-			category STRING NULL,
-			subcategory STRING NULL,
-	    type STRING NULL,
-	    packagetype STRING NULL,
-	    technology STRING NULL,
-			materials STRING NULL,
-	    value FLOAT,
-	    valunit STRING NULL,
-			tolerance DECIMAL(3,2),
-	    voltsrating FLOAT,
-	    ampsrating FLOAT,
-			wattsrating FLOAT,
-			temprating FLOAT,
-			tempunit STRING NULL,
-	    description1 STRING NULL,
-	    description2 STRING NULL,
-			color1 STRING NULL,
-			color2 STRING NULL,
-	    sourceinfo STRING NULL,
-	    datasheet STRING NULL,
-	    docs STRING NULL,
-	    reference STRING NULL,
-	    attributes STRING NULL,
-	    condition STRING NULL,
-	    note STRING NULL,
-	    warning STRING NULL,
-	    length FLOAT,
-	    width FLOAT,
-	    height FLOAT,
-	    weightlb FLOAT,
-	    weightoz FLOAT,
-	    metatitle STRING NULL,
-	    metadesc STRING NULL,
-	    metakeywords STRING NULL,
-)
-		 CSV DATA ('http://127.0.0.1:8079/export01.csv')	WITH skip = '1';`)
+	_, err := sess.SQL().Exec(`IMPORT INTO product.products CSV DATA ('http://127.0.0.1:8079/export01.csv')	WITH skip = '1';`)
 	if err != nil {
 		return err
 	}
 	return nil
 }
-//	    CONSTRAINT "primary" PRIMARY KEY (id ASC),
-//			FAMILY "primary" (id)
 
 //correct way from bash shell:
 //cockroach sql --certs-dir=certs -e "SELECT * from product.products;" --format=csv > export01.csv
@@ -386,12 +356,14 @@ if err != nil {
 fmt.Println(string(output))
 }
 
+//id SERIAL PRIMARY KEY,
+//id INT8 PRIMARY KEY DEFAULT unique_rowid(),
 func createTableIfNotExists(sess db.Session) error {	// createTables creates all the tables that are neccessary to run this example.
 fmt.Printf("Creating 'products' table\n")
 _, err := sess.SQL().Exec(`
   CREATE TABLE IF NOT EXISTS products (
     id SERIAL PRIMARY KEY,
-    image1 STRING NULL DEFAULT '',
+		image1 STRING NULL DEFAULT '',
     image2 STRING NULL DEFAULT '',
     image3 STRING NULL DEFAULT '',
     thumb STRING NULL DEFAULT '',
@@ -444,9 +416,12 @@ _, err := sess.SQL().Exec(`
     metakeywords STRING NULL DEFAULT ''
   )
   `)
+//CONSTRAINT "primary" PRIMARY KEY (id ASC),
+//FAMILY "primary" (id)
 //id INT8 DEFAULT unique_rowid(),
 //CONSTRAINT "primary" PRIMARY KEY (partno ASC, id ASC),
 //FAMILY "primary" (id, image1, image2, image3, thumb, name, partno, mfgpartno, mfgname, quantity, unlimitqty, enable, price, msrp, cost, minorder, maxorder, location, category, subcategory, type, packagetype, technology, materials, value, valunit, tolerance, voltsrating, ampsrating, wattsrating, temprating, tempunit, description1, description2, color1, color2, sourceinfo, datasheet, docs, reference, attributes, condition, note, warning, length, width, height, weightlb, weightoz, metatitle, metadesc, metakeywords)
+
 if err != nil {
   return err
 }
@@ -482,13 +457,25 @@ if err != nil {
 
 func createProduct(sess db.Session, partno string) {
 fmt.Printf("Creating product with part number: %s'\n", createpartno)
-product1 := Product{PartNo: createpartno}
+product1 := Product{PartNo: createpartno, Enable: false}
 err := Products(sess).InsertReturning(&product1)
 if err != nil {
     log.Fatal("sess.Save: ", err)
 }
 }
 
+func createHundred(sess db.Session) {
+for i := 0; i < 100; i++ {
+	    p := strconv.Itoa(i)
+			fmt.Printf("Creating part number: %s'\n", p)
+			p1 := Product{PartNo: p, Enable: false}
+			err := Products(sess).InsertReturning(&p1)
+			if err != nil {
+			    log.Fatal("sess.Save: ", err)
+			}
+
+}
+}
 
 /*
 //product1.setDefaults()
