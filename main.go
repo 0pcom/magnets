@@ -1,5 +1,4 @@
 // /* */ //
-
 package main
 
 import (
@@ -13,13 +12,140 @@ import (
 	"github.com/upper/db/v4/adapter/cockroachdb"
 	"os/exec"
 	"os"
+	flags "github.com/spf13/pflag"
 )
 
 const port = 8040
 
-func main() {
-	fmt.Printf("listening on http://127.0.0.1:%d using gorilla router\n", port)
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), Serve))
+//var createpartno string
+
+	var (
+		runapp	bool
+		createtables	bool
+		deleteproducts	bool
+		droptables	bool
+		testprod	bool
+		createpartno	string
+		importcsv	bool
+		printinventory	bool
+		exportcsv	bool
+		helpmenu	bool
+	)
+
+	func main(){
+		//TO DO: implement more string arguments for import export and port
+		flags.BoolVarP(&droptables, "droptables", "d", false, "Drop tables")
+		flags.BoolVarP(&deleteproducts, "deleteall", "D", false, "Delete the products in the products database")
+		flags.BoolVarP(&createtables, "createtables", "c", false, "Create the tables if they do not exist")
+		flags.BoolVarP(&testprod, "testprod", "t", false, "create test product")
+		flags.StringVarP(&createpartno, "createpartno", "C", "", "Create a part by providing the part number")
+		flags.BoolVarP(&exportcsv, "exportcsv", "e", false, "Export a csv to export01.csv")
+		flags.BoolVarP(&printinventory, "printinventory", "p", false, "Print the inventory to the terminal")
+		flags.BoolVarP(&importcsv, "importcsv", "i", false, "Import csv from http://127.0.0.1:8079/export01.csv")
+		flags.BoolVarP(&runapp, "run", "r", false, "run the web app")
+		flags.BoolVarP(&helpmenu, "help", "h", false, "show this help menu")
+		flags.Parse()
+
+var cmdargs int = 0
+// /* help menu */ //
+if helpmenu {
+	helpmenu1()
+	os.Exit(0)
+}
+// /* database connection */ //
+	fmt.Printf("Initializing cockroachDB connection\n")
+	sess, err := cockroachdb.Open(settings)		//establish the session
+	if err != nil {
+		log.Fatal("cockroachdb.Open: ", err)
+	}
+	defer sess.Close()
+
+	// /* drop tables */ //
+	if droptables {
+			dropTables(sess)
+			cmdargs = 1
+		}
+	// /* create tables */ //
+	if createtables {
+			createTableIfNotExists(sess)
+			cmdargs = 1
+	}
+
+	// /* delete products */ //
+	if deleteproducts {
+		defineproducts(sess)
+		deleteAll(sess)
+		cmdargs = 1
+	}
+
+	// /* Create Test Product */ //
+	if testprod {
+		defineproducts(sess)
+			createTestProd(sess)
+			cmdargs = 1
+	}
+	// /* create part */ //
+	if createpartno != "" {
+		fmt.Println("createpart has value ", createpartno)
+		createProduct(sess, createpartno)
+		cmdargs = 1
+	}
+	// /* export csv */ //
+	if exportcsv {
+		fmt.Println("Exporting csv to export01.csv")
+		exportCSV()
+		cmdargs = 1
+	}
+	// /* print inventory */ //
+	if printinventory {
+		defineproducts(sess)
+		log.Printf("products:")
+		for i := range products {
+			fmt.Printf("product #%d: %#v\n", i, products[i])
+	//			fmt.Printf("\tproducts[%d]: %d\n", products[i].ID, products[i].PartNo)
+	cmdargs = 1
+		}
+	}
+	// /* import csv */ //
+	if importcsv {
+			fmt.Println("Import a csv from http://127.0.0.1:8079/export01.csv")
+			importCSV(sess)
+			cmdargs = 1
+	}
+	// /* run the web app */ //
+	if runapp {
+		defineproducts(sess)
+		r := mux.NewRouter()
+		r.PathPrefix("/img/").Handler(http.StripPrefix("/img/", http.FileServer(http.Dir("./img"))))
+		r.HandleFunc("/", frontPage).Methods("GET")
+		r.HandleFunc("/about", aboutPage).Methods("GET")
+		r.HandleFunc("/time", timeFunc).Methods("GET")
+		r.HandleFunc("/products", findProducts).Methods("GET")
+		r.HandleFunc("/product/{slug}", findProduct).Methods("GET")
+		Serve = r
+		fmt.Printf("listening on http://127.0.0.1:%d using gorilla router\n", port)
+		log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), Serve))
+		cmdargs = 1
+	}
+
+if cmdargs == 0 {
+helpmenu1()
+}
+	}
+
+func helpmenu1() {
+	fmt.Printf("Usage: magnets -dDctCepirh\n")
+	flags.PrintDefaults()
+}
+
+func defineproducts(sess db.Session) {
+	//define products
+	productsCol := Products(sess)
+	products = []Product{}
+	err = productsCol.Find().All(&products) 	// Find().All() maps all the records from the products collection.
+	if err != nil {
+		log.Fatal("productsCol.Find: ", err)
+	}
 }
 //package gorilla	// Routing based on the gorilla/mux router
 var Serve http.Handler
@@ -27,46 +153,10 @@ var partno Product
 var category string
 var products []Product
 
-func init() {		// /* cockroachdb stuff using upper/db database access layer */ //
-	fmt.Printf("Initializing cockroachDB connection\n")
-	sess, err := cockroachdb.Open(settings)		//establish the session
-	if err != nil {
-		log.Fatal("cockroachdb.Open: ", err)
-	}
-	defer sess.Close()
-	//test actions on database
-	//dropTables(sess)
-	createTableIfNotExists(sess)
-	//deleteAll(sess)
-	//createTestProd(sess)
-	//importCSV(sess)
-	//exportCSV()
 
+//func Serve() {		// /* cockroachdb stuff using upper/db database access layer */ //
 
-
-	productsCol := Products(sess)
-	products = []Product{}
-	err = productsCol.Find().All(&products) 	// Find().All() maps all the records from the products collection.
-	if err != nil {
-		log.Fatal("productsCol.Find: ", err)
-	}
-
-	log.Printf("products:")
-	for i := range products {
-		fmt.Printf("product #%d: %#v\n", i, products[i])
-//			fmt.Printf("\tproducts[%d]: %d\n", products[i].ID, products[i].PartNo)
-	}
-
-	r := mux.NewRouter()
-	r.PathPrefix("/img/").Handler(http.StripPrefix("/img/", http.FileServer(http.Dir("./img"))))
-	r.HandleFunc("/", frontPage).Methods("GET")
-	r.HandleFunc("/about", aboutPage).Methods("GET")
-	r.HandleFunc("/time", timeFunc).Methods("GET")
-	r.HandleFunc("/products", findProducts).Methods("GET")
-	r.HandleFunc("/product/{slug}", findProduct).Methods("GET")
-	Serve = r
-
-}
+//}
 
 // /* timepage  */ //
 func monthDayYear(t time.Time) string {
@@ -202,7 +292,7 @@ WeightOz float64 `db:"weightoz,omitempty" json:"weightoz,omitempty"`
 MetaTitle string `db:"metatitle,omitempty" json:"metatitle,omitempty"`
 MetaDesc string `db:"metadesc,omitempty" json:"metadesc,omitempty"`
 MetaKeywords string `db:"metakeywords,omitempty" json:"metakeywords,omitempty"`
-}	//todo: add extra control fields
+}
 
 func (a *Product) Store(sess db.Session) db.Store {// Collection is required in order to create a relation between the Product struct and the "products" table.
 return Products(sess)
@@ -218,24 +308,77 @@ func dropTables(sess db.Session) error {
 	}
 	return nil
 }
+
 func importCSV(sess db.Session) error {
 	fmt.Printf("Importing CSV from http://127.0.0.1:8079/export01.csv\n")
 	_, err := sess.SQL().Exec(`
-		IMPORT INTO product.products
-		CSV DATA (
-			'http://127.0.0.1:8079/export01.csv'
-			);
-			WITH skip = '1';
-			`)
+		IMPORT INTO product.products (
+	    id INT8 PRIMARY KEY,
+	    image1 STRING NULL,
+	    image2 STRING NULL,
+	    image3 STRING NULL,
+	    thumb STRING NULL,
+	    name STRING NOT NULL,
+	    partno STRING UNIQUE NOT NULL,
+	    mfgpartno STRING NULL,
+	    mfgname STRING NULL,
+	    quantity INT,
+	    unlimitqty BOOL,
+	    enable BOOL,
+	    price FLOAT,
+	    msrp FLOAT,
+	    cost FLOAT,
+	    minorder INT,
+	    maxorder INT,
+	    location STRING NULL,
+			category STRING NULL,
+			subcategory STRING NULL,
+	    type STRING NULL,
+	    packagetype STRING NULL,
+	    technology STRING NULL,
+			materials STRING NULL,
+	    value FLOAT,
+	    valunit STRING NULL,
+			tolerance DECIMAL(3,2),
+	    voltsrating FLOAT,
+	    ampsrating FLOAT,
+			wattsrating FLOAT,
+			temprating FLOAT,
+			tempunit STRING NULL,
+	    description1 STRING NULL,
+	    description2 STRING NULL,
+			color1 STRING NULL,
+			color2 STRING NULL,
+	    sourceinfo STRING NULL,
+	    datasheet STRING NULL,
+	    docs STRING NULL,
+	    reference STRING NULL,
+	    attributes STRING NULL,
+	    condition STRING NULL,
+	    note STRING NULL,
+	    warning STRING NULL,
+	    length FLOAT,
+	    width FLOAT,
+	    height FLOAT,
+	    weightlb FLOAT,
+	    weightoz FLOAT,
+	    metatitle STRING NULL,
+	    metadesc STRING NULL,
+	    metakeywords STRING NULL,
+)
+		 CSV DATA ('http://127.0.0.1:8079/export01.csv')	WITH skip = '1';`)
 	if err != nil {
 		return err
 	}
 	return nil
 }
+//	    CONSTRAINT "primary" PRIMARY KEY (id ASC),
+//			FAMILY "primary" (id)
 
 //correct way from bash shell:
 //cockroach sql --certs-dir=certs -e "SELECT * from product.products;" --format=csv > export01.csv
 func exportCSV() { //the extremely lazy way
+	fmt.Printf("Exporting csv\n")
 output, err := exec.Command("make", "export").CombinedOutput()
 if err != nil {
   os.Stderr.WriteString(err.Error())
@@ -247,7 +390,7 @@ func createTableIfNotExists(sess db.Session) error {	// createTables creates all
 fmt.Printf("Creating 'products' table\n")
 _, err := sess.SQL().Exec(`
   CREATE TABLE IF NOT EXISTS products (
-    id INT8 DEFAULT unique_rowid(),
+    id SERIAL PRIMARY KEY,
     image1 STRING NULL DEFAULT '',
     image2 STRING NULL DEFAULT '',
     image3 STRING NULL DEFAULT '',
@@ -298,12 +441,12 @@ _, err := sess.SQL().Exec(`
     weightoz FLOAT DEFAULT 0.0,
     metatitle STRING NULL DEFAULT '',
     metadesc STRING NULL DEFAULT '',
-    metakeywords STRING NULL DEFAULT '',
-    CONSTRAINT "primary" PRIMARY KEY (partno ASC, id ASC),
-		FAMILY "primary" (id, image1, image2, image3, thumb, name, partno, mfgpartno, mfgname, quantity, unlimitqty, enable, price, msrp, cost, minorder, maxorder, location, category, subcategory, type, packagetype, technology, materials, value, valunit, tolerance, voltsrating, ampsrating, wattsrating, temprating, tempunit, description1, description2, color1, color2, sourceinfo, datasheet, docs, reference, attributes, condition, note, warning, length, width, height, weightlb, weightoz, metatitle, metadesc, metakeywords)
-
+    metakeywords STRING NULL DEFAULT ''
   )
   `)
+//id INT8 DEFAULT unique_rowid(),
+//CONSTRAINT "primary" PRIMARY KEY (partno ASC, id ASC),
+//FAMILY "primary" (id, image1, image2, image3, thumb, name, partno, mfgpartno, mfgname, quantity, unlimitqty, enable, price, msrp, cost, minorder, maxorder, location, category, subcategory, type, packagetype, technology, materials, value, valunit, tolerance, voltsrating, ampsrating, wattsrating, temprating, tempunit, description1, description2, color1, color2, sourceinfo, datasheet, docs, reference, attributes, condition, note, warning, length, width, height, weightlb, weightoz, metatitle, metadesc, metakeywords)
 if err != nil {
   return err
 }
@@ -336,6 +479,16 @@ if err != nil {
     log.Fatal("sess.Save: ", err)
 }
 }
+
+func createProduct(sess db.Session, partno string) {
+fmt.Printf("Creating product with part number: %s'\n", createpartno)
+product1 := Product{PartNo: createpartno}
+err := Products(sess).InsertReturning(&product1)
+if err != nil {
+    log.Fatal("sess.Save: ", err)
+}
+}
+
 
 /*
 //product1.setDefaults()
