@@ -13,6 +13,7 @@ import (
 	"os/exec"
 	"os"
 	"strconv"
+	//"github.com/valyala/fasttemplate"
 	flags "github.com/spf13/pflag"
 )
 
@@ -140,13 +141,16 @@ if helpmenu {
 	// /* run the web app */ //
 	if runapp {
 		defineproducts(sess)
-		r := mux.NewRouter()
+		r := mux.NewRouter() //.StrictSlash(true)
 		r.PathPrefix("/img/").Handler(http.StripPrefix("/img/", http.FileServer(http.Dir("./img"))))
 		r.HandleFunc("/", frontPage).Methods("GET")
+		//publicDir := "/public/"
+		//r.HandleFunc("/products", findProducts).Methods("GET")
+		r.HandleFunc("/post/{slug}", findProduct).Methods("GET")
 		r.HandleFunc("/about", aboutPage).Methods("GET")
-		r.HandleFunc("/time", timeFunc).Methods("GET")
-		r.HandleFunc("/products", findProducts).Methods("GET")
-		r.HandleFunc("/product/{slug}", findProduct).Methods("GET")
+		r.HandleFunc("/shipping", shippingPage).Methods("GET")
+		//r.HandleFunc("/time", timeFunc).Methods("GET")
+		r.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir("./public"))))
 		Serve = r
 		fmt.Printf("listening on http://127.0.0.1:%d using gorilla router\n", port)
 		log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), Serve))
@@ -185,15 +189,16 @@ var products []Product
 //}
 
 // /* timepage  */ //
-func monthDayYear(t time.Time) string {
-	return t.Format("Monday January 2, 2006 15:04:05")
+//func monthDayYear(t time.Time) string {
+func monthDayYear() string {
+	return time.Now().Format("Monday January 2, 2006 15:04:05")
 }
 
 func timeFunc(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	var fm = template.FuncMap{ "fdateMDY": monthDayYear,	}
 	tp1 := template.Must(template.New("").Funcs(fm).ParseFiles("time.gohtml"))
-	if err := tp1.ExecuteTemplate(w, "time.gohtml", time.Now()); err != nil {
+	if err := tp1.ExecuteTemplate(w, "time.gohtml",nil); err != nil { // time.Now()
 		log.Fatalln(err)
 	}
 }
@@ -216,29 +221,64 @@ func findProduct(w http.ResponseWriter, r *http.Request) {	//, product string
 if partno.Name == "" {
 	fmt.Fprint(w, "No product found for partno:\n", slug)
 } else {
-	w.Header().Set("Content-Type", "text/html")
-	tpl1 := template.Must(template.New("").ParseFiles("product.gohtml"))
+	//w.Header().Set("Content-Type", "text/html")
+	wd, err := os.Getwd()
+	if err != nil {
+	   log.Fatal(err)
+	}
+	var fm = template.FuncMap{
+		"fdateMDY": monthDayYear,
+	}
+	tpl1 := template.Must(template.New("").Funcs(fm).ParseFiles(wd + "/public/product.gohtml"))
 	tpl1.ExecuteTemplate(w, "product.gohtml", partno)
 }
 }
 // /* About Page  */ //
 func aboutPage(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html")
-	var fm = template.FuncMap{ "fdateMDY": monthDayYear,	}
-	tp1 := template.Must(template.New("").Funcs(fm).ParseFiles("about.gohtml"))
-	if err := tp1.ExecuteTemplate(w, "about.gohtml", time.Now()); err != nil {
+//	w.Header().Set("Content-Type", "text/html")
+	var fm = template.FuncMap{
+		"fdateMDY": monthDayYear,
+	}
+	wd, err := os.Getwd()
+	if err != nil {
+		 log.Fatal(err)
+	}
+	tp1 := template.Must(template.New("").Funcs(fm).ParseFiles(wd + "/public/about.gohtml"))
+	if err := tp1.ExecuteTemplate(w, "about.gohtml", nil); err != nil {	//time.Now()
+		log.Fatalln(err)
+	}
+}
+// /* Shipping Page  */ //
+func shippingPage(w http.ResponseWriter, r *http.Request) {
+//	w.Header().Set("Content-Type", "text/html")
+	var fm = template.FuncMap{
+		"fdateMDY": monthDayYear,
+	}
+	wd, err := os.Getwd()
+	if err != nil {
+		 log.Fatal(err)
+	}
+	tp1 := template.Must(template.New("").Funcs(fm).ParseFiles(wd + "/public/shipping.gohtml"))
+	if err := tp1.ExecuteTemplate(w, "shipping.gohtml", nil); err != nil {
 		log.Fatalln(err)
 	}
 }
 // /* Front Page */ //
 func frontPage(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html")
-	var fm = template.FuncMap{ "fdateMDY": monthDayYear,	}
-	tp1 := template.Must(template.New("").Funcs(fm).ParseFiles("index.gohtml"))
-	if err := tp1.ExecuteTemplate(w, "index.gohtml", time.Now()); err != nil {
+	// Working Directory
+wd, err := os.Getwd()
+if err != nil {
+   log.Fatal(err)
+}
+	var fm = template.FuncMap{
+		"fdateMDY": monthDayYear,
+	}
+	tp1 := template.Must(template.New("").Funcs(fm).ParseFiles(wd + "/public/index.gohtml"))
+	if err := tp1.ExecuteTemplate(w, "index.gohtml", products); err != nil {
 		log.Fatalln(err)
 	}
 }
+
 // /*  */ //
 func NewRouter() *mux.Router {
 router := mux.NewRouter().StrictSlash(true)
@@ -373,7 +413,7 @@ _, err := sess.SQL().Exec(`
     mfgname STRING NULL DEFAULT '',
     quantity INT DEFAULT 0,
     unlimitqty BOOL DEFAULT FALSE,
-    enable BOOL DEFAULT TRUE,
+    enable BOOL DEFAULT FALSE,
     price FLOAT DEFAULT 0.00,
     msrp FLOAT DEFAULT 0.00,
     cost FLOAT DEFAULT 0.00,
@@ -467,7 +507,7 @@ if err != nil {
 func createHundred(sess db.Session) {
 for i := 0; i < 100; i++ {
 	    p := strconv.Itoa(i)
-			fmt.Printf("Creating part number: %s'\n", p)
+			fmt.Printf("Creating part number: %s\n", p)
 			p1 := Product{PartNo: p, Enable: false}
 			err := Products(sess).InsertReturning(&p1)
 			if err != nil {

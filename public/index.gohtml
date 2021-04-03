@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<!-- 	<meta name="generator" content="Hugo 0.82.0" /> -->
+    <title>MAGNETOSPHERE.NET</title>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="theme-color" content="#000084" />
+    <!-- <link rel="icon" href="http://127.0.0.1:8040/favicon.ico"> -->
+    <link rel="canonical" href="https://magnetosphere.net">
+
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"></button>
+            <a class="brand" href="https://magnetosphere.net">MAGNETOSPHERE.NET</a>
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+
+
+
+                            <li>
+                                <a href="/about">
+
+                                    <span>About</span>
+                                </a>
+                            </li>
+
+
+
+                            <li>
+                                <a href="/shipping">
+
+                                    <span>Shipping</span>
+                                </a>
+                            </li>
+
+
+                            <li>
+															<a href="/">
+																<span><b>{{fdateMDY}}</b></span>
+															</a>
+                            </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+<div hidden id="snipcart" data-api-key="ZjMxZTEwMzEtMzFhZS00YjQyLTgxNDMtMTM4ZjVlZmFlMDY1NjM3MjkzMjU0MTU5NTQyMzU0"></div>
+<div id="content" class="container">
+
+<div class="row-fluid navmargin">
+    <div class="page-header">
+        <h1>MAGNETOSPHERE.NET</h1>
+    </div>
+</div>
+
+<div class="row-fluid">
+    <div class="span9 bs-docs-sidebar">
+        <p class="lead">we have the technology</p>
+        <p></p>
+        <p></p>
+        <p></p>
+        <hr class="soften">
+        <p></p>
+
+				<table class="table table-sm table-bordered ">
+				<thead class="thead-dark">
+
+				<tr>
+				  <th>partno</th>
+				<!-- <th>name</th> -->
+				<th>description</th>
+				<th></th>
+				<!-- <th>category</th> -->
+				<!-- <th></th> -->
+				<!-- <th scope="col" colspan="3"> </th> -->
+				</tr>
+
+				</thead>
+
+				<tbody id="myTable">
+				{{range .}}
+				<tr>
+				  {{ if .Enable }}
+				<td><a class="action" href="/post/{{.PartNo}}">{{.PartNo}}</a></td>
+				<!-- <td>{{.Name}}</td> -->
+				<!-- <td>${{.Price}}</td> -->
+				<td>{{.Description1}}</td>
+				<!-- <td>{{.Category}}</td> -->
+				<td>{{ if le .Qty 0 }}
+				    <span>Out of stock</span>
+				{{ else }}
+				  <button
+				    class="snipcart-add-item"
+				    data-item-id="{{ .PartNo }}"
+				    data-item-name="{{ .Name }}"
+				    data-item-price="{{ .Price }}"
+				    data-item-image="/img/{{ .Image1 }}"
+				    data-item-url="/product/{{ .PartNo }}"
+				    data-item-max-quantity="{{ .MaxOrder }}"
+						data-item-min-quantity="{{ .MinOrder }}"
+				    data-item-description="{{ .Description1 }}">
+				    ${{.Price}} Add to cart
+				  </button>
+				{{end}}</td>
+				</tr>
+				{{end}}
+				{{end}}
+
+				</tbody>
+
+				</table>
+
+
+
+            </li>
+
+
+
+
+
+
+        </ul>
+    </div>
+
+    <div class="span3 bs-docs-sidebar">
+        <h1>Categories</h1>
+        <ul class="nav nav-list bs-docs-sidenav">
+
+<li>
+    <a href="http://127.0.0.1:8040/categories/capacitor/">capacitor</a>
+</li>
+
+<li>
+    <a href="http://127.0.0.1:8040/categories/electrolytic/">electrolytic</a>
+</li>
+
+        </ul>
+        <p></p>
+    </div>
+
+</div>
+
+<h4><a href="/">Home</a></h4>
+
+        </div><footer class="container">
+    <hr class="soften">
+    <p>
+
+&copy;
+<a href="https://magnetosphere.net" target="_blank">
+    magnetosphere.net
+</a>
+<span id="thisyear">2021</span> all rights reserved
+
+
+</p>
+    <p class="text-center">
+
+
+
+
+
+    </p>
+</footer>
+
+</body><link rel="stylesheet" href="/css/bootstrap.css">
+<link rel="stylesheet" href="/css/bootstrap-responsive.css">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="https://cdn.snipcart.com/themes/v3.0.31/default/snipcart.css" />
+
+<script src="/js/jquery.js"></script>
+<script src="/js/bootstrap-386.js"></script>
+<script src="/js/bootstrap-transition.js"></script>
+<script src="/js/bootstrap-alert.js"></script>
+<script src="/js/bootstrap-modal.js"></script>
+<script src="/js/bootstrap-dropdown.js"></script>
+<script src="/js/bootstrap-scrollspy.js"></script>
+<script src="/js/bootstrap-tab.js"></script>
+<script src="/js/bootstrap-tooltip.js"></script>
+<script src="/js/bootstrap-popover.js"></script>
+<script src="/js/bootstrap-button.js"></script>
+<script src="/js/bootstrap-collapse.js"></script>
+<script src="/js/bootstrap-carousel.js"></script>
+<script src="/js/bootstrap-typeahead.js"></script>
+<script src="/js/bootstrap-affix.js"></script>
+<script>
+    _386 = {
+        fastLoad: false ,
+        onePass: false ,
+        speedFactor: 4
+    };
+
+
+    function ThisYear() {
+        document.getElementById('thisyear').innerHTML = new Date().getFullYear();
+    };
+</script>
+<script async src="https://cdn.snipcart.com/themes/v3.0.31/default/snipcart.js"></script>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <title>MAGNETOSPHERE.NET</title>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="theme-color" content="#000084" />
+<!--    <link rel="icon" href="http://127.0.0.1:8040/favicon.ico"> -->
+<link rel="canonical" href="https://magnetosphere.net">
+
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"></button>
+            <a class="brand" href="https://magnetosphere.net">MAGNETOSPHERE.NET</a>
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+
+
+
+                            <li>
+                                <a href="/about">
+
+                                    <span>About</span>
+                                </a>
+                            </li>
+
+
+
+                            <li>
+                                <a href="/shipping">
+
+                                    <span>Shipping</span>
+                                </a>
+                            </li>
+
+
+
+                              <li>
+                                  <a href="/">
+                                    <span><b>{{fdateMDY}}</b></span>
+                                  </a>
+                              </li>
+                            <!-- <b>{{.}}</b>  -->
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+<div hidden id="snipcart" data-api-key="ZjMxZTEwMzEtMzFhZS00YjQyLTgxNDMtMTM4ZjVlZmFlMDY1NjM3MjkzMjU0MTU5NTQyMzU0"></div>
+<div id="content" class="container">
+
+<div class="row-fluid navmargin">
+  <div class="span9 bs-docs-sidebar">
+    <div class="page-header">
+        <h1>{{.Name}}</h1>
+    </div>
+    <div>
+    </div>
+    <p class="lead">{{.Description1}}</p>
+<br>
+<p>PartNo: {{.PartNo}}</p>
+<p>Category: {{.Category}}</p>
+<p>Subcategory: {{.SubCategory}}</p>
+{{ if ge .MinOrder 2 }}
+<p>Minimum Order: {{.MinOrder}}</p>
+{{end}}
+<div class="actions">
+  {{ if le .Qty 0 }}
+  <span>Out of stock</span>
+  {{ else }}
+  <button
+    class="snipcart-add-item"
+    data-item-id="{{ .PartNo }}"
+    data-item-name="{{ .Name }}"
+    data-item-price="{{ .Price }}"
+    data-item-image="/img/{{ .Image1 }}"
+    data-item-url="/product/{{ .PartNo }}"
+    data-item-max-quantity="{{ .MaxOrder }}"
+    data-item-min-quantity="{{ .MinOrder }}"
+    data-item-description="{{ .Description1 }}">
+    ${{.Price}} Add to cart
+  </button>
+{{end}}
+</div>
+
+</p>
+
+</div>
+
+  <figure><a href="/img/{{.Image1}}">
+    <img src="/img/{{.Image1}}" alt="{{.Name}}"></a>
+  </figure>
+
+
+
+  <h4><a href="/">Home</a></h4>
+</div>
+    <p></p>
+</div>
+
+
+
+
+        <footer class="container">
+    <hr class="soften">
+    <p>
+
+&copy;
+<a href="https://magnetosphere.net" target="_blank">
+    magnetosphere.net
+</a>
+<span id="thisyear">2021</span> all rights reserved
+
+
+</p>
+    <p class="text-center">
+
+
+
+
+
+    </p>
+</footer>
+
+</body><link rel="stylesheet" href="/css/bootstrap.css">
+<link rel="stylesheet" href="/css/bootstrap-responsive.css">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="https://cdn.snipcart.com/themes/v3.0.31/default/snipcart.css" />
+
+<script src="/js/jquery.js"></script>
+<script src="/js/bootstrap-386.js"></script>
+<script src="/js/bootstrap-transition.js"></script>
+<script src="/js/bootstrap-alert.js"></script>
+<script src="/js/bootstrap-modal.js"></script>
+<script src="/js/bootstrap-dropdown.js"></script>
+<script src="/js/bootstrap-scrollspy.js"></script>
+<script src="/js/bootstrap-tab.js"></script>
+<script src="/js/bootstrap-tooltip.js"></script>
+<script src="/js/bootstrap-popover.js"></script>
+<script src="/js/bootstrap-button.js"></script>
+<script src="/js/bootstrap-collapse.js"></script>
+<script src="/js/bootstrap-carousel.js"></script>
+<script src="/js/bootstrap-typeahead.js"></script>
+<script src="/js/bootstrap-affix.js"></script>
+<script>
+    _386 = {
+        fastLoad: false ,
+        onePass: false ,
+        speedFactor: 4
+    };
+
+
+    function ThisYear() {
+        document.getElementById('thisyear').innerHTML = new Date().getFullYear();
+    };
+</script>
+<script async src="https://cdn.snipcart.com/themes/v3.0.31/default/snipcart.js"></script>
+</html>

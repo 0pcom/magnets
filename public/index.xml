@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>MAGNETOSPHERE.NET</title>
+    <link>http://127.0.0.1:8040/</link>
+    <description>Recent content on MAGNETOSPHERE.NET</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Fri, 02 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="http://127.0.0.1:8040/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>1500uF 6.3v</title>
+      <link>http://127.0.0.1:8040/post/cap1500uf6p3e/</link>
+      <pubDate>Fri, 02 Apr 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://127.0.0.1:8040/post/cap1500uf6p3e/</guid>
+      <description>partno = &amp;ldquo;cap1500uF6p3e&amp;rdquo;   </description>
+    </item>
+    
+    <item>
+      <title>About</title>
+      <link>http://127.0.0.1:8040/about/</link>
+      <pubDate>Fri, 02 Apr 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://127.0.0.1:8040/about/</guid>
+      <description>Magnetosphere.net is a static site created with:
+ Hugo  The ecommerce / payment processing is provided by:
+ Snipcart  We would like to extend our gracious thanks to the contributors and maintainers of the aforementioned projects.
+This site has no affiliation with, but supports the tremendous work of Suspicious 0bservers.
+Dedicated to my mother, who remains in my heart forever.</description>
+    </item>
+    
+    <item>
+      <title>Shipping</title>
+      <link>http://127.0.0.1:8040/shipping/</link>
+      <pubDate>Fri, 02 Apr 2021 00:00:00 +0000</pubDate>
+      
+      <guid>http://127.0.0.1:8040/shipping/</guid>
+      <description>Currently serving the following 50 states of the United States of America:
+ Alabama Alaska Arizona Arkansas California Colorado Connecticut Delaware Florida Georgia Hawaii Idaho Illinois Indiana Iowa Kansas Kentucky Louisiana Maine Maryland Massachusetts Michigan Minnesota Mississippi Missouri Montana Nebraska Nevada New Hampshire New Jersey New Mexico New York North Carolina South Carolina North Dakota South Dakota Ohio Oklahoma Oregon Pennsylvania Rhode Island Tennessee Texas Utah Vermont Virginia West Virginia Washington Wisconsin Wyoming  Orders are sent as they are received; on business days during normal business hours.</description>
+    </item>
+    
+  </channel>
+</rss>
