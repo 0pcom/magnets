@@ -10,6 +10,7 @@ vendor
 go.mod
 go.sum
 test
+testing
 *.csv
 
 #####  archives   #####
