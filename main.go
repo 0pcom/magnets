@@ -148,7 +148,6 @@ if helpmenu {
 		//r.HandleFunc("/products", findProducts).Methods("GET")
 		r.HandleFunc("/post/{slug}", findProduct).Methods("GET")
 		r.HandleFunc("/about", aboutPage).Methods("GET")
-		r.HandleFunc("/friend", friendPage).Methods("GET")
 		r.HandleFunc("/shipping", shippingPage).Methods("GET")
 		//r.HandleFunc("/time", timeFunc).Methods("GET")
 		r.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir("./public"))))
@@ -249,21 +248,6 @@ func aboutPage(w http.ResponseWriter, r *http.Request) {
 		log.Fatalln(err)
 	}
 }
-// /* friends Page  */ //
-func friendPage(w http.ResponseWriter, r *http.Request) {
-//	w.Header().Set("Content-Type", "text/html")
-	var fm = template.FuncMap{
-		"fdateMDY": monthDayYear,
-	}
-	wd, err := os.Getwd()
-	if err != nil {
-		 log.Fatal(err)
-	}
-	tp1 := template.Must(template.New("").Funcs(fm).ParseFiles(wd + "/public/friend.gohtml"))
-	if err := tp1.ExecuteTemplate(w, "friend.gohtml", nil); err != nil {	//time.Now()
-		log.Fatalln(err)
-	}
-}
 // /* Shipping Page  */ //
 func shippingPage(w http.ResponseWriter, r *http.Request) {
 //	w.Header().Set("Content-Type", "text/html")
@@ -348,6 +332,8 @@ Technology string  `db:"technology,omitempty" json:"technology,omitempty"`
 Materials string  `db:"materials,omitempty" json:"materials,omitempty"`
 Value float64 `db:"value,omitempty" json:"value,omitempty"`
 ValUnit string  `db:"valunit,omitempty" json:"valunit,omitempty"`
+Resistance float64 `db:"resistance,omitempty" json:"resistance,omitempty"`
+ResUnit string  `db:"resunit,omitempty" json:"resunit,omitempty"`
 Tolerance float64 `db:"tolerance,omitempty" json:"tolerance,omitempty"`
 VoltsRating float64 `db:"voltsrating,omitempty" json:"voltsrating,omitempty"`
 AmpsRating float64 `db:"ampsrating,omitempty" json:"ampsrating,omitempty"`
@@ -442,8 +428,10 @@ _, err := sess.SQL().Exec(`
     packagetype STRING NULL DEFAULT '',
     technology STRING NULL DEFAULT '',
 		materials STRING NULL DEFAULT '',
-    value FLOAT DEFAULT 0.0,
+		value FLOAT DEFAULT 0.0,
     valunit STRING NULL DEFAULT '',
+		resistance FLOAT DEFAULT 0.0,
+    resunit STRING NULL DEFAULT 'Ω',
 		tolerance DECIMAL(3,2) DEFAULT 0.00,
     voltsrating FLOAT DEFAULT 0.0,
     ampsrating FLOAT DEFAULT 0.0,
