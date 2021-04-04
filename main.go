@@ -148,6 +148,7 @@ if helpmenu {
 		//r.HandleFunc("/products", findProducts).Methods("GET")
 		r.HandleFunc("/post/{slug}", findProduct).Methods("GET")
 		r.HandleFunc("/about", aboutPage).Methods("GET")
+		r.HandleFunc("/friend", friendPage).Methods("GET")
 		r.HandleFunc("/shipping", shippingPage).Methods("GET")
 		//r.HandleFunc("/time", timeFunc).Methods("GET")
 		r.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir("./public"))))
@@ -245,6 +246,21 @@ func aboutPage(w http.ResponseWriter, r *http.Request) {
 	}
 	tp1 := template.Must(template.New("").Funcs(fm).ParseFiles(wd + "/public/about.gohtml"))
 	if err := tp1.ExecuteTemplate(w, "about.gohtml", nil); err != nil {	//time.Now()
+		log.Fatalln(err)
+	}
+}
+// /* friends Page  */ //
+func friendPage(w http.ResponseWriter, r *http.Request) {
+//	w.Header().Set("Content-Type", "text/html")
+	var fm = template.FuncMap{
+		"fdateMDY": monthDayYear,
+	}
+	wd, err := os.Getwd()
+	if err != nil {
+		 log.Fatal(err)
+	}
+	tp1 := template.Must(template.New("").Funcs(fm).ParseFiles(wd + "/public/friend.gohtml"))
+	if err := tp1.ExecuteTemplate(w, "friend.gohtml", nil); err != nil {	//time.Now()
 		log.Fatalln(err)
 	}
 }

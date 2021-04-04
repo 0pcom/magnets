@@ -6,8 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="format-detection" content="telephone=no" />
     <meta name="theme-color" content="#000084" />
-<!--    <link rel="icon" href="http://127.0.0.1:8040/favicon.ico"> -->
-<link rel="canonical" href="https://magnetosphere.net">
+    <!--<link rel="icon" href="http://127.0.0.1:8040/favicon.ico">-->
+    <link rel="canonical" href="https://magnetosphere.net">
+
 
 </head>
 <body>
@@ -44,12 +45,13 @@
                                 </a>
                             </li>
 
-                              <li>
-                                  <a href="">
-                                    <span><b>{{fdateMDY}}</b></span>
-                                  </a>
-                              </li>
-                            <!-- <b>{{.}}</b>  -->
+                            <li>
+                          		<a href="">
+
+                            			  <span><b>{{fdateMDY}}</b></span>
+                            		</a>
+                            </li>
+
                 </ul>
             </div>
         </div>
@@ -59,74 +61,49 @@
 <div id="content" class="container">
 
 <div class="row-fluid navmargin">
-  <div class="span9 bs-docs-sidebar">
     <div class="page-header">
-        <h1>{{.Name}}</h1>
+        <h1>Friends</h1>
     </div>
-    <div>
-    </div>
-    <p class="lead">{{.Description1}}</p>
-<br><br>
-    <figure><a href="/img/{{.Image1}}">
-      <img src="/img/{{.Image1}}" alt="{{.Name}}"></a>
-    </figure>
-    <ul><ul>
-    <p>Click for full resolution image</p>
-    <br>
-  {{ if ge .MinOrder 2 }}<p>Minimum Order: {{.MinOrder}}</p>{{end}}
-  <div class="actions">
-    {{ if le .Qty 0 }}
-    <span>Out of stock</span>
-    {{ else }}
-    <button
-    class="snipcart-add-item"
-    data-item-id="{{ .PartNo }}"
-    data-item-name="{{ .Name }}"
-    data-item-price="{{ .Price }}"
-    data-item-image="/img/{{ .Image1 }}"
-    data-item-url="/product/{{ .PartNo }}"
-    data-item-max-quantity="{{ .MaxOrder }}"
-    data-item-min-quantity="{{ .MinOrder }}"
-    data-item-description="{{ .Description1 }}">
-    ${{.Price}} Add to cart
-  </button>
-  {{end}}
-</div>
-<br>
-<p>PartNo: {{.PartNo}}</p>
-{{if ne .Category ""}}<p>Category:{{.Category}}</p>{{end}}
-{{if ne .SubCategory ""}}<p>Subcategory: {{.SubCategory}}</p>{{end}}
-{{if ne .VoltsRating 0.0 }}<p>Voltage: {{.VoltsRating}}V</p>{{end}}
-{{if ne .Value 0.0 }}<p>Value: {{.Value}}{{.ValUnit}}</p>{{end}}
-{{if ne .AmpsRating 0.0 }}<p>Amperage: {{.AmpsRating}}A</p>{{end}}
-{{if ne .Tolerance 0.0 }}<p>Tolerance: {{.Tolerance}}</p>{{end}}
-{{if ne .Type "" }}<p>Type: {{.Type}}</p>{{end}}
-{{if ne .PackageType "" }}<p>Package Type: {{.PackageType}}</p>{{end}}
-{{if ne .Technology "" }}<p>Technology: {{.Technology}}</p>{{end}}
-{{if ne .Materials "" }}<p>Materials: {{.Materials}}</p>{{end}}
-{{if ne .WattsRating 0.0 }}<p>Watts Rating: {{.WattsRating}}</p>{{end}}
-{{if ne .TempRating 0.0 }}<p>Temp Rating: {{.TempRating}}{{.TempUnit}}</p>{{end}}
-{{if ne .Condition "" }}<p>Condition: {{.Condition}}</p>{{end}}
-{{if ne .Datasheet "" }}<p>Datasheet: {{.Datasheet}}</p>{{end}}
-{{if ne .Docs "" }}<p>Documentation: {{.Docs}}</p>{{end}}
-{{if ne .Note "" }}<p>Note: {{.Note}}</p>{{end}}
-{{if ne .Warning "" }}<p>Warning: {{.Warning}}</p>{{end}}
-{{if ne .Description2 "" }}<p>Long Description: {{.Description2}}</p>{{end}}
+    <p class="lead">Friends of <a href="/">Magnetosphere.net</a></p>
+<ul>
 </ul>
+<ul>
+  <p>A list of friendly and helpful web resources</p>
+  <p></p>
+<p>Friends:</p>
+<p></p>
+<li><a href="http://bunkerofdoom.com">Bunker Of Doom</a></li>
+<li><a href="http://antiqueengineer.com">Antique Engineer</a></li>
+<p></p>
+<p>We would also like to personally thank:</p>
+<p></p>
+<li><a href="https://bgmicro.com">BG Micro</a></li>
+<li><a href="http://www.tannerelectronics.com/">Tanner Electronics</a></li>
+<p></p>
+<p>Important information regarding spaceweather and the earth's magnetosphere (by suspicious0bservers):</p>
+<p></p>
+<li><a href="https://suspiciousobservers.org">Suspicious 0bservers</a></li>
+<li><a href="https://www.youtube.com/user/Suspicious0bservers/videos">Suspicious 0bservers youtube videos</a></li>
+<li><a href="http://magneticreversal.org/">Magnetic Reversal</a></li>
+<p></p>
+<p>Skycoin; building the new internet:</p>
+<p></p>
+<li><a href="https://skycoin.com/">Skycoin</a></li>
+<li><a href="https://t.me/Skycoin">Skycoin Telegram Group</a></li>
+<p></p>
+<p>EndeavourOS; an Arch-based linux distribution:</p>
+<p></p>
+<li><a href="https://endeavouros.com/">EndeavourOS</a></li>
+<li><a href="https://t.me/Endeavouros">EndeavourOS Telegram Group</a></li>
+<p></p>
+<p></p>
 
-<h4><a href="/">Home</a></h4>
-
-</p>
-
-</div>
 </ul>
-
-
-</div>
-    <p></p>
+    <h4><a href="/">Home</a></h4>
 </div>
 
-        <footer class="container">
+
+        </div><footer class="container">
     <hr class="soften">
     <p>
 
