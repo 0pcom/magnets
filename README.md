@@ -8,7 +8,7 @@ Hugo is used to generate the html templates and page resources for the web appli
 
 The process for using hugo to generate templates for golang applications in this way __is not well documented elsewhere__. The advantage, of course, is avoiding having to manually edit any of the generated templates to insert the functions used by the web application.
 
-In other words, this is a way to use (hugo)[gohugo.io] with a database.
+In other words, this is a way to use [hugo](gohugo.io) with a database.
 
 The database used is [cockroachdb](https://www.cockroachlabs.com/docs/v20.2/build-a-go-app-with-cockroachdb-upperdb), with [upper/db](https://tour.upper.io/queries/01) as the database access layer.
 
