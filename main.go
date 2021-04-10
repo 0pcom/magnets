@@ -283,7 +283,7 @@ func shippingPage(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		 log.Fatal(err)
 	}
-	tp1 := template.Must(template.New("").Funcs(fm).ParseFiles(wd + "/public/shipping/index.html.html"))
+	tp1 := template.Must(template.New("").Funcs(fm).ParseFiles(wd + "/public/shipping/index.html"))
 	if err := tp1.ExecuteTemplate(w, "index.html", nil); err != nil {
 		log.Fatalln(err)
 	}
