@@ -59,7 +59,7 @@ ignoreErrors = ["error-remote-getjson"]
     image = "<a href=\"/img/{{.Image1}}\"><img src=\"/img/{{.Image1}}\" class=\"center\"></a>"
     name = "<a href=\"/post/{{.PartNo}}\"><h2 class=\"header\">{{ .Name }}</h2></a>"
     readmore = "<p><a href=\"/post/{{.PartNo}}\">Read More</a></p>"
-    button = "<button class=\"snipcart-add-item waves-effect waves-light btn\" data-item-id=\"{{.PartNo}}\" data-item-name=\"{{.PartNo}}\" data-item-image=\"/img/{{.Image1}}\" data-item-price=\"{{.Price}}\" data-item-url=\"/post/{{.PartNo}}\" data-item-description=\"{{.Name}}\" data-item-min-quantity=\"{{.MinOrder}}\" data-item-max-quantity=\"{{.MaxOrder}}\" data-item-has-taxes-included=\"true\" >Add to cart</button>"
+    button = "<button class=\"snipcart-add-item waves-effect waves-light btn\" data-item-id=\"{{.PartNo}}\" data-item-name=\"{{.PartNo}}\" data-item-image=\"/img/{{.Image1}}\" data-item-price=\"{{.Price}}\" data-item-url=\"/post/{{.PartNo}}\" data-item-description=\"{{.Name}}\" data-item-min-quantity=\"{{.MinOrder}}\" data-item-max-quantity=\"{{.MaxOrder}}\" data-item-has-taxes-included=\"false\" >Add to cart</button>"
 
     # The name to display as main title in the home page
     mainpagetitle = "MAGNETOSPHERE.NET"
