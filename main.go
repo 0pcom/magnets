@@ -13,7 +13,7 @@ import (
 	"os/exec"
 	"os"
 	"strconv"
-  "encoding/json"
+  //"encoding/json"
 flags "github.com/spf13/pflag"
 )
 
@@ -147,10 +147,10 @@ if helpmenu {
 		//publicDir := "/public/"
 		//r.HandleFunc("/products", findProducts).Methods("GET")
 		r.HandleFunc("/post/{slug}", findProduct).Methods("GET")
-		r.HandleFunc("/json", jsonEndpoint).Methods("GET")
-		//r.HandleFunc("/about", aboutPage).Methods("GET")
-		//r.HandleFunc("/friend", friendPage).Methods("GET")
-		//r.HandleFunc("/shipping", shippingPage).Methods("GET")
+		//r.HandleFunc("/json", jsonEndpoint).Methods("GET")
+		r.HandleFunc("/about", aboutPage).Methods("GET")
+		r.HandleFunc("/friend", friendPage).Methods("GET")
+		r.HandleFunc("/shipping", shippingPage).Methods("GET")
 		//r.HandleFunc("/time", timeFunc).Methods("GET")
 		r.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir("./public"))))
 		Serve = r
@@ -227,24 +227,22 @@ if partno.Name == "" {
 	var fm = template.FuncMap{
 		"fdateMDY": monthDayYear,
 	}
-	tpl1 := template.Must(template.New("").Funcs(fm).ParseFiles(wd + "/public/product.html"))
-	tpl1.ExecuteTemplate(w, "product.html", partno)
+	tpl1 := template.Must(template.New("").Funcs(fm).ParseFiles(wd + "/public/post/product/index.html"))
+	tpl1.ExecuteTemplate(w, "index.html", partno)
 }
 }
-
+/*
 func jsonEndpoint(w http.ResponseWriter, r *http.Request) {
 	jsonproducts, err := json.Marshal(products)
 	if err != nil{
 		panic(err)
 	}
-
 	w.Header().Set("Content-Type","application/json")
 	w.WriteHeader(http.StatusOK)
 	//Write json response back to response
 	w.Write(jsonproducts)
-
 }
-
+*/
 // /* About Page  */ //
 func aboutPage(w http.ResponseWriter, r *http.Request) {
 //	w.Header().Set("Content-Type", "text/html")
@@ -255,8 +253,8 @@ func aboutPage(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		 log.Fatal(err)
 	}
-	tp1 := template.Must(template.New("").Funcs(fm).ParseFiles(wd + "/public/about.html"))
-	if err := tp1.ExecuteTemplate(w, "about.html", nil); err != nil {	//time.Now()
+	tp1 := template.Must(template.New("").Funcs(fm).ParseFiles(wd + "/public/about/index.html"))
+	if err := tp1.ExecuteTemplate(w, "index.html", nil); err != nil {	//time.Now()
 		log.Fatalln(err)
 	}
 }
@@ -270,8 +268,8 @@ func friendPage(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		 log.Fatal(err)
 	}
-	tp1 := template.Must(template.New("").Funcs(fm).ParseFiles(wd + "/public/friend.html"))
-	if err := tp1.ExecuteTemplate(w, "friend.html", nil); err != nil {	//time.Now()
+	tp1 := template.Must(template.New("").Funcs(fm).ParseFiles(wd + "/public/friend/index.html"))
+	if err := tp1.ExecuteTemplate(w, "index.html", nil); err != nil {	//time.Now()
 		log.Fatalln(err)
 	}
 }
@@ -285,8 +283,8 @@ func shippingPage(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		 log.Fatal(err)
 	}
-	tp1 := template.Must(template.New("").Funcs(fm).ParseFiles(wd + "/public/shipping.html"))
-	if err := tp1.ExecuteTemplate(w, "shipping.html", nil); err != nil {
+	tp1 := template.Must(template.New("").Funcs(fm).ParseFiles(wd + "/public/shipping/index.html.html"))
+	if err := tp1.ExecuteTemplate(w, "index.html", nil); err != nil {
 		log.Fatalln(err)
 	}
 }

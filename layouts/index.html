@@ -16,13 +16,6 @@
         <p></p>
         <h1>{{ i18n "postslist" }}</h1>
         <ul>
-            {{ range first 10 .Site.RegularPages }}
-            {{ if eq .Type "post" }}
-            <li><a href="{{ .Permalink }}">{{ .Title }}</a>
-          {{ end }}
-          {{ end }}
-        </ul>
-        <ul>
             {{/* $urlPre := "http://127.0.0.1:8040" /*}}
           {{/* $products := getJSON $urlPre "/json" /*}}
           {{/* range $products */}}

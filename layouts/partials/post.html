@@ -1,97 +1,53 @@
-{{ $ifenable := "{{if .Enable}}" }}
-{{ $partno := "{{.PartNo}}" }}
-{{ $image1 := "{{.Image1}}" }}
-{{ $price := "{{.Price}}" }}
-{{ $description1 := "{{.Description1}}" }}
-{{ $name := "{{.Name}}" }}
-{{ $url := "/post/{{.PartNo}}" }}
-{{ $end := "{{end}}" }}
-{{$ifnecat := `{{if ne .Category ""}}`}}
-{{ $ifnesubcat := `{{if ne .SubCategory ""}}`}}
-{{ $ifnevr := `{{if ne .VoltsRating 0.0 }}`}}
-{{ $ifneval := `{{if ne .Value 0.0 }}`}}
-{{ $ifneamp := `{{if ne .AmpsRating 0.0 }}`}}
-{{ $ifnetol := `{{if ne .Tolerance 0.0 }}`}}
-{{ $ifnetyp := `{{if ne .Type "" }}`}}
-{{ $ifneptyp := `{{if ne .PackageType "" }}`}}
-{{ $ifnetech := `{{if ne .Technology "" }}`}}
-{{ $ifnemat := `{{if ne .Materials "" }}`}}
-{{ $ifnewat := `{{if ne .WattsRating 0.0 }}`}}
-{{ $ifnetemp := `{{if ne .TempRating 0.0 }}`}}
-{{ $ifnecond := `{{if ne .Condition "" }}`}}
-{{ $ifnedat := `{{if ne .Datasheet "" }}`}}
-{{ $ifnedoc := `{{if ne .Docs "" }}`}}
-{{ $ifnenot := `{{if ne .Note "" }}`}}
-{{ $ifnewrn := `{{if ne .Warning "" }}`}}
-{{ $ifnedesc2 := `{{if ne .Description2 "" }}`}}
-{{$cat := `{{.Category}}`}}
-{{$subcat := `{{.SubCategory}}`}}
-{{ $vol := `{{.VoltsRating}}`}}
-{{ $val := `{{.Value}}`}}
-{{ $valu := `{{.ValUnit}}`}}
-{{ $amp := `{{.AmpsRating}}`}}
-{{ $tol := `{{.Tolerance}}`}}
-{{ $typ := `{{.Type}}`}}
-{{ $ptyp := `{{.PackageType}}`}}
-{{ $tech := `{{.Technology}}`}}
-{{ $mat := `{{.Materials}}`}}
-{{ $wat := `{{.WattsRating}}`}}
-{{ $tmp := `{{.TempRating}}`}}
-{{ $tmpu := `{{.TempUnit}}`}}
-{{ $cond := `{{.Condition}}`}}
-{{ $data := `{{.Datasheet}}`}}
-{{ $docu := `{{.Documentation}}`}}
-{{ $note := `{{.Note}}`}}
-{{ $warn := `{{.Warning}}`}}
-{{ $desc2 := `{{.Description2}}`}}
 
-{{$ifenable}}
+{{.ifenable | safeHTML}}
 <div class="col s6">
-    <a href="{{$url}}"><h2 class="header">{{ $name }}</h2></a>
+    {{.name | safeHTML}}
     <div class="card horizontal">
         <div class="card-image">
-          {{ .Site.Imagedisp }}
+          {{.image | safeHTML}}
         </div>
         <br>
         <div class="card-stacked">
         <div class="card-content">
           <div class="card-action">
             <div class class="center">
-            <p>{{ $description1 }}
-                <button
-                class="snipcart-add-item waves-effect waves-light btn"
-                data-item-id="{{$partno}}"
-                data-item-name="{{$partno}}"
-                data-item-image="/images/{{$image1}}"
-                data-item-price="{{$price}}"
-                data-item-description="{{$name}}"
-                data-item-url="{{$url}}">
-                Add to cart
-              </button>
+            <p>{{.description1 | safeHTML}}
+                {{.button | safeHTML}}
             </p>
-              <p>PartNo: {{$partno}}</p>
-              {{$ifnecat}}<p>Category: {{$cat}}</p>{{$end}}
-              {{$ifnesubcat}}<p>Subcategory: {{$subcat}}</p>{{$end}}
-              {{$ifnevr}}<p>Voltage: {{$vol}}V</p>{{$end}}
-              {{$ifneval}}<p>Value: {{$val}}{{$valu}}</p>{{$end}}
-              {{$ifneamp}}<p>Amperage: {{$amp}}A</p>{{$end}}
-              {{$ifnetol}}<p>Tolerance: {{$tol}}</p>{{$end}}
-              {{$ifnetyp}}<p>Type: {{$typ}}</p>{{$end}}
-              {{$ifneptyp}}<p>Package Type: {{$ptyp}}</p>{{$end}}
-              {{$ifnetech}}<p>Technology: {{$tech}}</p>{{$end}}
-              {{$ifnemat}}<p>Materials: {{$mat}}</p>{{$end}}
-              {{$ifnewat}}<p>Watts Rating: {{$wat}}</p>{{$end}}
-              {{$ifnetemp}}<p>Temp Rating: {{$tmp}}{{$tmpu}}</p>{{$end}}
-              {{$ifnecond}}<p>Condition: {{$cond}}</p>{{$end}}
-              {{$ifnedat}}<p>Datasheet: {{$data}}</p>{{$end}}
-              {{$ifnedoc}}<p>Documentation: {{$docu}}</p>{{$end}}
-              {{$ifnenot}}<p>Note: {{$note}}</p>{{$end}}
-              {{$ifnewrn}}<p>Warning: {{$warn}}</p>{{$end}}
-              {{$ifnedesc2}}<p>Long Description: {{$desc2}}</p>{{$end}}
+              <p>PartNo: {{.partno | safeHTML}}</p>
+              {{.ifnecat | safeHTML}}<p>Category: {{.cat | safeHTML}}</p>{{.end | safeHTML}}
+              {{.ifnesubcat | safeHTML}}<p>Subcategory: {{.subcat | safeHTML}}</p>{{.end | safeHTML}}
+              {{.ifnevr | safeHTML}}<p>Voltage: {{.vol | safeHTML}}V</p>{{.end}}
+              {{.ifneval | safeHTML}}<p>Value: {{.val | safeHTML}}{{.valu | safeHTML}}</p>{{.end | safeHTML}}
+              {{.ifneamp | safeHTML}}<p>Amperage: {{.amp | safeHTML}}A</p>{{.end | safeHTML}}
+              {{.ifnetol | safeHTML}}<p>Tolerance: {{.tol | safeHTML}}</p>{{.end | safeHTML}}
+              {{.ifnetyp | safeHTML}}<p>Type: {{.typ | safeHTML}}</p>{{.end | safeHTML}}
+              {{.ifneptyp | safeHTML}}<p>Package Type: {{.ptyp | safeHTML}}</p>{{.end | safeHTML}}
+              {{.ifnetech | safeHTML}}<p>Technology: {{.tech | safeHTML}}</p>{{.end | safeHTML}}
+              {{.ifnemat | safeHTML}}<p>Materials: {{.mat | safeHTML}}</p>{{.end | safeHTML}}
+              {{.ifnewat | safeHTML}}<p>Watts Rating: {{.wat | safeHTML}}</p>{{.end | safeHTML}}
+              {{.ifnetemp | safeHTML}}<p>Temp Rating: {{.tmp}}{{.tmpu | safeHTML}}</p>{{.end | safeHTML}}
+              {{.ifnecond | safeHTML}}<p>Condition: {{.cond | safeHTML}}</p>{{.end | safeHTML}}
+              {{.ifnedat | safeHTML}}<p>Datasheet: {{.data | safeHTML}}</p>{{.end | safeHTML}}
+              {{.ifnedoc | safeHTML}}<p>Documentation: {{.docu | safeHTML}}</p>{{.end | safeHTML}}
+              {{.ifnenot | safeHTML}}<p>Note: {{.note | safeHTML}}</p>{{.end | safeHTML}}
+              {{.ifnewrn | safeHTML}}<p>Warning: {{.warn | safeHTML}}</p>{{.end | safeHTML}}
+              {{.ifnedesc2 | safeHTML}}<p>Long Description: {{.desc2 | safeHTML}}</p>{{.end | safeHTML}}
             </div>
             </div>
         </div>
         </div>
     </div>
 </div>
-{{$end}}
+{{.else}}
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis in felis id leo viverra pretium. Fusce ultricies convallis porttitor. Nam auctor sit amet tortor ut mollis. Curabitur quis metus vel magna dignissim viverra. Etiam vitae facilisis ipsum. Sed rutrum felis sem, eget auctor odio molestie sit amet. Sed vel cursus lorem. Proin rutrum a enim in ornare. Nullam ante velit, porta vel sapien in, commodo consequat quam. Aliquam dapibus libero ipsum, sit amet molestie metus aliquet at. Mauris lacinia id nisi convallis cursus. Duis vitae tincidunt quam, et aliquam quam. Interdum et malesuada fames ac ante ipsum primis in faucibus. Aenean imperdiet dolor quam, id semper neque auctor sit amet. Quisque ut venenatis ex.</p>
+<p></p>
+<p>Phasellus nulla tortor, cursus non metus at, aliquam lacinia eros. Aliquam vel enim semper, rhoncus lacus at, placerat odio. Nullam ut risus non tellus auctor malesuada. Donec non congue lacus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In sed tortor nunc. Cras feugiat posuere lacus, vitae lobortis sapien tincidunt in.</p>
+<p></p>
+<p>Etiam auctor elit ut nulla scelerisque, non faucibus dolor tempus. Phasellus eleifend vehicula sem ut ornare. Integer aliquet pulvinar libero fringilla tincidunt. Sed sollicitudin gravida ex, eget luctus arcu condimentum eget. Mauris porta, ex scelerisque sodales euismod, neque ipsum semper leo, vitae consequat nulla turpis id nulla. Pellentesque placerat tincidunt enim, eget ultricies metus fermentum id. Morbi consequat risus mauris, quis ultricies ipsum tincidunt non.</p>
+<p></p>
+<p>Praesent porta, ligula sed aliquam rhoncus, erat ipsum laoreet tellus, id auctor nisl ipsum quis enim. Praesent id convallis erat. Vestibulum quis interdum nulla. Ut vitae lectus odio. Pellentesque vitae porttitor ligula. Aliquam et orci id arcu vehicula consectetur. Maecenas porta orci in velit hendrerit, ac euismod turpis dictum.</p>
+<p></p>
+<p>Nam dictum eros vel blandit lacinia. Curabitur ornare efficitur elit, sed posuere est lobortis ut. Nulla arcu dui, facilisis sed lectus eget, vulputate fringilla lacus. Fusce sodales nec odio in aliquam. Proin sit amet molestie diam. Curabitur in orci sem. Aenean elit velit, mattis non vulputate eget, accumsan non odio. Mauris lobortis, ipsum non congue iaculis, lectus lorem porta justo, a vulputate magna erat id magna. Curabitur risus lectus, iaculis sit amet scelerisque sit amet, suscipit non dolor. Integer porttitor eu sapien semper euismod. Integer vitae magna eros. Sed id purus enim. </p>
+<p></p>
+{{.end | safeHTML}}

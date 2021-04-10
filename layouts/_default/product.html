@@ -6,7 +6,7 @@
     </div>
     <p class="lead">{{ .Params.description }}</p>
     <ul>
-    {{ partial "post.html" }}
+    {{ partial "post.html" .Site.Params }}
     </ul>
     <h4><a href="{{ .Site.BaseURL }}">{{ i18n "backtohome" }}</a></h4>
 </div>
