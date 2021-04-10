@@ -1,0 +1,121 @@
+#baseURL = "https://magnetosphere.net"
+baseURL = "http://127.0.0.1:8040"
+title = "MAGNETOSPHERE.NET"
+languageCode = "en"
+DefaultContentLanguage = "en" # Change this to change the site's language
+#theme = "hugo.386"
+preserveTaxonomyNames = true
+ignoreErrors = ["error-remote-getjson"]
+
+[params]
+    range = "{{range .}}"
+    ifenable = "{{if .Enable}}"
+    partno = "{{.PartNo}}"
+    image1 = "{{.Image1}}"
+    price = "{{.Price}}"
+    description1 = "{{.Description1}}"
+    name1 = "{{.Name}}"
+    url = "/post/{{.PartNo}}"
+    end = "{{end}}"
+    image = "<a href=/img/{{.Image1}}><img src=/img/{{.Image1}} class=center></a>"
+    name = "<a href=/post/{{.PartNo}}><h2 class=header>{{ .Name }}</h2></a>"
+    readmore = "<p><a href=/post/{{.PartNo}}>Read More</a></p>"
+    button = "<button class=\"snipcart-add-item waves-effect waves-light btn\" data-item-id=\"{{.PartNo}}\" data-item-name=\"{{.PartNo}}\" data-item-image=\"/img/{{.Image1}}\" data-item-price=\"{{.Price}}\" data-item-url=\"/post/{{.PartNo}}\" data-item-description=\"{{.Name}}\" >Add to cart</button>"
+    # The name to display as main title in the home page
+    mainpagetitle = "MAGNETOSPHERE.NET"
+
+    # The subtitle to display under the title in the home page
+    mainpagesubtitle = "we have the technology"
+
+    # The description of your website. It will be displayed in the home page
+    mainpagedesc = ""
+
+    # The name to display in the copyright section in the footer
+    copyrightname = "magnetosphere.net"
+
+    # The url to use as link in the copyright name in the footer. Leave empty to use none.
+    copyrighturl = "https://magnetosphere.net"
+    copyrightsuffix = "all rights reserved"
+    # Show the "built on Hugo" disclaimer
+    #showhugo = true
+
+    # Urls for social networks
+    #facebook = "https://facebook.com"
+    #twitter = "https://twitter.com"
+    #linkedin = "https://linkedin.com"
+    #github = "https://github.com"
+    #gitlab = "https://gitlab.com"
+
+    # Enables or disables the loading animations. false activates them. Default is false.
+    loadfastload = false
+
+    # Sets the speed for the page loading effect. Default is 1.0.
+    loadspeedfactor = 4.0
+
+    # Enables or disables the second flyby cursor. Default is false.
+    loadonepass = false
+
+[params.copyright]
+    name = "magnetosphere.net"
+
+    # The url to use as link in the copyright name in the footer. Leave empty to use none.
+    url = "https://magnetosphere.net"
+
+    # Text to go before copyright information
+    #prefix = "[hugo.386 theme by Max le Fou](https://gitlab.com/maxlefou/hugo.386)"
+
+    # Text to go between copyright and hugo disclaimer (if enabled)
+    #suffix = "Example site"
+
+[menu]
+  # This displays buttons in the navbar to access your contents
+  [[menu.main]]
+    identifier = "about" # An unique identifier for the button
+    name = "About"       # A display name for the button
+    url = "/about"      # The path to the content. It can lead to a single page (like here)
+    weight = 10          # A number to order the buttons in the navbar
+
+  [[menu.main]]
+    identifier = "shipping"
+    name = "Shipping"
+    url = "/shipping"       # The path can lead to a content folder too.
+    weight = 20
+
+  [[menu.main]]
+    identifier = "friend"
+    name = "Friends"
+    url = "/friend"       # The path can lead to a content folder too.
+    weight = 30
+
+
+#[taxonomies]
+#category = "categories"
+#tag = "tags"
+
+
+#[privacy]
+
+#  [privacy.vimeo]
+#    disabled = false
+#    simple = true
+
+#  [privacy.twitter]
+#    disabled = false
+#    enableDNT = true
+#    simple = true
+
+#  [privacy.instagram]
+#    disabled = false
+#    simple = true
+
+#  [privacy.youtube]
+#    disabled = false
+#    privacyEnhanced = true
+
+#[services]
+
+#  [services.instagram]
+#    disableInlineCSS = true
+
+#  [services.twitter]
+#    disableInlineCSS = true

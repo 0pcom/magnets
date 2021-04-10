@@ -1,0 +1,25 @@
+    {{.range}}
+    {{.ifenable}}
+    <div class="col s6">
+      {{ .name | safeHTML }}
+        <div class="card horizontal">
+            <div class="card-image">
+              {{ .image | safeHTML }}
+            </div>
+            <br>
+            <div class="card-stacked">
+            <div class="card-content">
+              <div class="card-action">
+                <div class class="center">
+                <p>{{ .description1 }}
+{{.button | safeHTML}}
+                </p>
+                {{ .readmore | safeHTML }}
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+    {{.end}}
+    {{.end}}

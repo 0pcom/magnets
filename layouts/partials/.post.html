@@ -1,0 +1,74 @@
+{{ $ifenable := "{{if .Enable}}" }}
+{{ $partno := "{{.PartNo}}" }}
+{{ $image1 := "{{.Image1}}" }}
+{{ $price := "{{.Price}}" }}
+{{ $description1 := "{{.Description1}}" }}
+{{ $name := "{{.Name}}" }}
+{{ $url := "/post/{{.PartNo}}" }}
+{{ $end := "{{end}}" }}
+{{ $ifnecat := `{{if ne .Category ""}}`}}
+
+
+
+
+{{$ifenable}}
+<div class="col s6">
+    <a href="{{$url}}"><h2 class="header">{{ $name }}</h2></a>
+    <div class="card horizontal">
+        <div class="card-image">
+        <a href="/img/{{$image1}}"><img src="/img/{{$image1}}" class="center"></a>
+        </div>
+        <br>
+        <div class="card-stacked">
+        <div class="card-content">
+          <div class="card-action">
+            <div class class="center">
+            <p>{{ $description1 }}
+                <button
+                class="snipcart-add-item waves-effect waves-light btn"
+                data-item-id="{{$partno}}"
+                data-item-name="{{$partno}}"
+                data-item-image="/images/{{$image1}}"
+                data-item-price="{{$price}}"
+                data-item-description="{{$name}}"
+                data-item-url="{{$url}}">
+                Add to cart
+              </button>
+            </p>
+              <p>PartNo: {{.partNo}}</p>
+              {{if ne .category ""}}<p>Category:{{.category}}</p>{{end}}
+              {{if ne .subcategory ""}}<p>Subcategory: {{.subcategory}}</p>{{end}}
+              {{if ne .VoltsRating 0.0 }}<p>Voltage: {{.VoltsRating}}V</p>{{end}}
+              {{if ne .Value 0.0 }}<p>Value: {{.Value}}{{.ValUnit}}</p>{{end}}
+              {{if ne .AmpsRating 0.0 }}<p>Amperage: {{.AmpsRating}}A</p>{{end}}
+              {{if ne .Tolerance 0.0 }}<p>Tolerance: {{.Tolerance}}</p>{{end}}
+              {{if ne .Type "" }}<p>Type: {{.Type}}</p>{{end}}
+              {{if ne .PackageType "" }}<p>Package Type: {{.PackageType}}</p>{{end}}
+              {{if ne .Technology "" }}<p>Technology: {{.Technology}}</p>{{end}}
+              {{if ne .Materials "" }}<p>Materials: {{.Materials}}</p>{{end}}
+              {{if ne .WattsRating 0.0 }}<p>Watts Rating: {{.WattsRating}}</p>{{end}}
+              {{if ne .TempRating 0.0 }}<p>Temp Rating: {{.TempRating}}{{.TempUnit}}</p>{{end}}
+              {{if ne .Condition "" }}<p>Condition: {{.Condition}}</p>{{end}}
+              {{if ne .Datasheet "" }}<p>Datasheet: {{.Datasheet}}</p>{{end}}
+              {{if ne .Docs "" }}<p>Documentation: {{.Docs}}</p>{{end}}
+              {{if ne .Note "" }}<p>Note: {{.Note}}</p>{{end}}
+              {{if ne .Warning "" }}<p>Warning: {{.Warning}}</p>{{end}}
+              {{if ne .Description2 "" }}<p>Long Description: {{.Description2}}</p>{{end}}
+            <p>{{ .description1 }}
+                <button
+                class="snipcart-add-item waves-effect waves-light btn"
+                data-item-id="{{ .id }}"
+                data-item-name="{{ .name }}"
+                data-item-image="{{ .image1 }}"
+                data-item-price="{{ .price }}"
+                data-item-url="{{ .url }}">
+                Add to cart
+              </button>
+            </p>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+{{end}}

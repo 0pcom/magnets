@@ -1,0 +1,32 @@
+{{ define "main" }}
+<article class="row-fluid navmargin">
+    <header class="page-header">
+        <h1>{{.Title}}</h1>
+    </header>
+    <!-- "{{.Content}}" pulls from the markdown content of the corresponding _index.md -->
+    {{.Content}}
+</article>
+<ul>
+<!-- Ranges through content/posts/*.md -->
+{{ range .Pages }}
+    <li>
+        <a href="{{.Permalink}}"> {{.Title}}</a>
+          {{/* if le .Qty 0 */}}
+          <span>Out of stock</span>
+          {{/* else */}}
+          <button
+          class="snipcart-add-item"
+          data-item-id="{{/* .PartNo */}}"
+          data-item-name="{{/* .Name */}}"
+          data-item-price="{{/* .Price */}}"
+          data-item-image="/img/{{/* .Image1 */}}"
+          data-item-url="/product/{{/* .PartNo */}}"
+          data-item-max-quantity="{{/* .MaxQty */}}"
+          data-item-description="{{/* .Description1 */}}">
+          Add to cart
+        </button>
+        {{/* end */}}
+    </li>
+{{ end }}
+</ul>
+{{ end }}

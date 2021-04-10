@@ -13,8 +13,8 @@ import (
 	"os/exec"
 	"os"
 	"strconv"
-	//"github.com/valyala/fasttemplate"
-	flags "github.com/spf13/pflag"
+  "encoding/json"
+flags "github.com/spf13/pflag"
 )
 
 const port = 8040
@@ -147,8 +147,10 @@ if helpmenu {
 		//publicDir := "/public/"
 		//r.HandleFunc("/products", findProducts).Methods("GET")
 		r.HandleFunc("/post/{slug}", findProduct).Methods("GET")
-		r.HandleFunc("/about", aboutPage).Methods("GET")
-		r.HandleFunc("/shipping", shippingPage).Methods("GET")
+		r.HandleFunc("/json", jsonEndpoint).Methods("GET")
+		//r.HandleFunc("/about", aboutPage).Methods("GET")
+		//r.HandleFunc("/friend", friendPage).Methods("GET")
+		//r.HandleFunc("/shipping", shippingPage).Methods("GET")
 		//r.HandleFunc("/time", timeFunc).Methods("GET")
 		r.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir("./public"))))
 		Serve = r
@@ -163,7 +165,7 @@ helpmenu1()
 	}
 
 func helpmenu1() {
-	fmt.Printf("Usage: magnets -dDctCepirh\n")
+	fmt.Printf("Usage: magnets -dDctCyepirh\n")
 	fmt.Printf("\tSuggested Demo: magnets -ctpr\n")
 	flags.PrintDefaults()
 }
@@ -177,16 +179,12 @@ func defineproducts(sess db.Session) {
 		log.Fatal("productsCol.Find: ", err)
 	}
 }
+
 //package gorilla	// Routing based on the gorilla/mux router
 var Serve http.Handler
 var partno Product
 var category string
 var products []Product
-
-
-//func Serve() {		// /* cockroachdb stuff using upper/db database access layer */ //
-
-//}
 
 // /* timepage  */ //
 //func monthDayYear(t time.Time) string {
@@ -197,16 +195,16 @@ func monthDayYear() string {
 func timeFunc(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	var fm = template.FuncMap{ "fdateMDY": monthDayYear,	}
-	tp1 := template.Must(template.New("").Funcs(fm).ParseFiles("time.gohtml"))
-	if err := tp1.ExecuteTemplate(w, "time.gohtml",nil); err != nil { // time.Now()
+	tp1 := template.Must(template.New("").Funcs(fm).ParseFiles("time.html"))
+	if err := tp1.ExecuteTemplate(w, "time.html",nil); err != nil { // time.Now()
 		log.Fatalln(err)
 	}
 }
 // /* products page */ //
 func findProducts(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	tpl0 := template.Must(template.New("").ParseFiles("products.gohtml"))
-	tpl0.ExecuteTemplate(w, "products.gohtml", products)	//fmt.Fprint(w, "products\n")
+	tpl0 := template.Must(template.New("").ParseFiles("products.html"))
+	tpl0.ExecuteTemplate(w, "products.html", products)	//fmt.Fprint(w, "products\n")
 }
 // /* individual product page */ //
 func findProduct(w http.ResponseWriter, r *http.Request) {	//, product string
@@ -229,10 +227,24 @@ if partno.Name == "" {
 	var fm = template.FuncMap{
 		"fdateMDY": monthDayYear,
 	}
-	tpl1 := template.Must(template.New("").Funcs(fm).ParseFiles(wd + "/public/product.gohtml"))
-	tpl1.ExecuteTemplate(w, "product.gohtml", partno)
+	tpl1 := template.Must(template.New("").Funcs(fm).ParseFiles(wd + "/public/product.html"))
+	tpl1.ExecuteTemplate(w, "product.html", partno)
 }
 }
+
+func jsonEndpoint(w http.ResponseWriter, r *http.Request) {
+	jsonproducts, err := json.Marshal(products)
+	if err != nil{
+		panic(err)
+	}
+
+	w.Header().Set("Content-Type","application/json")
+	w.WriteHeader(http.StatusOK)
+	//Write json response back to response
+	w.Write(jsonproducts)
+
+}
+
 // /* About Page  */ //
 func aboutPage(w http.ResponseWriter, r *http.Request) {
 //	w.Header().Set("Content-Type", "text/html")
@@ -243,8 +255,23 @@ func aboutPage(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		 log.Fatal(err)
 	}
-	tp1 := template.Must(template.New("").Funcs(fm).ParseFiles(wd + "/public/about.gohtml"))
-	if err := tp1.ExecuteTemplate(w, "about.gohtml", nil); err != nil {	//time.Now()
+	tp1 := template.Must(template.New("").Funcs(fm).ParseFiles(wd + "/public/about.html"))
+	if err := tp1.ExecuteTemplate(w, "about.html", nil); err != nil {	//time.Now()
+		log.Fatalln(err)
+	}
+}
+// /* friends Page  */ //
+func friendPage(w http.ResponseWriter, r *http.Request) {
+//	w.Header().Set("Content-Type", "text/html")
+	var fm = template.FuncMap{
+		"fdateMDY": monthDayYear,
+	}
+	wd, err := os.Getwd()
+	if err != nil {
+		 log.Fatal(err)
+	}
+	tp1 := template.Must(template.New("").Funcs(fm).ParseFiles(wd + "/public/friend.html"))
+	if err := tp1.ExecuteTemplate(w, "friend.html", nil); err != nil {	//time.Now()
 		log.Fatalln(err)
 	}
 }
@@ -258,8 +285,8 @@ func shippingPage(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		 log.Fatal(err)
 	}
-	tp1 := template.Must(template.New("").Funcs(fm).ParseFiles(wd + "/public/shipping.gohtml"))
-	if err := tp1.ExecuteTemplate(w, "shipping.gohtml", nil); err != nil {
+	tp1 := template.Must(template.New("").Funcs(fm).ParseFiles(wd + "/public/shipping.html"))
+	if err := tp1.ExecuteTemplate(w, "shipping.html", nil); err != nil {
 		log.Fatalln(err)
 	}
 }
@@ -273,8 +300,8 @@ if err != nil {
 	var fm = template.FuncMap{
 		"fdateMDY": monthDayYear,
 	}
-	tp1 := template.Must(template.New("").Funcs(fm).ParseFiles(wd + "/public/index.gohtml"))
-	if err := tp1.ExecuteTemplate(w, "index.gohtml", products); err != nil {
+	tp1 := template.Must(template.New("").Funcs(fm).ParseFiles(wd + "/public/index.html"))
+	if err := tp1.ExecuteTemplate(w, "index.html", products); err != nil {
 		log.Fatalln(err)
 	}
 }

@@ -1,24 +1,16 @@
-###  files&folders ###
-###################
-cockroach-data
-private
+*.tar.gz
+*.csv
+*.bak
+.Makefile
+.main.go
 certs
 certs1
 certs2
 certs3
-vendor
+cockroach-data
 go.mod
 go.sum
+public
+private
 test
-testing
-*.csv
-
-#####  archives   #####
-###################
-*.tar.gz
-
-# backup&hidden files #
-###################
-*.bak
-.Makefile
-.main.go
+vendor
