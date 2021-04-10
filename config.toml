@@ -1,5 +1,5 @@
-#baseURL = "https://magnetosphere.net"
-baseURL = "http://127.0.0.1:8040"
+#baseURL = "http://127.0.0.1:8040/"
+baseURL = "https://magnetosphere.net"
 title = "MAGNETOSPHERE.NET"
 languageCode = "en"
 DefaultContentLanguage = "en" # Change this to change the site's language
