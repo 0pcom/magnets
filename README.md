@@ -84,7 +84,7 @@ go mod init
 go mod vendor -v
 ```
 
-##Build the Frontend with Hugo
+## Build the Frontend with Hugo
 
 The hugo template exists and should be modified or customized if desired. A modification to the hugo.386 theme is employed here.
 
