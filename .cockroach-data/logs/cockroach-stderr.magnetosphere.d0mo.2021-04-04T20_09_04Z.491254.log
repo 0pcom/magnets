@@ -1,6 +1,0 @@
-I210404 20:09:04.051249 1 util/log/sync_buffer.go:195  [config] file created at: 2021/04/04 20:09:04
-I210404 20:09:04.051261 1 util/log/sync_buffer.go:195  [config] running on machine: magnetosphere
-I210404 20:09:04.051265 1 util/log/sync_buffer.go:195  [config] binary: CockroachDB CCL v20.2.0 (x86_64-unknown-linux-gnu, built 2020/11/09 16:01:45, go1.13.14)
-I210404 20:09:04.051268 1 util/log/sync_buffer.go:195  [config] arguments: [cockroach start --certs-dir=certs --advertise-addr=192.168.2.118 --join=192.168.2.130 --cache=.25 --max-sql-memory=.25]
-I210404 20:09:04.051289 1 util/log/sync_buffer.go:195  [config] line format: [IWEF]yymmdd hh:mm:ss.uuuuuu goid file:line msg utf8=✓
-I210404 20:09:04.051011 1 util/log/flags.go:106  stderr capture started
