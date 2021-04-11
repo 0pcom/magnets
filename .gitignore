@@ -8,6 +8,7 @@ certs1
 certs2
 certs3
 cockroach-data
+.cockroach-data
 go.mod
 go.sum
 public
