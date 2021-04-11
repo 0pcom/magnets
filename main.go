@@ -18,7 +18,7 @@ flags "github.com/spf13/pflag"
 )
 
 const port = 8040
-
+const siteURL = "https://magnetosphere.net"
 //var createpartno string
 
 	var (
@@ -30,8 +30,9 @@ const port = 8040
 		createpartno	string
 		create100	bool
 		importcsv	bool
-		printinventory	bool
-		vprintinventory	bool
+		printinv	bool
+		printinv2	bool
+		vprintinv	bool
 		exportcsv	bool
 		helpmenu	bool
 	)
@@ -45,8 +46,9 @@ const port = 8040
 		flags.StringVarP(&createpartno, "createpartno", "C", "", "Create a part by providing the part number")
 		flags.BoolVarP(&create100, "create100", "y", false, "Create 100 parts with sequential part numbers")
 		flags.BoolVarP(&exportcsv, "exportcsv", "e", false, "Export a csv to export01.csv")
-		flags.BoolVarP(&printinventory, "printinventory", "p", false, "Print the inventory to the terminal")
-		flags.BoolVarP(&vprintinventory, "vprintinventory", "v", false, "More verbose printinventory")
+		flags.BoolVarP(&printinv, "printinv", "p", false, "Print the inventory to the terminal")
+		flags.BoolVarP(&printinv2, "printinv2", "q", false, "Print the inventory - BTCPayserver format")
+		flags.BoolVarP(&vprintinv, "vprintinv", "v", false, "More verbose printinventory")
 		flags.BoolVarP(&importcsv, "importcsv", "i", false, "Import csv from http://127.0.0.1:8079/export01.csv")
 		flags.BoolVarP(&runapp, "run", "r", false, "run the web app")
 		flags.BoolVarP(&helpmenu, "help", "h", false, "show this help menu")
@@ -102,7 +104,7 @@ if helpmenu {
 		cmdargs = 1
 	}
 	// /* print inventory */ //
-	if printinventory {
+	if printinv {
 		defineproducts(sess)
 		log.Printf("products:")
 		for i := range products {
@@ -114,11 +116,26 @@ if helpmenu {
 				fmt.Printf("\tQty:		"); fmt.Printf("%d\n", products[i].Qty)
 				fmt.Printf("\tPrice:		"); fmt.Printf("%.2f\n", products[i].Price)
 				fmt.Printf("\tEnable:		"); fmt.Printf("%t\n", products[i].Enable)
+		}
+		cmdargs = 1
+	}
+	// /* print inventory so it can be pasted in the btcpayserver raw editor! */ //
+	if printinv2 {
+		defineproducts(sess)
+		log.Printf("products:")
+		for i := range products {
+			if products[i].Enable {
+				fmt.Printf("%s:\n", products[i].PartNo)
+				fmt.Printf("  price: "); fmt.Printf("%.2f\n", products[i].Price)
+				fmt.Printf("  title:	");	fmt.Printf("%s\n", products[i].Name)
+				fmt.Printf("  description: "); fmt.Printf("%s\n", products[i].Description1)
+				fmt.Printf("  image:	");	fmt.Printf("%s/img/%s\n", siteURL, products[i].Image1)
+				}
+			}
 	cmdargs = 1
 		}
-	}
 	// /* more verbosely print inventory */ //
-	if vprintinventory {
+	if vprintinv {
 		defineproducts(sess)
 		log.Printf("products:")
 		for i := range products {

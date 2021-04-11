@@ -1,0 +1,11 @@
+I210401 20:38:19.597202 72 util/log/sync_buffer.go:195 ⋮ [config] file created at: 2021/04/01 20:38:19
+I210401 20:38:19.597209 72 util/log/sync_buffer.go:195 ⋮ [config] running on machine: ‹magnetosphere›
+I210401 20:38:19.597217 72 util/log/sync_buffer.go:195 ⋮ [config] binary: CockroachDB CCL v20.2.0 (x86_64-unknown-linux-gnu, built 2020/11/09 16:01:45, go1.13.14)
+I210401 20:38:19.597222 72 util/log/sync_buffer.go:195 ⋮ [config] arguments: ‹[cockroach start --certs-dir=certs --advertise-addr=192.168.2.118 --join=192.168.2.130 --cache=.25 --max-sql-memory=.25]›
+I210401 20:38:19.597231 72 util/log/sync_buffer.go:195 ⋮ [config] line format: [IWEF]yymmdd hh:mm:ss.uuuuuu goid file:line msg utf8=✓
+I210401 20:38:19.597011 72 vendor/github.com/cockroachdb/pebble/version_set.go:142 ⋮ [n?] [JOB 1] MANIFEST created 000001
+I210401 20:38:19.599773 72 vendor/github.com/cockroachdb/pebble/open.go:295 ⋮ [n?] [JOB 1] WAL created 000002
+I210401 20:38:19.604880 121 vendor/github.com/cockroachdb/pebble/table_stats.go:118 ⋮ [n?] [JOB 2] all initial table stats loaded
+I210401 20:38:19.620331 72 vendor/github.com/cockroachdb/pebble/version_set.go:142 ⋮ [n?] [JOB 1] MANIFEST created 000001
+I210401 20:38:19.622775 72 vendor/github.com/cockroachdb/pebble/open.go:295 ⋮ [n?] [JOB 1] WAL created 000002
+I210401 20:38:19.627893 143 vendor/github.com/cockroachdb/pebble/table_stats.go:118 ⋮ [n?] [JOB 2] all initial table stats loaded

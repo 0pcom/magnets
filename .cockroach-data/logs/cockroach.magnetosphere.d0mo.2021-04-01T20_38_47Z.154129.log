@@ -1,0 +1,84 @@
+I210401 20:38:47.449736 1 util/log/sync_buffer.go:195 ⋮ [config] file created at: 2021/04/01 20:38:47
+I210401 20:38:47.449747 1 util/log/sync_buffer.go:195 ⋮ [config] running on machine: ‹magnetosphere›
+I210401 20:38:47.449756 1 util/log/sync_buffer.go:195 ⋮ [config] binary: CockroachDB CCL v20.2.0 (x86_64-unknown-linux-gnu, built 2020/11/09 16:01:45, go1.13.14)
+I210401 20:38:47.449764 1 util/log/sync_buffer.go:195 ⋮ [config] arguments: ‹[cockroach start --certs-dir=certs --advertise-addr=192.168.2.118 --join=192.168.2.130 --cache=.25 --max-sql-memory=.25]›
+I210401 20:38:47.449779 1 util/log/sync_buffer.go:195 ⋮ [config] line format: [IWEF]yymmdd hh:mm:ss.uuuuuu goid file:line msg utf8=✓
+I210401 20:38:47.449645 1 server/status/recorder.go:605 ⋮ ‹available memory from cgroups is unsupported, using system memory 16 GiB instead: can't read available memory from cgroup v2 at /sys/fs/cgroup/unified/user.slice/user-1000.slice/session-29.scope/memory.max: open /sys/fs/cgroup/unified/user.slice/user-1000.slice/session-29.scope/memory.max: no such file or directory›
+I210401 20:38:47.449991 1 cli/start.go:1163 ⋮ ‹CockroachDB CCL v20.2.0 (x86_64-unknown-linux-gnu, built 2020/11/09 16:01:45, go1.13.14)›
+I210401 20:38:47.451437 1 server/status/recorder.go:605 ⋮ ‹available memory from cgroups is unsupported, using system memory 16 GiB instead: can't read available memory from cgroup v2 at /sys/fs/cgroup/unified/user.slice/user-1000.slice/session-29.scope/memory.max: open /sys/fs/cgroup/unified/user.slice/user-1000.slice/session-29.scope/memory.max: no such file or directory›
+I210401 20:38:47.451468 1 server/config.go:433 ⋮ system total memory: ‹16 GiB›
+I210401 20:38:47.451501 1 server/config.go:435 ⋮ server configuration:
+‹max offset             500000000›
+‹cache size             3.9 GiB›
+‹SQL memory pool size   3.9 GiB›
+‹scan interval          10m0s›
+‹scan min idle time     10ms›
+‹scan max idle time     1s›
+‹event log enabled      true›
+I210401 20:38:47.451586 1 cli/start.go:967 ⋮ process identity: ‹uid 1000 euid 1000 gid 1000 egid 1000›
+I210401 20:38:47.451904 1 cli/start.go:501 ⋮ could not initialize GEOS - spatial functions may not be available: geos: error during GEOS init: geos: cannot load GEOS from dir ‹"/usr/local/lib/cockroach"›: ‹geos error: /usr/local/lib/cockroach/libgeos.so: cannot open shared object file: No such file or directory›
+I210401 20:38:47.451980 1 cli/start.go:508 ⋮ starting cockroach node
+I210401 20:38:47.454117 66 rpc/tls.go:270 ⋮ [n?] server certificate addresses: ‹IP=127.0.0.1,192.168.2.118; DNS=localhost,magnetosphere,magnetosphere.net; CN=node›
+I210401 20:38:47.454183 66 rpc/tls.go:319 ⋮ [n?] web UI certificate addresses: ‹IP=127.0.0.1,192.168.2.118; DNS=localhost,magnetosphere,magnetosphere.net; CN=node›
+I210401 20:38:47.485850 66 server/server.go:781 ⋮ [n?] monitoring forward clock jumps based on server.clock.forward_jump_check_enabled
+I210401 20:38:47.505820 66 server/config.go:624 ⋮ [n?] 1 storage engine‹› initialized
+I210401 20:38:47.505860 66 server/config.go:627 ⋮ [n?] ‹Pebble cache size: 3.9 GiB›
+I210401 20:38:47.505882 66 server/config.go:627 ⋮ [n?] ‹store 0: RocksDB, max size 0 B, max open file limit 10000›
+I210401 20:38:47.512378 144 server/server.go:1411 ⋮ [n?] connecting to gossip network to verify cluster ID ‹"90546476-8089-48e5-80b3-e1e5c2e1c6d0"›
+W210401 20:38:47.519252 66 gossip/gossip.go:1494 ⋮ [n?] no incoming or outgoing connections
+I210401 20:38:47.519344 66 gossip/gossip.go:403 ⋮ [n1] NodeDescriptor set to ‹node_id:1 address:<network_field:"tcp" address_field:"192.168.2.118:26257" > attrs:<> locality:<> ServerVersion:<major_val:20 minor_val:2 patch:0 unstable:0 > build_tag:"v20.2.0" started_at:1617309527519333737 cluster_name:"" sql_address:<network_field:"tcp" address_field:"192.168.2.118:26257" >›
+I210401 20:38:47.526939 144 server/server.go:1414 ⋮ [n1] node connected via gossip
+W210401 20:38:47.526935 270 kv/kvserver/store.go:1704 ⋮ [n1,s1,r6/1:‹/Table/{SystemCon…-11}›] could not gossip system config: ‹[NotLeaseHolderError] r6: replica (n1,s1):1 not lease holder; lease holder unknown›
+(1) ‹[NotLeaseHolderError] r6: replica (n1,s1):1 not lease holder; lease holder unknown›
+Error types: (1) *roachpb.NotLeaseHolderError
+I210401 20:38:47.527175 66 server/node.go:430 ⋮ [n1] initialized store [n1,s1]: disk (capacity=109 GiB, available=59 GiB, used=38 KiB, logicalBytes=19 KiB), ranges=35, leases=0, queries=0.00, writes=0.00, bytesPerReplica={p10=0.00 p25=0.00 p50=0.00 p75=0.00 p90=166.00 pMax=16616.00}, writesPerReplica={p10=0.00 p25=0.00 p50=0.00 p75=0.00 p90=0.00 pMax=0.00}
+I210401 20:38:47.527509 66 kv/kvserver/stores.go:236 ⋮ [n1] read 0 node addresses from persistent storage
+F210401 20:38:47.529270 56 server/server.go:275 ⋮ [n1] clock synchronization error: this node is more than 500ms away from at least half of the known nodes (0 of 1 are within the offset)
+goroutine 56 [running]:
+github.com/cockroachdb/cockroach/pkg/util/log.getStacks(0x95d8e00, 0x7fcec9aeeda0, 0xc0016913a8, 0x78eac6)
+	/go/src/github.com/cockroachdb/cockroach/pkg/util/log/get_stacks.go:25 +0xb8
+github.com/cockroachdb/cockroach/pkg/util/log.(*loggerT).outputLogEntry(0x95d7fc0, 0x4, 0x1671d672483cabf2, 0x38, 0x87a10b5, 0x10, 0x113, 0xc000178120, 0x83, 0xc000ded6d8, ...)
+	/go/src/github.com/cockroachdb/cockroach/pkg/util/log/clog.go:241 +0xa02
+github.com/cockroachdb/cockroach/pkg/util/log.addStructured(0x6209340, 0xc000d80390, 0xc000000004, 0x2, 0x5106b9c, 0x2, 0xc0016919f0, 0x1, 0x1)
+	/go/src/github.com/cockroachdb/cockroach/pkg/util/log/structured.go:52 +0x1ac
+github.com/cockroachdb/cockroach/pkg/util/log.logDepth(0x6209340, 0xc000d80390, 0x1, 0x4, 0x5106b9c, 0x2, 0xc0016919f0, 0x1, 0x1)
+	/go/src/github.com/cockroachdb/cockroach/pkg/util/log/log.go:44 +0x8c
+github.com/cockroachdb/cockroach/pkg/util/log.Fatalf(...)
+	/go/src/github.com/cockroachdb/cockroach/pkg/util/log/log.go:165
+github.com/cockroachdb/cockroach/pkg/server.NewServer.func1()
+	/go/src/github.com/cockroachdb/cockroach/pkg/server/server.go:275 +0xd2
+github.com/cockroachdb/cockroach/pkg/rpc.(*Context).runHeartbeat.func3(0x6209280, 0xc0008b59c0, 0xd, 0x1)
+	/go/src/github.com/cockroachdb/cockroach/pkg/rpc/context.go:1202 +0x582
+github.com/cockroachdb/cockroach/pkg/util/stop.(*Stopper).RunTaskWithErr(0xc000b0b290, 0x6209280, 0xc0008b59c0, 0x5125022, 0xd, 0xc000bd7d68, 0x0, 0x0)
+	/go/src/github.com/cockroachdb/cockroach/pkg/util/stop/stopper.go:326 +0x140
+github.com/cockroachdb/cockroach/pkg/rpc.(*Context).runHeartbeat(0xc0003c9b00, 0xc000e30280, 0xc000539ea0, 0x13, 0xc0002ff4a0, 0x0, 0x0)
+	/go/src/github.com/cockroachdb/cockroach/pkg/rpc/context.go:1132 +0x45a
+github.com/cockroachdb/cockroach/pkg/rpc.(*Context).grpcDialNodeInternal.func1.1.1(0x6209340, 0xc000df8b40)
+	/go/src/github.com/cockroachdb/cockroach/pkg/rpc/context.go:1058 +0x79
+github.com/cockroachdb/cockroach/pkg/util/stop.(*Stopper).RunWorker.func1(0xc00082e390, 0xc000b0b290, 0xc000e30370)
+	/go/src/github.com/cockroachdb/cockroach/pkg/util/stop/stopper.go:222 +0x13d
+created by github.com/cockroachdb/cockroach/pkg/util/stop.(*Stopper).RunWorker
+	/go/src/github.com/cockroachdb/cockroach/pkg/util/stop/stopper.go:215 +0xa8
+
+For more context, check log files in: /home/d0mo/go/src/github.com/0pcom/magnets/cockroach-data/logs
+
+
+****************************************************************************
+
+This node experienced a fatal error (printed above), and as a result the
+process is terminating.
+
+Fatal errors can occur due to faulty hardware (disks, memory, clocks) or a
+problem in CockroachDB. With your help, the support team at Cockroach Labs
+will try to determine the root cause, recommend next steps, and we can
+improve CockroachDB based on your report.
+
+Please submit a crash report by following the instructions here:
+
+    https://github.com/cockroachdb/cockroach/issues/new/choose
+
+If you would rather not post publicly, please contact us directly at:
+
+    support@cockroachlabs.com
+
+The Cockroach Labs team appreciates your feedback.

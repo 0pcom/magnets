@@ -127,7 +127,26 @@ ignoreErrors = ["error-remote-getjson"]
     url = "/friend"       # The path can lead to a content folder too.
     weight = 30
 
+  [[menu.main]]
+    identifier = "bitcoin"
+    name = "Bitcoin"
+    url = "https://pay.magnetosphere.net/apps/42U8i51gFZF7reRf71hZ26wa7Qx3/pos/"       # The path can lead to a content folder too.
+    weight = 40
 
+  [[menu.main]]
+    identifier = "time"
+    name = "{{fdateMDY}}"
+    url = ""       # The path can lead to a content folder too.
+    weight = 50
+
+  [[menu.main]]
+    identifier = "snipcart1"
+    name = "<span class=\"snipcart-checkout\">cart:<span class=\"snipcart-items-count\"></span> <span class=\"snipcart-total-price\"></span></span>"
+    url = ""       # The path can lead to a content folder too.
+    weight = 60
+
+
+#    <a href=\"https://pay.magnetosphere.net/apps/42U8i51gFZF7reRf71hZ26wa7Qx3/pos/\">shop with bitcoin here</a>
 #[taxonomies]
 #category = "categories"
 #tag = "tags"

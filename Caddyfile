@@ -1,0 +1,7 @@
+magnetosphere.net {
+reverse_proxy 127.0.0.1:8040
+}
+
+pay.magnetosphere.net {
+reverse_proxy 127.0.0.1:23000
+}
