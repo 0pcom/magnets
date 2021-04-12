@@ -13,6 +13,8 @@ import (
 	"os/exec"
 	"os"
 	"strconv"
+	_ "github.com/0pcom/magnets/statik"
+	"github.com/rakyll/statik/fs"
   //"encoding/json"
 flags "github.com/spf13/pflag"
 )
@@ -157,6 +159,10 @@ if helpmenu {
 	}
 	// /* run the web app */ //
 	if runapp {
+		statikFS, err := fs.New()
+		if err != nil {
+			log.Fatal(err)
+		}
 		defineproducts(sess)
 		r := mux.NewRouter() //.StrictSlash(true)
 		r.PathPrefix("/img/").Handler(http.StripPrefix("/img/", http.FileServer(http.Dir("./img"))))
@@ -169,7 +175,7 @@ if helpmenu {
 		r.HandleFunc("/friend", friendPage).Methods("GET")
 		r.HandleFunc("/shipping", shippingPage).Methods("GET")
 		//r.HandleFunc("/time", timeFunc).Methods("GET")
-		r.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir("./public"))))
+		r.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(statikFS)))
 		Serve = r
 		fmt.Printf("listening on http://127.0.0.1:%d using gorilla router\n", port)
 		log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), Serve))

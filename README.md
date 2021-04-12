@@ -21,6 +21,14 @@ yay -S cockroachdb go hugo
 ```
 it's recommended to use `cockroachdb-bin` for faster testing and deployment
 
+Additionally, to build the files that are embedded in the binary you will need:
+```
+go get github.com/rakyll/statik
+sudo ln -s ~/go/bin/statik /usr/bin/statik
+```
+
+(Alternatively, you can add GOBIN to your PATH)
+
 ## CockroachDB Single Node
 
 The first step is creating the certs used to establish the connection between the go application ([main.go](/main.go)) and cocroachdb. `make single-node` starts the cockroachdb node
@@ -102,6 +110,16 @@ Live-editing the hugo templates is also possible, this is done independent of th
 ```
 hugo server -D
 ```
+
+## Build the statik/statik.go file
+(requires the statik binary)
+```
+go generate
+```
+
+the contents of the `public` folder which was created by hugo in the previous step can now be compiled into the binary.
+
+Note that the /img directory is not built into the binary but the files included in it (any referenced in the database) still appear in the web app.
 
 ## Run the application
 test the database connection and view the help menu with no flags:
