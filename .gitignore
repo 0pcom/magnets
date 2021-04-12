@@ -13,6 +13,7 @@ cockroach-data
 go.mod
 go.sum
 public
+statik
 private
 test
 vendor
