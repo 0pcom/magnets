@@ -4,7 +4,7 @@
     <div class="navbar-inner">
         <div class="container">
             <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"></button>
-            <a class="brand" href="{{ .Site.BaseURL }}">{{ .Site.Title }}</a>
+            <a class="brand" href="{{ .Site.BaseURL }}">{{ .Site.Params.title }}</a>
             <div class="nav-collapse collapse">
                 <ul class="nav">
                     {{ $currentPage := . }}
@@ -37,4 +37,16 @@
         </div>
     </div>
 </nav>
-<div hidden id="snipcart" data-api-key="ZjMxZTEwMzEtMzFhZS00YjQyLTgxNDMtMTM4ZjVlZmFlMDY1NjM3MjkzMjU0MTU5NTQyMzU0" data-config-modal-style="side"></div>
+<link rel="preconnect" href="https://app.snipcart.com">
+<link rel="preconnect" href="https://cdn.snipcart.com">
+<div hidden id="snipcart" data-api-key="ZjMxZTEwMzEtMzFhZS00YjQyLTgxNDMtMTM4ZjVlZmFlMDY1NjM3MjkzMjU0MTU5NTQyMzU0" data-config-modal-style="side" hidden >
+    <address-fields section="top">
+        <div>
+            <snipcart-label for="phone">
+                Phone number
+            </snipcart-label>
+            <snipcart-input name="phone">
+            </snipcart-input>
+        </div>
+    </address-fields>
+  </div>

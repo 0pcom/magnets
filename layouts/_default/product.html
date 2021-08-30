@@ -1,14 +1,13 @@
 {{ define "main" }}
-
+{{- partial "header.html" . -}}
+<div id="content" class="container">
 <div class="row-fluid navmargin">
-    <div class="page-header">
-        <h1>{{ .Title }}</h1>
-    </div>
-    <p class="lead">{{ .Params.description }}</p>
     <ul>
     {{ partial "post.html" .Site.Params }}
     </ul>
     <h4><a href="{{ .Site.BaseURL }}">{{ i18n "backtohome" }}</a></h4>
 </div>
 
+</div>
+{{- partial "footer.html" . -}}
 {{ end }}

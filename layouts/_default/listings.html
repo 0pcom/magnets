@@ -1,6 +1,8 @@
 {{ define "main" }}
+{{- partial "header.html" . -}}
 <div class="row-fluid navmargin">
     <div class="page-header">
+      {{ .Site.Params.mainpagetitle | safeHTML }}
         <h1>{{.Site.Params.maintitle | safeHTML}}</h1>
     </div>
 </div>
@@ -10,30 +12,9 @@
         <p></p>
         <hr class="soften">
         <p></p>
-
-        <nav class="navbar navbar-inverse">
-        <div class="navbar-inner">
-        <div class="container">
-            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"></button>
-            <div class="nav-collapse collapse">
-                <ul class="nav">
-        {{ range .Site.Menus.two }}
-        <li>
-            <a href="{{ .URL | safeHTML }}">
-                {{ .Pre }}
-                <span>{{ .Name | safeHTML }}</span>
-            </a>
-        </li>
-    {{ end }}
-  </ul>
-</div>
-</div>
-</div>
-</nav>
         <h1>{{ i18n "postslist" }}: {{.Site.Params.lenprods | safeHTML}}</h1>
-        <br>
         <ul>
-          {{partial "product.html" .Site.Params}}
+          {{partial "listproduct.html" .Site.Params}}
           </ul>
     </div>
 
@@ -46,5 +27,4 @@
 
 </div>
 {{- partial "footer.html" . -}}
-
 {{ end }}

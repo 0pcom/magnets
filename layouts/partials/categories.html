@@ -1,5 +1,15 @@
-{{range first 10 ($.Site.GetPage "taxonomyTerm" "categories").Pages }}
+{{.Cats | safeHTML}}
+{{.ifproductstable | safeHTML}}
+{{.RangeCats | safeHTML}}
 <li>
-    <a href="{{ .Permalink }}">{{.Title}}</a>
+{{.productsCategories | safeHTML}}
 </li>
-{{ end }}
+{{.end | safeHTML}}
+{{.end | safeHTML}}
+{{.ifequipmentstable | safeHTML}}
+{{.RangeCats | safeHTML}}
+<li>
+{{.equipmentsCategories | safeHTML}}
+</li>
+{{.end | safeHTML}}
+{{.end | safeHTML}}

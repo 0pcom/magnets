@@ -1,0 +1,214 @@
+// handle.go //
+
+package handle
+
+import (
+"fmt"
+"net/http"
+"html/template"
+//"github.com/gorilla/handlers"
+"strconv"
+funcmap "github.com/0pcom/magnets/pkg/funcmap"
+inv "github.com/0pcom/magnets/pkg/inv"
+    "log"
+  	"github.com/gorilla/mux"
+  	"os"
+)
+
+
+
+// custom 404 not found page
+func Page404() http.Handler {
+return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+  wd, err := os.Getwd()
+	if err != nil { log.Fatal(err)	}
+	tpl1 := template.Must(template.New("").Funcs(funcmap.FM).ParseFiles(wd + "/public/404.html"))
+	if err :=	tpl1.ExecuteTemplate(w, "404.html", nil); err != nil {	fmt.Printf("error: %s", err) }
+})
+}
+// custom 404 not found page
+func Page404Page (w http.ResponseWriter, r *http.Request) {
+  wd, err := os.Getwd()
+	if err != nil { log.Fatal(err)	}
+	tpl1 := template.Must(template.ParseFiles(wd + "/public/404.html"))
+	if err :=	tpl1.ExecuteTemplate(w, "404.html", nil); err != nil {	fmt.Printf("error: %s", err) }
+}
+
+//func helpmenu1() {
+//	fmt.Printf("Usage: magnets -dDctCyepirh\n")
+//	fmt.Printf("\tSuggested Demo: magnets -ctpr\n")
+//	flags.PrintDefaults()
+//}
+
+
+
+
+// // individual product page ENDPOINT: /post/{slug} // //
+func FindProduct(w http.ResponseWriter, r *http.Request) {	//, product string
+	slug := mux.Vars(r)["slug"]
+	a := false
+	for i := range inv.Mproducts {
+		if inv.Mproducts[i].PartNo == slug {
+			a = true
+			break				// Found!
+		}
+}
+if !a {
+	fmt.Fprint(w, "No product found for part number:\n", slug)
+} else {
+	productp := funcmap.SubPage{"products", slug}
+	wd, err := os.Getwd()
+	if err != nil { log.Fatal(err)	}
+	tpl1 := template.Must(template.New("").Funcs(funcmap.FM).ParseFiles(wd + "/public/post/product/index.html"))
+	//tpl1, err := template.Must(template.New("").Funcs(funcmap.FM).ParseFiles(wd + "/public/post/product/index.html"))
+	//if err != nil {
+	//	fmt.Printf("error: %s", err)
+	//	return
+	//}
+	if err :=	tpl1.ExecuteTemplate(w, "index.html", productp); err != nil {	fmt.Printf("error: %s", err) }
+	}
+}
+
+// // individual equipment page ENDPOINT: /equipment/post/{slug} // //
+func FindEquipment(w http.ResponseWriter, r *http.Request) {	//, product string
+	slug := mux.Vars(r)["slug"]
+	a := false
+	for i := range inv.Mequipments {
+		if inv.Mequipments[i].PartNo == slug {
+			a = true
+			break				// Found!
+		}
+}
+if !a {
+	fmt.Fprint(w, "No equipment found for part number:\n", slug)
+} else {
+	equipmentp := funcmap.SubPage{"equipments", slug}
+	wd, err := os.Getwd()
+	if err != nil { log.Fatal(err)	}
+	tpl1 := template.Must(template.New("").Funcs(funcmap.FM).ParseFiles(wd + "/public/post/product/index.html"))
+	if err :=	tpl1.ExecuteTemplate(w, "index.html", equipmentp); err != nil {	fmt.Printf("error: %s", err) }
+}
+}
+// // individual category page ENDPOINT: /cat/{slug}/{id:[0-9]+} // //
+func CategoryPage(w http.ResponseWriter, r *http.Request) {
+	slug := mux.Vars(r)["slug"]
+	vars := mux.Vars(r)
+	id, _ := strconv.Atoi(vars["id"])
+	a := false
+	for k := range inv.Pcats {
+		if inv.Pcats[k].Name == slug {
+			a = true
+		}
+	}
+if !a {
+	fmt.Fprint(w, "No product category matching\n", slug)
+} else {
+	categoryp := funcmap.Page{"products", slug, id}
+	wd, err := os.Getwd()
+	if err != nil {	log.Fatal(err)	}
+	tpl1 := template.Must(template.New("").Funcs(funcmap.FM).ParseFiles(wd + "/public/index.html"))
+	if err :=	tpl1.ExecuteTemplate(w, "index.html", categoryp); err != nil {	fmt.Printf("error: %s", err) }
+}
+}
+// // individual equipment category page ENDPOINT: /equipment/cat/{slug}/{id:[0-9]+} // //
+func CategoryEquipmentPage(w http.ResponseWriter, r *http.Request) {
+	slug := mux.Vars(r)["slug"]
+	vars := mux.Vars(r)
+	id, _ := strconv.Atoi(vars["id"])
+	a := false
+	for k := range inv.Ecats {
+		if inv.Ecats[k].Name == slug {
+			a = true
+		}
+	}
+if !a {
+	fmt.Fprint(w, "No equipment category matching\n", slug)
+} else {
+		categoryp := funcmap.Page{"equipments", slug, id}
+		wd, err := os.Getwd()
+		if err != nil {	log.Fatal(err)	}
+		tpl1 := template.Must(template.New("").Funcs(funcmap.FM).ParseFiles(wd + "/public/index.html"))
+		if err :=	tpl1.ExecuteTemplate(w, "index.html", categoryp); err != nil {	fmt.Printf("error: %s", err) }
+	}
+}
+//}
+// // Front Page - main page ENDPOINT: magnetosphere.net/
+func FrontPage(w http.ResponseWriter, r *http.Request) {
+  slug := mux.Vars(r)["slug"]
+	wd, err := os.Getwd()
+	if err != nil {	log.Fatal(err) }
+	if slug == "" {
+	tp1 := template.Must(template.New("").Funcs(funcmap.FM).ParseFiles(wd + "/public/index.html"))
+	if err = tp1.ExecuteTemplate(w, "index.html", funcmap.Page{"products", "", 0}); err != nil {	fmt.Printf("error: %s", err) }
+	} else {
+	tp1 := template.Must(template.New("").Funcs(funcmap.FM).ParseFiles(wd + "/public/404.html"))
+	if err = tp1.ExecuteTemplate(w, "404.html", nil); err != nil {	fmt.Printf("error: %s", err) }
+}
+}
+// // page Page - /p/ page ENDPOINT: magnetosphere.net/p/{id:[0-9]+} // //
+func PagePage(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id, _ := strconv.Atoi(vars["id"])
+  wd, err := os.Getwd()
+  if err != nil { log.Fatal(err)	}
+  fp := funcmap.Page{"products", "", id} //no category specified here
+	tp1 := template.Must(template.New("").Funcs(funcmap.FM).ParseFiles(wd + "/public/index.html"))
+	if err := tp1.ExecuteTemplate(w, "index.html", fp); err != nil {	fmt.Printf("error: %s", err) }
+}
+// // List Page - text-only listings main page ENDPOINT: magnetosphere.net/list OR: magnetosphere.net/list/{id:[0-9]+} // //
+func ListPage(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id, _ := strconv.Atoi(vars["id"])
+wd, err := os.Getwd()
+if err != nil { log.Fatal(err)	}
+fp := funcmap.Page{"products", "", id} //no category specified here
+	tp1 := template.Must(template.New("").Funcs(funcmap.FM).ParseFiles(wd + "/public/list/index.html"))
+	if err := tp1.ExecuteTemplate(w, "index.html", fp); err != nil {	fmt.Printf("error: %s", err) }
+}
+// // Equipment Page - main equipment page ENDPOINT magnetosphere.net/equipment OR magnetosphere.net/equipment/p/{id:[0-9]+} // //
+func EquipmentPage(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id, _ := strconv.Atoi(vars["id"])
+wd, err := os.Getwd()
+if err != nil { log.Fatal(err)	}
+fp := funcmap.Page{"equipments", "", id} //no category specified here
+	tp1 := template.Must(template.New("").Funcs(funcmap.FM).ParseFiles(wd + "/public/index.html"))
+	if err := tp1.ExecuteTemplate(w, "index.html", fp); err != nil {	fmt.Printf("error: %s", err) }
+}
+
+// // Blog Pages - main page ENDPOINT: magnetosphere.net/ OR: magnetosphere.net/p/{id:[0-9]+} // //
+func BlogPage(w http.ResponseWriter, r *http.Request) {
+	slug := mux.Vars(r)["slug"]
+	wd, err := os.Getwd()
+	if err != nil {	log.Fatal(err) }
+	if slug == "" {
+	tp1 := template.Must(template.New("").Funcs(funcmap.FM).ParseFiles(wd + "/public/blog/index.html"))
+	if err = tp1.ExecuteTemplate(w, "index.html", nil); err != nil {	fmt.Printf("error: %s", err) }
+	} else {
+	tp1 := template.Must(template.New("").Funcs(funcmap.FM).ParseFiles(wd + "/public/blog/" + slug + "/index.html"))
+	if err = tp1.ExecuteTemplate(w, "index.html", nil); err != nil {	fmt.Printf("error: %s", err) }
+}
+}
+// // Single Pages  // //
+// // About Page  // //
+func AboutPage(w http.ResponseWriter, r *http.Request) {
+
+	wd, err := os.Getwd()
+	if err != nil {	log.Fatal(err) }
+	tp1 := template.Must(template.New("").Funcs(funcmap.FM).ParseFiles(wd + "/public/about/index.html"))
+	if err := tp1.ExecuteTemplate(w, "index.html", nil); err != nil {	fmt.Printf("error: %s", err) }
+}
+// // friends Page  // //
+func FriendPage(w http.ResponseWriter, r *http.Request) {
+	wd, err := os.Getwd()
+	if err != nil {	log.Fatal(err)	}
+	tp1 := template.Must(template.New("").Funcs(funcmap.FM).ParseFiles(wd + "/public/friend/index.html"))
+	if err := tp1.ExecuteTemplate(w, "index.html", nil); err != nil {	fmt.Printf("error: %s", err) }
+}
+// // Shipping / orders policy Page  // //
+func PolicyPage(w http.ResponseWriter, r *http.Request) {
+	wd, err := os.Getwd()
+	if err != nil {	log.Fatal(err)	}
+	tp1 := template.Must(template.New("").Funcs(funcmap.FM).ParseFiles(wd + "/public/policy/index.html"))
+	if err := tp1.ExecuteTemplate(w, "index.html", nil); err != nil {	fmt.Printf("error: %s", err) }
+}

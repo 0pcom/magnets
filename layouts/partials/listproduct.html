@@ -1,38 +1,18 @@
 {{.ifproductstable | safeHTML}}
 
 {{.cateq | safeHTML}}
-{{.productsByPage | safeHTML}}
-{{.indexproductsByPage | safeHTML}}
-{{.mainpagetitle | safeHTML }}
-{{.maindesc | safeHTML}}
+{{.listPage1 | safeHTML}}
+{{.indexPage1 | safeHTML}}
+{{.mainpagedesc | safeHTML}}
 <p>{{.ifpagenotzero | safeHTML}}{{.prevproductpage | safeHTML}}{{.end | safeHTML}} {{.ifnextpage | safeHTML}} {{.nextproductpage | safeHTML}} {{.end | safeHTML}}</p>
 <hr>
 {{.rangeproducts | safeHTML}}
 {{.ifenable | safeHTML}}
 <div class="col s6">
-  {{ .name1 | safeHTML }}
-    <div class="card horizontal">
-      {{.ifneimg1 | safeHTML}}
-      <div class="card-image">
-        {{.image01 | safeHTML}}
-      </div>
-      {{.end | safeHTML}}
-        <br>
-        <div class="card-stacked">
-        <div class="card-content">
-          <div class="card-action">
-            <div class class="center">
-            <p>{{ .description1 | safeHTML}}</p>
-            <p>{{ .productsreadmore | safeHTML }}</p>
-            <p>{{ .ifshippable | safeHTML}}</p>
-            <p>Price: ${{.price | safeHTML}}</p>
-            <p>In stock: {{.quantity | safeHTML}}</p>
-            <p>{{.productbutton | safeHTML}}</p>
-            </div>
-            </div>
-        </div>
-        </div>
-    </div>
+  <p>{{ .namelink | safeHTML }}</p>
+  <p>Price: ${{.price | safeHTML}}</p>
+  <p>In stock: {{.quantity | safeHTML}}</p>
+  <p>{{ .ifshippable | safeHTML}} {{.productbutton | safeHTML}}</p>
 </div>
 <hr>
 {{.end | safeHTML}}
@@ -42,7 +22,6 @@
 
 {{ .catne | safeHTML }}
 {{.productsByCat | safeHTML}}
-{{.categorytitle | safeHTML}}
 {{ .metap | safeHTML }}
 <p>{{.ifpagenotzero | safeHTML}}{{.prevproductscatpage | safeHTML}}{{.end | safeHTML}} {{.nextproductscatpage | safeHTML}}</p>
 <hr>
@@ -61,8 +40,7 @@
         <div class="card-content">
           <div class="card-action">
             <div class class="center">
-            <p>{{ .description1 | safeHTML}}</p>
-            <p>{{ .productsreadmore | safeHTML }}</p>
+            <p>{{ .description1 | safeHTML}}{{ .productsreadmore | safeHTML }}</p>
             <p>Price: ${{.price | safeHTML}}</p>
             <p>In stock: {{.quantity | safeHTML}}</p>
             <p>{{.productbutton | safeHTML}}</p>
@@ -82,7 +60,7 @@
 {{.ifequipmentstable | safeHTML}}
 {{.cateq | safeHTML}}
 {{.equipmentsByPage | safeHTML}}
-{{.equipmentdesc | safeHTML}}
+{{.equipmentpagedesc | safeHTML}}
 <p>{{.ifpagenotzero | safeHTML}}{{.prevequipmentpage | safeHTML}}{{.end | safeHTML}} {{.nextequipmentpage | safeHTML}}</p>
 <hr>
 {{.rangeproducts | safeHTML}}
@@ -99,8 +77,7 @@
         <div class="card-content">
           <div class="card-action">
             <div class class="center">
-            <p>{{ .description1 | safeHTML}}</p>
-            <p>{{ .equipmentsreadmore | safeHTML }}</p>
+            <p>{{ .description1 | safeHTML}}{{ .equipmentsreadmore | safeHTML }}</p>
             <p>Price: ${{.price | safeHTML}}</p>
             <p>In stock: {{.quantity | safeHTML}}</p>
             <p>{{.equipmentbutton | safeHTML}}</p>
@@ -134,8 +111,7 @@
         <div class="card-content">
           <div class="card-action">
             <div class class="center">
-            <p>{{ .description1 | safeHTML}}</p>
-            <p>{{ .equipmentsreadmore | safeHTML }}</p>
+            <p>{{ .description1 | safeHTML}}{{ .equipmentsreadmore | safeHTML }}</p>
             <p>Price: ${{.price | safeHTML}}</p>
             <p>In stock: {{.quantity | safeHTML}}</p>
             <p>{{.equipmentbutton | safeHTML}}</p>
