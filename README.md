@@ -29,6 +29,7 @@ The database used here is [cockroachdb](https://www.cockroachlabs.com/docs/v20.2
 
 Tested on Archlinux
 
+Install dependencies:
 ```
 yay -S cockroachdb go hugo
 ```
@@ -42,6 +43,11 @@ sudo ln -s ~/go/bin/statik /usr/bin/statik
 
 (Alternatively, you can add GOBIN to your PATH)
 
+clone this repo:
+```
+git clone https://github.com/0pcom/magnets
+cd magnets
+```
 ## CockroachDB Single Node
 
 The first step is creating the certs used to establish the connection between the go application and cocroachdb. `make single-node` starts the cockroachdb node
