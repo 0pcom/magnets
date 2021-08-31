@@ -2,7 +2,7 @@
 # See https://github.com/gohugoio/hugoThemes#themetoml for an example
 name = "magnetophere.386"
 description = "Hugo port of the BOOTSTRA.386 theme"
-homepage = "//github.com/0pcom/magnetosphere/"
+homepage = "//github.com/0pcom/magnets/"
 tags = ["store","retro","hardware","magnetosphere","magnetosphere.386"]
 features = ["responsive"]
 min_version = "0.41"

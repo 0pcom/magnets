@@ -1,21 +1,60 @@
 #baseURL = "http://127.0.0.1:8040/"
 baseURL = "https://magnetosphere.net"
-title = "MAGNETOSPHERE.NET"
+port = 8040
+title = "we have the technology | magnetosphere.net"
 languageCode = "en"
 DefaultContentLanguage = "en" # Change this to change the site's language
 #theme = "hugo.386"
 preserveTaxonomyNames = true
 ignoreErrors = ["error-remote-getjson"]
 
+[params.copyright]
+    name = "magnetosphere.net"
+    # The url to use as link in the copyright name in the footer. Leave empty to use none.
+    url = "https://magnetosphere.net"
+    # Text to go before copyright information
+    #prefix = "[hugo.386 theme by Max le Fou](https://gitlab.com/maxlefou/hugo.386)"
+    # Text to go between copyright and hugo disclaimer (if enabled)
+    #suffix = "Example site"
+
 [params]
+    title = "magnetosphere.net"
+    # The subtitle to display under the title in the home page
+    # The name to display as main title in the home page
+    mainpagetitle = "<title>we have the technology | magnetosphere.net</title>"
+    itemtitle = "<title>{{.Name}} | magnetosphere.net</title>"
+    categorytitle = "<title>{{.Category}} | magnetosphere.net</title>"
+    categorydesc = "<meta name=\"description\" content=\"Browse {{.Table}} by category: {{.Category}} page: {{.PageNumber}}. Credit Cards, Paypal, and Cryptocurrency accepted; buy with bitcoin or skycoin.\"/>"
+    sitetitle = "<title>magnetosphere.net | we have the technology</title>"
+    mainpagesubtitle = "we have the technology"
+    # The description of your website. It will be displayed in the home page
+    maindesc = "<meta name=\"description\" content=\"Shop a wide variety of electronics parts, components, equipment and more. Credit Cards, Paypal, and Cryptocurrency accepted; buy with bitcoin or skycoin. Browse {{.Table}}, page: {{.PageNumber}}\"/>"
+    equipmentdesc = "<meta name=\"description\" content=\"Shop electronics equipment and more. Credit Cards, Paypal, and Cryptocurrency accepted; buy with bitcoin or skycoin. Browse {{.Table}}, page: {{.PageNumber}}\"/>"
+    maintitle = "magnetosphere.net"
+    # The name to display in the copyright section in the footer
+    copyrightname = "magnetosphere.net"
+    # The url to use as link in the copyright name in the footer. Leave empty to use none.
+    copyrighturl = "https://magnetosphere.net"
+    copyrightsuffix = "all rights reserved"
+##### BELOW THIS LINE ######
+#################################
+##### BEGIN SHARED CONFIGURATION ######
     ifenable = "{{if .Enable}}"
-    range = "{{range .}}"
+    #range = "{{range .}}"
+    rangeproducts = "{{range $products}}"
+    rangeproduct = "{{range $product}}"
     end = "{{end}}"
     else = "{{else}}"
     partno = "{{.PartNo}}"
+    productpartno = "{{.PartNo}}"
     name1 = "{{.Name}}"
+    ifname = "{{if ne .Name \"\"}}"
+    namelink = "<a href=\"/post/{{.PartNo}}\">{{.Name}}</a>"
+    name2 = "{{$product.Name}}"
     imageee = "{{.Image1}}"
-    price = "{{.Price}}"
+    price = "{{correct .Price}}"
+    quantity = "{{ .Qty}}"
+    ifshippable = "{{if eq .Shippable false}} This item is only available for local pickup {{if ne .Location \"\"}} in {{ .Location }}. Enter your phone number during checkout and we will contact you by phone to schedule pick-up{{end}}{{end}}"
     description1 = "{{.Description1}}"
     url = "/post/{{.PartNo}}"
     cat = "{{.Category}}"
@@ -24,17 +63,20 @@ ignoreErrors = ["error-remote-getjson"]
     val = "{{.Value}}"
     valu = "{{.ValUnit}}"
     amp = "{{.AmpsRating}}"
-    tol = "{{.Tolerance}}"
+    tol = "{{multiply .Tolerance 100}}"
     typ = "{{.Type}}"
     ptyp = "{{.PackageType}}"
     tech = "{{.Technology}}"
     mat = "{{.Materials}}"
     wat = "{{.WattsRating}}"
+    year = "{{.Year}}"
+    cablelength = "{{.CableLength}}"
+    weightoz = "{{.WeightOz}}"
     tmp = "{{.TempRating}}"
     tmpu = "{{.TempUnit}}"
     cond = "{{.Condition}}"
-    data = "{{.Datasheet}}"
-    docu = "{{.Documentation}}"
+    data = "<a href=\"/img/pdf/{{.Datasheet}}\">{{.Datasheet}}</a>"
+    docu = "{{.Docs}}"
     note = "{{.Note}}"
     warn = "{{.Warning}}"
     desc2 = "{{.Description2}}"
@@ -50,35 +92,73 @@ ignoreErrors = ["error-remote-getjson"]
     ifnemat = "{{if ne .Materials \"\"}}"
     ifnewat = "{{if ne .WattsRating 0.0 }}"
     ifnetemp = "{{if ne .TempRating 0.0 }}"
+    ifneyear = "{{if ne .Year 0 }}"
+    ifnecablelength = "{{if ne .CableLength 0.0 }}"
+    ifneweightoz = "{{if ne .WeightOz 0.0 }}"
     ifnecond = "{{if ne .Condition \"\"}}"
     ifnedat = "{{if ne .Datasheet \"\"}}"
     ifnedoc = "{{if ne .Docs \"\"}}"
     ifnenot = "{{if ne .Note \"\"}}"
     ifnewrn = "{{if ne .Warning \"\"}}"
     ifnedesc2 = "{{if ne .Description2 \"\"}}"
-    image = "<a href=\"/img/{{.Image1}}\"><img src=\"/img/{{.Image1}}\" class=\"center\"></a>"
-    name = "<a href=\"/post/{{.PartNo}}\"><h2 class=\"header\">{{ .Name }}</h2></a>"
-    readmore = "<p><a href=\"/post/{{.PartNo}}\">Read More</a></p>"
-    button = "<button class=\"snipcart-add-item waves-effect waves-light btn\" data-item-id=\"{{.PartNo}}\" data-item-name=\"{{.PartNo}}\" data-item-image=\"/img/{{.Image1}}\" data-item-price=\"{{.Price}}\" data-item-url=\"/post/{{.PartNo}}\" data-item-description=\"{{.Name}}\" data-item-min-quantity=\"{{.MinOrder}}\" data-item-max-quantity=\"{{.MaxOrder}}\" data-item-has-taxes-included=\"false\" >Add to cart</button>"
+    ifneimg1 = "{{if ne .Image1 \"\"}}"
+    ifneimg2 = "{{if ne .Image2 \"\"}}"
+    ifneimg3 = "{{if ne .Image3 \"\"}}"
+    image01 = "<a href=\"/img/{{.Image1}}\"><img src=\"/img/{{.Image1}}\" alt=\"{{.Name}}\" class=\"center\"></a>"
+    image02 = "<a href=\"/img/{{.Image2}}\"><img src=\"/img/{{.Image2}}\" alt=\"{{.Name}}\" class=\"center\"></a>"
+    image03 = "<a href=\"/img/{{.Image3}}\"><img src=\"/img/{{.Image3}}\" alt=\"{{.Name}}\" class=\"center\"></a>"
+    pname = "<a href=\"/post/{{.PartNo}}\"><h2 class=\"header\">{{ .Name }}</h2></a>"
+    ename = "<a href=\"/equipment/post/{{.PartNo}}\"><h2 class=\"header\">{{ .Name }}</h2></a>"
+    productsreadmore = "<a href=\"/post/{{.PartNo}}\" class=\"btn btn-info\" role=\"button\">Read More</a>"
+    equipmentsreadmore = "<a href=\"/equipment/post/{{.PartNo}}\" class=\"btn btn-info\" role=\"button\">Read More</a>"
+    productbutton = "<button class=\"snipcart-add-item waves-effect waves-light btn\" data-item-id=\"{{.PartNo}}\" data-item-name=\"{{.PartNo}}\" data-item-image=\"/img/{{.Image1}}\" data-item-price=\"{{.Price}}\" data-item-url=\"/post/{{.PartNo}}\" data-item-description=\"{{.Name}}\" data-item-min-quantity=\"{{.MinOrder}}\" data-item-quantity=\"{{.DefaultQty}}\" data-item-quantity-step=\"{{.StepQty}}\" data-item-shippable=\"{{.Shippable}}\" data-item-max-quantity=\"{{.MaxOrder}}\" data-item-weight=\"{{convertozgrams .WeightOz}}\" {{if ne .Length 0.0 }} data-item-length=\"{{convertincm .Length}}\"{{end}}{{if ne .Width 0.0 }} data-item-width=\"{{convertincm .Width}}\"{{end}}{{if ne .Height 0.0 }} data-item-height=\"{{convertincm .Height}}\"{{end}} data-item-has-taxes-included=\"false\" >Add to cart</button>"
+    equipmentbutton = "<button class=\"snipcart-add-item waves-effect waves-light btn\" data-item-id=\"{{.PartNo}}\" data-item-name=\"{{.PartNo}}\" data-item-image=\"/img/{{.Image1}}\" data-item-price=\"{{.Price}}\" data-item-url=\"/equipment/post/{{.PartNo}}\" data-item-description=\"{{.Name}}\" data-item-min-quantity=\"{{.MinOrder}}\"  data-item-quantity=\"{{.DefaultQty}}\" data-item-quantity-step=\"{{.StepQty}}\" data-item-shippable=\"{{.Shippable}}\" data-item-max-quantity=\"{{.MaxOrder}}\" data-item-weight=\"{{convertozgrams .WeightOz}}\" {{if ne .Length 0.0 }} data-item-length=\"{{convertincm .Length}}\"{{end}}{{if ne .Width 0.0 }} data-item-width=\"{{convertincm .Width}}\"{{end}}{{if ne .Height 0.0 }} data-item-height=\"{{convertincm .Height}}\"{{end}} data-item-has-taxes-included=\"false\" >Add to cart</button>"
+    Cats = "{{$cats := listCategories .Table}}" #
+    RangeCats = "{{range $cats}}"
+    productsCategories = "<a href=\"/cat/{{.Name}}\">{{.Name}} ({{.Count}})</a>"
+    equipmentsCategories = "<a href=\"/equipment/cat/{{.Name}}\">{{.Name}} ({{.Count}})</a>"
+    CategoriesUL = "<ul class=\"nav nav-list bs-docs-sidenav\">"
+    cateq = "{{if eq .Category \"\"}}"
+    catne = "{{if ne .Category \"\"}}"
+    productsByPage = "{{$products := productListPage .PageNumber}}"
+    listPage1 = "{{$products := listPage1 .PageNumber}}"
+    indexproductsByPage = "{{ $index := productIndexPage .PageNumber}}"
+    indexPage1 = "{{ $index := indexPage1 .PageNumber}}"
+    lenprods = "{{lenprods}}"
+    ifnextpage = "{{if gt $index 9}}"
+    productPage =  "{{$product := findProduct1 .PartNumber}}"
+    PartNumber = "{{.PartNumber}}"
+    equipmentsByPage = "{{$products := equipmentListPage .PageNumber}}"
+    equipmentPage =  "{{$product := findEquipment1 .PartNumber}}"
+    ifproductstable = "{{if eq .Table \"products\"}}"
+    ifequipmentstable = "{{if eq .Table \"equipments\"}}"
+    productsByCat = "{{$products := productsCategoryListPage .Category .PageNumber}}"
+    equipmentsByCat = "{{$products := equipmentsCategoryListPage .Category .PageNumber}}"
+    ifpagenotzero = "{{if ne .PageNumber 0}}"
+    nextproductpage = "<a href=\"/p/{{nextPage .PageNumber}}\" class=\"btn btn-info\" role=\"button\">Next</a>"
+    prevproductpage = "<a href=\"/p/{{prevPage .PageNumber}}\" class=\"btn btn-info\" role=\"button\">Previous</a>"
+    nextequipmentpage = "<a href=\"/equipment/p/{{nextPage .PageNumber}}\" class=\"btn btn-info\" role=\"button\">Next</a>"
+    prevequipmentpage = "</a><a href=\"/equipment/p/{{prevPage .PageNumber}}\" class=\"btn btn-info\" role=\"button\">Previous"
+    nextproductscatpage = "<a href=\"/cat/{{.Category}}/{{nextPage .PageNumber}}\" class=\"btn btn-info\" role=\"button\">Next</a>"
+    prevproductscatpage = "<a href=\"/cat/{{.Category}}/{{prevPage .PageNumber}}\" class=\"btn btn-info\" role=\"button\">Previous</a>"
+    nextequipmentscatpage = "<a href=\"/equipment/cat/{{.Category}}/{{nextPage .PageNumber}}\" class=\"btn btn-info\" role=\"button\">Next</a>"
+    prevequipmentscatpage = "<a href=\"/equipment/cat/{{.Category}}/{{prevPage .PageNumber}}\" class=\"btn btn-info\" role=\"button\">Previous</a>"
+    metaitemdescription = "<meta name=\"description\" content=\"Buy {{.Description1}}, Price: ${{.Price}}, In-stock: {{.Qty}}\"/>"
+    metap = "<meta name=\"description\" content=\"Browse products by category: {{.Category}}. Page: {{.PageNumber}}.\"/>"
+    metae = "<meta name=\"description\" content=\"Browse equipment by category: {{.Category}}. Page: {{.PageNumber}}.\"/>"
+    paymentcards = "<img src=\"/img/assets/visa_card.png\" alt=\"Visa is accepted payment\"> <img src=\"/img/assets/master_card.png\" alt=\"MasterCard is accepted payment\"> <img src=\"/img/assets/discover_network_card.png\" alt=\"Discover card is accepted payment\"> <img src=\"/img/assets/american_express_card.png\" alt=\"American Express is accepted payment\"> <img src=\"/img/assets/paypal.png\" alt=\"Paypal is accepted payment\"> <img src=\"/img/assets/bitcoin_text_logo.png\" alt=\"Bitcoin cryptocurrency btc crypto is accepted payment\"> <img src=\"/img/assets/sky_card.png\" alt=\"Skycoin cryptocurrency sky crypto is accepted payment\"> <img src=\"/img/assets/ness_card.png\" alt=\"Privateness cryptocurrency ness crypto is accepted payment\">"
+    visacard = "<img src=\"/img/assets/visa_card.png\" alt=\"Visa is accepted payment\" >"
+    mastercard = "<img src=\"/img/assets/master_card.png\" alt=\"MasterCard is accepted payment\" class=\"center\">"
+    discovercard = "<img src=\"/img/assets/discover_network_card.png\" alt=\"Discover card is accepted payment\" class=\"center\">"
+    amexcard = "<img src=\"/img/assets/american_express_card.png\" alt=\"American Express is accepted payment\" class=\"center\">"
+    paypalcard = "<img src=\"/img/assets/paypal.png\" alt=\"Paypal is accepted payment\" class=\"center\">"
+    btccard = "<img src=\"/img/assets/bitcoin_text_logo.png\" alt=\"Bitcoin cryptocurrency btc crypto is accepted payment\" class=\"center\">"
+    skycard = "<img src=\"/img/assets/sky_card.png\" alt=\"Skycoin cryptocurrency sky crypto is accepted payment\" class=\"center\">"
+    nesscard = "<img src=\"/img/assets/ness_card.png\" alt=\"Privateness cryptocurrency ness crypto is accepted payment\" class=\"center\">"
+    cart = "<cart isSideCart=\"true\" editingCart=\"true\"> </cart>"
 
-    # The name to display as main title in the home page
-    mainpagetitle = "MAGNETOSPHERE.NET"
-
-    # The subtitle to display under the title in the home page
-    mainpagesubtitle = "we have the technology"
-
-    # The description of your website. It will be displayed in the home page
-    mainpagedesc = ""
-
-    # The name to display in the copyright section in the footer
-    copyrightname = "magnetosphere.net"
-
-    # The url to use as link in the copyright name in the footer. Leave empty to use none.
-    copyrighturl = "https://magnetosphere.net"
-    copyrightsuffix = "all rights reserved"
     # Show the "built on Hugo" disclaimer
     #showhugo = true
-
     # Urls for social networks
     #facebook = "https://facebook.com"
     #twitter = "https://twitter.com"
@@ -87,38 +167,31 @@ ignoreErrors = ["error-remote-getjson"]
     #gitlab = "https://gitlab.com"
 
     # Enables or disables the loading animations. false activates them. Default is false.
-    loadfastload = false
-
+    loadfastload = true #false
     # Sets the speed for the page loading effect. Default is 1.0.
     loadspeedfactor = 1.0
-
     # Enables or disables the second flyby cursor. Default is false.
     loadonepass = false
 
-[params.copyright]
-    name = "magnetosphere.net"
-
-    # The url to use as link in the copyright name in the footer. Leave empty to use none.
-    url = "https://magnetosphere.net"
-
-    # Text to go before copyright information
-    #prefix = "[hugo.386 theme by Max le Fou](https://gitlab.com/maxlefou/hugo.386)"
-
-    # Text to go between copyright and hugo disclaimer (if enabled)
-    #suffix = "Example site"
-
 [menu]
   # This displays buttons in the navbar to access your contents
+  [[menu.main]]
+    identifier = "equipment"
+    name = "Equipment"
+    url = "/equipment"
+    weight = 5
+
   [[menu.main]]
     identifier = "about" # An unique identifier for the button
     name = "About"       # A display name for the button
     url = "/about"      # The path to the content. It can lead to a single page (like here)
     weight = 10          # A number to order the buttons in the navbar
 
+
   [[menu.main]]
-    identifier = "shipping"
-    name = "Shipping"
-    url = "/shipping"       # The path can lead to a content folder too.
+    identifier = "policies"
+    name = "Policies"
+    url = "/policy"       # The path can lead to a content folder too.
     weight = 20
 
   [[menu.main]]
@@ -128,10 +201,17 @@ ignoreErrors = ["error-remote-getjson"]
     weight = 30
 
   [[menu.main]]
-    identifier = "bitcoin"
-    name = "Bitcoin"
-    url = "https://pay.magnetosphere.net/apps/42U8i51gFZF7reRf71hZ26wa7Qx3/pos/"       # The path can lead to a content folder too.
+    identifier = "blog"
+    name = "Blog"
+    url = "/blog"       # The path can lead to a content folder too.
     weight = 40
+
+
+  #[[menu.main]]
+  #  identifier = "bitcoin"
+  #  name = "Bitcoin"
+  #  url = "https://pay.magnetosphere.net/apps/42U8i51gFZF7reRf71hZ26wa7Qx3/pos/"       # The path can lead to a content folder too.
+  #  weight = 40
 
   [[menu.main]]
     identifier = "time"
@@ -146,35 +226,15 @@ ignoreErrors = ["error-remote-getjson"]
     weight = 60
 
 
-#    <a href=\"https://pay.magnetosphere.net/apps/42U8i51gFZF7reRf71hZ26wa7Qx3/pos/\">shop with bitcoin here</a>
-#[taxonomies]
-#category = "categories"
-#tag = "tags"
-
-
-#[privacy]
-
-#  [privacy.vimeo]
-#    disabled = false
-#    simple = true
-
-#  [privacy.twitter]
-#    disabled = false
-#    enableDNT = true
-#    simple = true
-
-#  [privacy.instagram]
-#    disabled = false
-#    simple = true
-
-#  [privacy.youtube]
-#    disabled = false
-#    privacyEnhanced = true
-
-#[services]
-
-#  [services.instagram]
-#    disableInlineCSS = true
-
-#  [services.twitter]
-#    disableInlineCSS = true
+  [[menu.two]]
+    identifier = 'main'
+    name = 'Gallery'
+    pre = ""
+    url = '/'
+    weight = -110
+  [[menu.two]]
+    name = 'Full List'
+    post = ""
+    pre = ""
+    url = '/list'
+    weight = -100
