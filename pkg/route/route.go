@@ -31,11 +31,11 @@ func Server(webPort int){
   r.Handle("/cat/{slug}", handlers.LoggingHandler(os.Stdout, http.HandlerFunc(handle.CategoryPage))).Methods("GET")	//category
   r.Handle("/cat/{slug}/{id:[0-9]+}", handlers.LoggingHandler(os.Stdout, http.HandlerFunc(handle.CategoryPage))).Methods("GET")	//category pagination
   // equipment table endpoints
-  r.Handle("/equipment", handlers.LoggingHandler(os.Stdout, http.HandlerFunc(handle.EquipmentPage))).Methods("GET")	//equipment
-  r.Handle("/equipment/p/{id:[0-9]+}", handlers.LoggingHandler(os.Stdout, http.HandlerFunc(handle.EquipmentPage))).Methods("GET")	//equipment pagination
-  r.Handle("/equipment/post/{slug}", handlers.LoggingHandler(os.Stdout, http.HandlerFunc(handle.FindEquipment))).Methods("GET")	//individual product page
-  r.Handle("/equipment/cat/{slug}", handlers.LoggingHandler(os.Stdout, http.HandlerFunc(handle.CategoryEquipmentPage))).Methods("GET")	//category
-  r.Handle("/equipment/cat/{slug}/{id:[0-9]+}", handlers.LoggingHandler(os.Stdout, http.HandlerFunc(handle.CategoryEquipmentPage))).Methods("GET")	//category pagination
+  //r.Handle("/equipment", handlers.LoggingHandler(os.Stdout, http.HandlerFunc(handle.EquipmentPage))).Methods("GET")	//equipment
+  //r.Handle("/equipment/p/{id:[0-9]+}", handlers.LoggingHandler(os.Stdout, http.HandlerFunc(handle.EquipmentPage))).Methods("GET")	//equipment pagination
+  //r.Handle("/equipment/post/{slug}", handlers.LoggingHandler(os.Stdout, http.HandlerFunc(handle.FindEquipment))).Methods("GET")	//individual product page
+  //r.Handle("/equipment/cat/{slug}", handlers.LoggingHandler(os.Stdout, http.HandlerFunc(handle.CategoryEquipmentPage))).Methods("GET")	//category
+  //r.Handle("/equipment/cat/{slug}/{id:[0-9]+}", handlers.LoggingHandler(os.Stdout, http.HandlerFunc(handle.CategoryEquipmentPage))).Methods("GET")	//category pagination
   //single pages
   r.Handle("/about", handlers.LoggingHandler(os.Stdout, http.HandlerFunc(handle.AboutPage))).Methods("GET")	//about page
   r.Handle("/blog", handlers.LoggingHandler(os.Stdout, http.HandlerFunc(handle.BlogPage))).Methods("GET")	//about page
@@ -47,9 +47,11 @@ func Server(webPort int){
   r.Handle("/policy/", handlers.LoggingHandler(os.Stdout, http.HandlerFunc(handle.PolicyPage))).Methods("GET")	//shipping page
   //r.Handle("/time", handlers.LoggingHandler(os.Stdout, http.HandlerFunc(timeFunc))).Methods("GET")	//shipping page
   //
-  r.Handle("/{slug}", handlers.LoggingHandler(os.Stdout, http.HandlerFunc(handle.FrontPage))).Methods("GET") //site root
+  //site root
+  //FrontPage Fails on any slug detected
+  r.Handle("/{slug}", handlers.LoggingHandler(os.Stdout, http.HandlerFunc(handle.FrontPage))).Methods("GET")
   r.Handle("/", handlers.LoggingHandler(os.Stdout, http.HandlerFunc(handle.FrontPage))).Methods("GET") //site root
-  r.Handle("/p/{id:[0-9]+}", handlers.LoggingHandler(os.Stdout, http.HandlerFunc(handle.PagePage))).Methods("GET") //pagination
+  r.Handle("/{slug}/{id:[0-9]+}", handlers.LoggingHandler(os.Stdout, http.HandlerFunc(handle.FrontPage))).Methods("GET") // /p/ for pagination
   r.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(statikFS)))	//statik sources
   r.PathPrefix("/").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
     // this handler behaved as I would expect the r.NotFoundHandler to behave..

@@ -1,33 +1,23 @@
-{{.ifproductstable | safeHTML}}
-
-{{.cateq | safeHTML}}
-{{.productsByPage | safeHTML}}
-{{.indexproductsByPage | safeHTML}}
-{{.mainpagetitle | safeHTML }}
-{{.maindesc | safeHTML}}
-<p>{{.ifpagenotzero | safeHTML}}{{.prevproductpage | safeHTML}}{{.end | safeHTML}} {{.ifnextpage | safeHTML}} {{.nextproductpage | safeHTML}} {{.end | safeHTML}}</p>
+{{range .metadesc}}{{ . | safeHTML }}{{end}}
+{{range .ifview1}}{{ . | safeHTML }}{{end}}
+{{range .productsPage1}}{{ . | safeHTML }}{{end}}
+{{range .nextprevproductpage}}{{ . | safeHTML }}{{end}}
 <hr>
-{{.rangeproducts | safeHTML}}
-{{.ifenable | safeHTML}}
+{{range .rangeProducts}}{{ . | safeHTML }}{{end}}
 <div class="col s6">
-  {{ .name1 | safeHTML }}
+  {{range .name1}}{{ . | safeHTML }}{{end}}
     <div class="card horizontal">
-      {{.ifneimg1 | safeHTML}}
-      <div class="card-image">
-        {{.image01 | safeHTML}}
-      </div>
-      {{.end | safeHTML}}
+        {{range .img11}}{{ . | safeHTML }}{{end}}
         <br>
         <div class="card-stacked">
         <div class="card-content">
           <div class="card-action">
             <div class class="center">
-            <p>{{ .description1 | safeHTML}}</p>
-            <p>{{ .productsreadmore | safeHTML }}</p>
-            <p>{{ .ifshippable | safeHTML}}</p>
-            <p>Price: ${{.price | safeHTML}}</p>
-            <p>In stock: {{.quantity | safeHTML}}</p>
-            <p>{{.productbutton | safeHTML}}</p>
+            <p>{{range .desc1}}{{ . | safeHTML }}{{end}}</p>
+            <p>{{range .productsreadmore}}{{. | safeHTML }}{{end}}</p>
+            <p>Price: ${{range .price}}{{ . | safeHTML }}{{end}}</p>
+            <p>In stock: {{range .quantity}}{{ . | safeHTML }}{{end}}</p>
+            <p>{{range .productbutton0}}{{ . | safeHTML }}{{end}}</p>
             </div>
             </div>
         </div>
@@ -35,37 +25,26 @@
     </div>
 </div>
 <hr>
-{{.end | safeHTML}}
-{{.end | safeHTML}}
-<p>{{.ifpagenotzero | safeHTML}}{{.prevproductpage | safeHTML}}{{.end | safeHTML}}{{.ifnextpage | safeHTML}} {{.nextproductpage | safeHTML}} {{.end | safeHTML}}</p>
-{{.end | safeHTML}}
-
-{{ .catne | safeHTML }}
-{{.productsByCat | safeHTML}}
-{{.categorytitle | safeHTML}}
-{{ .metap | safeHTML }}
-<p>{{.ifpagenotzero | safeHTML}}{{.prevproductscatpage | safeHTML}}{{.end | safeHTML}} {{.nextproductscatpage | safeHTML}}</p>
+{{range .end}}{{ . | safeHTML }}{{end}}
+{{range .nextprevproductpage}}{{ . | safeHTML }}{{end}}
+{{range .end}}{{ . | safeHTML }}{{end}}
+{{range .ifview2}}{{ . | safeHTML }}{{end}}
+{{range .productsPage1}}{{ . | safeHTML }}{{end}}
+{{range .rangeProducts}}{{ . | safeHTML }}{{end}}
 <hr>
-{{.rangeproducts | safeHTML}}
-{{.ifenable | safeHTML}}
 <div class="col s6">
-  {{ .name1 | safeHTML }}
+  {{range .name1}}{{ . | safeHTML }}{{end}}
     <div class="card horizontal">
-      {{.ifneimg1 | safeHTML}}
-      <div class="card-image">
-        {{.image01 | safeHTML}}
-      </div>
-      {{.end | safeHTML}}
-              <br>
+        <br>
         <div class="card-stacked">
         <div class="card-content">
           <div class="card-action">
             <div class class="center">
-            <p>{{ .description1 | safeHTML}}</p>
-            <p>{{ .productsreadmore | safeHTML }}</p>
-            <p>Price: ${{.price | safeHTML}}</p>
-            <p>In stock: {{.quantity | safeHTML}}</p>
-            <p>{{.productbutton | safeHTML}}</p>
+            <p>{{range .desc1}}{{ . | safeHTML }}{{end}}</p>
+            <p>{{range .productsreadmore}}{{. | safeHTML }}{{end}}</p>
+            <p>Price: ${{range .price}}{{ . | safeHTML }}{{end}}</p>
+            <p>In stock: {{range .quantity}}{{ . | safeHTML }}{{end}}</p>
+            <p>{{range .productbutton}}{{ . | safeHTML }}{{end}}</p>
             </div>
             </div>
         </div>
@@ -73,81 +52,5 @@
     </div>
 </div>
 <hr>
-{{.end | safeHTML}}
-{{.end | safeHTML}}
-<p>{{.ifpagenotzero | safeHTML}}{{.prevproductscatpage | safeHTML}}{{.end | safeHTML}} {{.nextproductscatpage | safeHTML}}</p>
-{{.end | safeHTML}}
-{{.end | safeHTML}}
-
-{{.ifequipmentstable | safeHTML}}
-{{.cateq | safeHTML}}
-{{.equipmentsByPage | safeHTML}}
-{{.equipmentdesc | safeHTML}}
-<p>{{.ifpagenotzero | safeHTML}}{{.prevequipmentpage | safeHTML}}{{.end | safeHTML}} {{.nextequipmentpage | safeHTML}}</p>
-<hr>
-{{.rangeproducts | safeHTML}}
-{{.ifenable | safeHTML}}
-<div class="col s6">
-  {{ .name1 | safeHTML }}
-    <div class="card horizontal">
-      {{.ifneimg1 | safeHTML}}
-      <div class="card-image">
-        {{.image01 | safeHTML}}
-      </div>
-      {{.end | safeHTML}}        <br>
-        <div class="card-stacked">
-        <div class="card-content">
-          <div class="card-action">
-            <div class class="center">
-            <p>{{ .description1 | safeHTML}}</p>
-            <p>{{ .equipmentsreadmore | safeHTML }}</p>
-            <p>Price: ${{.price | safeHTML}}</p>
-            <p>In stock: {{.quantity | safeHTML}}</p>
-            <p>{{.equipmentbutton | safeHTML}}</p>
-            </div>
-            </div>
-        </div>
-        </div>
-    </div>
-</div>
-<hr>
-{{.end | safeHTML}}
-{{.end | safeHTML}}
-<p>{{.ifpagenotzero | safeHTML}}{{.prevequipmentpage | safeHTML}}{{.end | safeHTML}} {{.nextequipmentpage | safeHTML}}</p>
-{{.end | safeHTML}}
-{{ .catne | safeHTML }}
-{{.equipmentsByCat | safeHTML}}
-{{.metae | safeHTML}}
-<p>{{.ifpagenotzero | safeHTML}}{{.prevequipmentscatpage | safeHTML}}{{.end | safeHTML}} {{.nextequipmentscatpage | safeHTML}}</p>
-<hr>
-{{.rangeproducts | safeHTML}}
-{{.ifenable | safeHTML}}
-<div class="col s6">
-  {{ .name1 | safeHTML }}
-    <div class="card horizontal">
-      {{.ifneimg1 | safeHTML}}
-      <div class="card-image">
-        {{.image01 | safeHTML}}
-      </div>
-      {{.end | safeHTML}}        <br>
-        <div class="card-stacked">
-        <div class="card-content">
-          <div class="card-action">
-            <div class class="center">
-            <p>{{ .description1 | safeHTML}}</p>
-            <p>{{ .equipmentsreadmore | safeHTML }}</p>
-            <p>Price: ${{.price | safeHTML}}</p>
-            <p>In stock: {{.quantity | safeHTML}}</p>
-            <p>{{.equipmentbutton | safeHTML}}</p>
-            </div>
-            </div>
-        </div>
-        </div>
-    </div>
-</div>
-<hr>
-{{.end | safeHTML}}
-{{.end | safeHTML}}
-<p>{{.ifpagenotzero | safeHTML}}{{.prevequipmentscatpage | safeHTML}}{{.end | safeHTML}} {{.nextequipmentscatpage | safeHTML}}</p>
-{{.end | safeHTML}}
-{{.end | safeHTML}}
+{{range .end}}{{ . | safeHTML }}{{end}}
+{{range .end}}{{ . | safeHTML }}{{end}}

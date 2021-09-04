@@ -12,7 +12,7 @@
         <p></p>
         <hr class="soften">
         <p></p>
-        <h1>{{ i18n "postslist" }}: {{.Site.Params.lenprods | safeHTML}}</h1>
+        <h1>{{ i18n "postslist" }}: {{range .Site.Params.lenprods}}{{. | safeHTML}}{{end}}</h1>
         <ul>
           {{partial "listproduct.html" .Site.Params}}
           </ul>

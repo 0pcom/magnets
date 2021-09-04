@@ -5,6 +5,7 @@ package funcmap
 import (
 	"log"
 		inv "github.com/0pcom/magnets/pkg/inv"
+		"strconv"
 )
 import (
  	"fmt"
@@ -17,27 +18,20 @@ import (
 
 
 //these are functions called from the template or webpage
-var FM = template.FuncMap{
-	"fdateMDY": monthDayYear,
-	"snipcartapikey": snipcartApiKey,
-	"multiply": multiply,
-	"correct": correct,
-	"convertozgrams": convertozgrams,
-	"convertincm": convertincm,
-	"lenprods": lenprods,
-	"productListPage": productListPage,
-	"listPage1": listPage1,
-	"productIndexPage": productIndexPage,
-	"indexPage1": indexPage1,
-	"equipmentListPage": equipmentListPage,
-	"nextPage": nextPage,
-	"prevPage": prevPage,
-	"listCategories": listCategories,
-	"productsCategoryListPage": productsCategoryListPage,
-	"equipmentsCategoryListPage": equipmentsCategoryListPage,
-	"findProduct1": findProduct1,
-	"findEquipment1": findEquipment1,
-	//"pagination": pagination,
+var FM = template.FuncMap{              //   inputs:           returns:              use:
+	"fdateMDY": monthDayYear,              //   n/a               time                  time
+	"snipcartapikey": snipcartApiKey,      //   n/a               key from env          snipcart
+	"multiply": multiply,                  //   num,num           result                snipcart
+	"correct": correct,                    //   num               formatted             snipcart
+	"convertozgrams": convertozgrams,      //   num               grams from oz         snipcart
+	"convertincm": convertincm,            //   num               in from cm            snipcart
+	"listCategories": listCategories,      //   table             categories            menu
+	"lenprods": lenprods,                  //   table,cat         len(products)         displays # of products
+	"productList": productList,            //   table,cat,page#   []products{}          browse database
+	"productList1": productList1,          //   table,cat				  []products{}          browse database
+	"productIndex": productIndex,          //   table,cat,page#   index#                pagination
+	"page": page,                          //   table,cat,page#   page #                previous, next
+	"findProduct1": findProduct1,          //   PartNo            product{}             individual product page
 }//below are the functions
 // // timepage  // //
 //func monthDayYear(t time.Time) string {
@@ -56,12 +50,6 @@ func convertozgrams(a float64) float64 {	//convert ounces to grams for snipcart
 func convertincm(a float64) float64 {	//convert inches to centimeters for snipcart
 	return math.Round((a*2.54)*100)/100
 }
-//func timeFunc(w http.ResponseWriter, r *http.Request) {	//a page with just the time
-//	w.Header().Set("Content-Type", "text/html")
-//	tp1 := template.Must(template.New("").Funcs(fm).ParseFiles("time.html"))
-//	if err := tp1.ExecuteTemplate(w, "time.html",nil); err != nil {	fmt.Printf("error: %s", err) }
-//}
-
 
 // // return list of categories // //
 func listCategories(table string) []inv.Category {
@@ -76,17 +64,26 @@ func listCategories(table string) []inv.Category {
 }
 
 
-func nextPage(a int) int {//the "current context" of the template ({{.}}) is now an index
-	return a + 1
-}
-func prevPage(a int) int {//check for nonzero argument is done on the template side
-	return a - 1
-}
-func nextProd(a int) int {//the "current context" of the template ({{.}}) is now an index
-	return a + 1
-}
-func prevProd(a int) int {//check for nonzero argument is done on the template side
-	return a - 1
+//the "current context" of the template ({{.}}) is now an index
+func page(directive string, table string, cat string, pageno int) string {
+var pagestr string
+var pre string
+if table == "products" && cat == ""{		pre = "/p/"}
+if table == "products" && cat != ""{		pre = fmt.Sprintf("/cat/%s", cat)}
+if table == "equipments" && cat == ""{	pre = "/equipment/p/"}
+if table == "equipments" && cat != ""{	pre = fmt.Sprintf("/equipment/cat/%s", cat)}
+
+if directive == "first"{		pagestr = fmt.Sprintf("%s%s", pre, strconv.Itoa(0))}
+if directive == "firstt"{		pagestr = strconv.Itoa(0)}
+if directive == "prev"{			pagestr = fmt.Sprintf("%s%s", pre, strconv.Itoa(pageno -1))}
+if directive == "prevv"{		pagestr = strconv.Itoa(pageno - 1)}
+if directive == "next"{			pagestr = fmt.Sprintf("%s%s", pre, strconv.Itoa(pageno + 1))}
+if directive == "nextt"{		pagestr = strconv.Itoa(pageno + 1)}
+if directive == "last"{			pagestr = fmt.Sprintf("%s%s", pre, strconv.Itoa(lastPage(table, cat)))}
+if directive == "lastt"{		pagestr = strconv.Itoa(lastPage(table, cat))}
+if directive == "current"{	pagestr = fmt.Sprintf("%s%s", pre, strconv.Itoa(pageno))}
+if directive == "currentt"{	pagestr = strconv.Itoa(pageno)}
+return pagestr
 }
 
 var snipcartapikey string = os.Getenv("SNIPCARTAPIKEY")
@@ -101,132 +98,194 @@ func snipcartApiKey() string {
 //the template then calls the mapped functions, passing the values that were passed to it
 //returned from there is the data which is rendered on the page
 type Page struct {
+	Title string
+	Partno string
 	Table string //specifies the table; products or equipments
   Category string //category
+	View string
   PageNumber int	//pagination
 }
 type SubPage struct {
+	Title string
 	Table string
   PartNumber string
 }
 
 
 // // function called from the template to get products by page // //
-func productListPage(pagenumber int) []inv.Product {
-	var products1 []inv.Product
-	fmt.Println(pagenumber)
-	lenprod := len(inv.Mproducts)
-	if pagenumber == 0 {
-		for i := 0; i < lenprod; i++ {
-			if inv.Mproducts[i].Enable == true {
-				products1 = append(products1, inv.Mproducts[i])
-			}
-			//pull products from the whole database for the first page!
-			randnu := rand.New(rand.NewSource(time.Now().Unix()))
-			products2 := make([]inv.Product, len(products1))
-			perm := randnu.Perm(len(products1))
-			for i, randIndex := range perm {
-				products2[i] = products1[randIndex]
+func productList(table string, category string, view string, pagenumber int) []inv.Product {
+	products1 := inv.Mproducts
+	products3 := make([]inv.Product, 0)
+	//lenprod := len(inv.Mproducts)
+	if view == "2" {
+				products3 = products1
+	}
+	if view == "1" && pagenumber == 0 && category == "" {
+		//}	//randomize the order in which products appear on the page
+		randnu := rand.New(rand.NewSource(time.Now().Unix()))
+		products2 := make([]inv.Product, len(products1))
+		perm := randnu.Perm(len(products1))
+		for i, randIndex := range perm {
+			products2[i] = products1[randIndex]
+		}
+		//	//randomize the categories products are selected from
+		randnu1 := rand.New(rand.NewSource(time.Now().Unix()))
+		cats2 := make([]inv.Category, len(inv.Pcats))
+		perm1 := randnu1.Perm(len(inv.Pcats))
+		for i, randIndex := range perm1 {
+			cats2[i] = inv.Pcats[randIndex]
+		}
+		for i:= range products2 {
+			if products3 == nil || len(products3)==0{
+				products3 = append(products3, products2[i])
+				} else {
+				founded:=false
+				for j:= range products3{
+					if products3[j].Category == products2[i].Category {
+						founded=true
+					}
+				}
+				if !founded{
+					products3 = append(products3, products2[i])
+				}
 			}
 		}
-	} else {
-		//subsequent pages
-		for i := ((pagenumber - 1) * 10); len(products1) < 10; i++ {
-			if inv.Mproducts[i].Enable == false {break}
-			products1 = append(products1, inv.Mproducts[i])
+	//}
+	}
+	if view == "1" && pagenumber != 0 {
+	//subsequent pages
+	v := ((pagenumber - 1) * 10)
+	if v < (inv.Lenproducts - 10) {
+		for i := v; i < (v + 10) ; i++ {
+			products3 = append(products3, inv.Mproducts[i])
 		}
 	}
-	//}	//randomize the order in which products appear on the page
-	randnu := rand.New(rand.NewSource(time.Now().Unix()))
-	products2 := make([]inv.Product, len(products1))
-	perm := randnu.Perm(len(products1))
-	for i, randIndex := range perm {
-		products2[i] = products1[randIndex]
+}
+if view == "1" && category != "" {
+		products3 = productCat(table, category, pagenumber)
 	}
-  //	//randomize the categories products are selected from
-	randnu1 := rand.New(rand.NewSource(time.Now().Unix()))
-	cats2 := make([]inv.Category, len(inv.Pcats))
-	perm1 := randnu1.Perm(len(inv.Pcats))
-	for i, randIndex := range perm1 {
-		cats2[i] = inv.Pcats[randIndex]
-	}
-cats2 = cats2[:10]
-	//limit to 10 results!
-  //k := len(cats2)
-  //l := len(products2)
-	products3 := make([]inv.Product, 10)
-  //m := len(products3)
-  for i:= range products2 {
-      if products3 == nil || len(products3)==0{ products3 = append(products3, products2[i]) } else {
-          founded:=false
-          for j:= range products3{
-            if products3[j].Category == products2[i].Category {
-              founded=true
-              }
-            }
-          if !founded{
-            products3 = append(products3, products2[i])
-            }
-      }
-  }
-  //sort.Sort(alphab(inv.Pcats))
-//    for i := 0; i < 10; i++ {
-//          products3[i] = products2[i]
-//    }
-	return products3
+
+return products3
 }
 // // function called from the template to get products by page // //
-func productIndexPage(pagenumber int) int {
-	var products1 []inv.Product
-		for i := (pagenumber * 10); len(products1) < 10; i++ {
-				if inv.Mproducts[i].Enable == false {break}
-				products1 = append(products1, inv.Mproducts[i])
+func productList1(table string, category string) []inv.Product {
+	ret := make([]inv.Product, 0)
+	if table == "products" {
+		ret = inv.Mproducts
+	}
+	if table == "equipments" {
+		ret = inv.Mequipments
+	}
+return ret
+}
+// // function called from the template to get products by page // //
+func equipmentList(pagenumber int) []inv.Product {
+	products1 := inv.Mproducts
+	products3 := make([]inv.Product, 0)
+	//lenprod := len(inv.Mproducts)
+	if pagenumber == 0 {
+		//}	//randomize the order in which products appear on the page
+		randnu := rand.New(rand.NewSource(time.Now().Unix()))
+		products2 := make([]inv.Product, len(products1))
+		perm := randnu.Perm(len(products1))
+		for i, randIndex := range perm {
+			products2[i] = products1[randIndex]
+		}
+		//	//randomize the categories products are selected from
+		randnu1 := rand.New(rand.NewSource(time.Now().Unix()))
+		cats2 := make([]inv.Category, len(inv.Pcats))
+		perm1 := randnu1.Perm(len(inv.Pcats))
+		for i, randIndex := range perm1 {
+			cats2[i] = inv.Pcats[randIndex]
+		}
+		for i:= range products2 {
+			if products3 == nil || len(products3)==0{
+				products3 = append(products3, products2[i])
+				} else {
+				founded:=false
+				for j:= range products3{
+					if products3[j].Category == products2[i].Category {
+						founded=true
+					}
+				}
+				if !founded{
+					products3 = append(products3, products2[i])
+				}
 			}
-			fmt.Println(len(products1))
-return len(products1)
+		}
+	//}
+	} else {
+		//subsequent pages
+		v := ((pagenumber - 1) * 10)
+		if v < (inv.Lenproducts - 10) {
+			for i := v; i < (v + 10) ; i++ {
+				products3 = append(products3, inv.Mproducts[i])
+			}
+		}
+	}
+return products3
+}
+
+// // index has a role in the display of pagination options // //
+func productIndex(table string, cat string, pageno int) int {
+	var toreturn int
+	v := (pageno * 10)
+	if table == "products" && cat == ""{		if v < (len(inv.Mproducts) - 10) {toreturn = (len(inv.Mproducts) - v)} else { toreturn = 0 }}
+	if table == "products" && cat != ""{		toreturn = productCatIndex(table, cat, pageno)}
+	if table == "equipments" && cat == ""{	if v < (len(inv.Mproducts) - 10) {toreturn = (len(inv.Mproducts) - v)} else { toreturn = 0 }}
+	if table == "equipments" && cat != ""{	toreturn = productCatIndex(table, cat, pageno)}
+	return toreturn
+}
+
+// // function called from the template to get products by page // //
+func productCatIndex(table string, cat string, pageno int) int {
+	var catcount int
+	var toreturn int
+	if table == "products" {
+		for i := range inv.Pcats {
+			a := false
+			if inv.Pcats[i].Name == cat {
+				catcount = inv.Pcats[i].Count
+				a = true
+			}
+			if a == true {break}
+		}
+	}
+	if table == "equipments"{
+		for i := range inv.Ecats {
+			a := false
+			if inv.Ecats[i].Name == cat {
+				catcount = inv.Ecats[i].Count
+				a = true
+			}
+			if a == true {break}
+		}
+
+	}
+	v := (pageno * 10)
+	if v < (catcount - 10) {toreturn = (catcount - v)} else { toreturn = 0 }
+return toreturn
 }
 // // function called from the template to get products by page // //
 func lenprods() int {
 return inv.Lenproducts
 }
 // // function called from the template to get equipments by page // //
-func equipmentListPage(pagenumber int) []inv.Equipment {
-	//upper := (pagenumber + 1) * 10
-	//lower := pagenumber * 10
-	var equipments1 []inv.Equipment
-	fmt.Println(pagenumber)
-	//var a int
-	//	a = len(equipments)
-	//b := 0
-	//if a < 10 {	b = a	} else {	b = 10	}
-	//if a < upper {	upper = a	}
-	//if pagenumber == 0 {
-	for i := 0; len(equipments1) < 10; i++ {
-			if inv.Mequipments[i].Enable == false {break}
-			equipments1 = append(equipments1, inv.Mequipments[i])
-		}
-		//for i := 0; i < b; i++ {
-		//		if inv.Mequipments[i].Enable == false {break}
-		//		equipments1 = append(equipments1, inv.Mequipments[i])
-		//	}
-		//} else {
-		//	for i := lower; i < upper; i++  {
-		//			if inv.Mequipments[i].Enable == false {break}
-		//			equipments1 = append(equipments1, inv.Mequipments[i])
-		//		}
-	//	}
-	//}	//randomize the order in which products appear on the page
-	//var products2
-		randnu := rand.New(rand.NewSource(time.Now().Unix()))
-		equipments2 := make([]inv.Equipment, len(equipments1))
-		perm := randnu.Perm(len(equipments1))
-		for i, randIndex := range perm {
-			equipments2[i] = equipments1[randIndex]
-		}
-return equipments2
-}
+//func equipmentList(pagenumber int) []inv.Equipment {
+//	var equipments1 []inv.Equipment
+//	for i := 0; len(equipments1) < 10; i++ {
+//			equipments1 = append(equipments1, inv.Mequipments[i])
+//		}
+//		randnu := rand.New(rand.NewSource(time.Now().Unix()))
+//		equipments2 := make([]inv.Equipment, len(equipments1))
+//		perm := randnu.Perm(len(equipments1))
+//		for i, randIndex := range perm {
+//			equipments2[i] = equipments1[randIndex]
+//		}
+//return equipments2
+//}
 // // function called from the template to get products by category & page // //
-func productsCategoryListPage(cat string, pagenumber int) []inv.Product {
+func productCat(table string, cat string, pagenumber int) []inv.Product {
 	var categoryProducts []inv.Product
 	var categoryProducts1 []inv.Product
 	for i := range inv.Mproducts { if inv.Mproducts[i].Category == cat {	categoryProducts = append(categoryProducts, inv.Mproducts[i]) } }
@@ -239,12 +298,10 @@ func productsCategoryListPage(cat string, pagenumber int) []inv.Product {
 	if a < upper {	upper = a	}
 	if pagenumber == 0 {
 		for i := 0; i < b; i++ {
-			if categoryProducts[i].Enable == false {break}
 			categoryProducts1 = append(categoryProducts1, categoryProducts[i])
 		}
 		} else {
 			for i := lower; i < upper; i++  {
-					if categoryProducts[i].Enable == false {break}
 					categoryProducts1 = append(categoryProducts1, categoryProducts[i])
 		}
 	}	//randomize the order in which products appear on the page
@@ -292,39 +349,84 @@ func equipmentsCategoryListPage(cat string, pagenumber int) []inv.Equipment {
 	}
 	// // function called from the template to get index number for products by page // //
 	func indexPage1(pagenumber int) int {
+
 		var products1 []inv.Product
 			for i := 0; i < len(products1); i++ {
-					if inv.Mproducts[i].Enable == false {break}
 					products1 = append(products1, inv.Mproducts[i])
 				}
 //				fmt.Println(len(products1))
+
 	return len(products1)
 	}
 
 
 
-	// // function called from template for above endpoint // //
-	func findProduct1(part string) []inv.Product {	//, product string
+	// // returns the database entry given the part number // //
+	func findProduct1(table string, partno string) []inv.Product {	//, product string
 		var ppartno []inv.Product
+		if table == "products" {
 		for i := range inv.Mproducts {
-			if inv.Mproducts[i].PartNo == part {
+			if inv.Mproducts[i].PartNo == partno {
 				ppartno = append(ppartno, inv.Mproducts[i])
 				break				// Found!
 			}
+		}
 	}
+	if table == "equipments" {
+	for i := range inv.Mequipments {
+		if inv.Mequipments[i].PartNo == partno {
+			ppartno = append(ppartno, inv.Mequipments[i])
+			break				// Found!
+		}
+	}
+}
 		return ppartno
 	}
 
 
 
 	// // function called from template for above endpoint // //
-	func findEquipment1(part string) []inv.Equipment {	//, product string
-		var epartno []inv.Equipment
+	func findEquipment1(part string) inv.Equipment {	//, product string
+		var epartno inv.Equipment
 		for i := range inv.Mequipments {
 			if inv.Mequipments[i].PartNo == part {
-				epartno = append(epartno, inv.Mequipments[i])
+				epartno = inv.Mequipments[i]
 				break				// Found!
 			}
 		}
 		return epartno
+	}
+
+	// // returns the last page with products // //
+	func lastPage(table string, cat string) int {
+		var toreturn int
+		if table == "products" {
+			if cat == "" {
+				toreturn = int(math.Floor(float64(len(inv.Mproducts) / 10)))
+				} else {
+					a := false
+					for i := range inv.Pcats {
+						if inv.Pcats[i].Name == cat {
+							a = true
+							toreturn = int(math.Floor(float64(inv.Pcats[i].Count) / 10))
+						}
+						if a == true {break}
+					}
+				}
+			}
+		if table == "equipments" {
+			if cat == "" {
+				toreturn = int(math.Floor(float64(len(inv.Mequipments) / 10)))
+				} else {
+					a := false
+					for i := range inv.Ecats {
+						if inv.Ecats[i].Name == cat {
+							a = true
+							toreturn = int(math.Floor(float64(inv.Ecats[i].Count) / 10))
+						}
+						if a == true {break}
+					}
+				}
+			}
+		return toreturn
 	}

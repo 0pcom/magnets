@@ -73,7 +73,8 @@ type Category struct {
 	Name string
 	Count int
 }
-
+type Equipment = Product
+/*
 type Equipment struct {	// Equipment is used to represent a single record in the "equipments" table.
 	Id	int64	`db:"id,omitempty" json:"id,omitempty"`
 	Image1 string `db:"image1,omitempty" json:"image1,omitempty"`
@@ -136,7 +137,7 @@ type Equipment struct {	// Equipment is used to represent a single record in the
 	MetaKeywords string `db:"metakeywords,omitempty" json:"metakeywords,omitempty"`
 }
 
-
+*/
 //id SERIAL PRIMARY KEY,
 //id INT8 PRIMARY KEY DEFAULT unique_rowid(),
 func CreateProductsTableIfNotExists(sess db.Session) error {	// createTables creates all the tables that are neccessary to run this example.

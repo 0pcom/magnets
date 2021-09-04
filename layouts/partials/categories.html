@@ -1,15 +1,5 @@
-{{.Cats | safeHTML}}
-{{.ifproductstable | safeHTML}}
-{{.RangeCats | safeHTML}}
+{{range .Cats}}{{. | safeHTML}}{{end}}
 <li>
-{{.productsCategories | safeHTML}}
+{{range .productsCategories}}{{. | safeHTML}}{{end}}
 </li>
-{{.end | safeHTML}}
-{{.end | safeHTML}}
-{{.ifequipmentstable | safeHTML}}
-{{.RangeCats | safeHTML}}
-<li>
-{{.equipmentsCategories | safeHTML}}
-</li>
-{{.end | safeHTML}}
-{{.end | safeHTML}}
+{{range .end}}{{. | safeHTML}}{{end}}

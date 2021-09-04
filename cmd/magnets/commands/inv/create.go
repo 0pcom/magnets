@@ -81,11 +81,11 @@ var createCmd = &cobra.Command{
 
 			if createseriesp != 0 {
 				fmt.Printf("creating %d products\n", createseriesp)
-				inv.CreateSeriesP(sess, createseriesp)
+				inv.CreateSeries(sess, "product", createseriesp)
 			}
 			if createseriese != 0 {
 				fmt.Printf("creating %d equipments\n", createseriese)
-				inv.CreateSeriesE(sess, createseriese)
+				inv.CreateSeries(sess, "equipment", createseriese)
 			}
 
 

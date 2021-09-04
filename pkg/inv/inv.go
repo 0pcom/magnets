@@ -9,8 +9,8 @@ import(
 	"github.com/upper/db/v4"
 	//"github.com/upper/db/v4/adapter/cockroachdb"
 
-	mdb "github.com/0pcom/magnets/pkg/db"
-	user "github.com/0pcom/magnets/pkg/user"
+	//mdb "github.com/0pcom/magnets/pkg/db"
+	//user "github.com/0pcom/magnets/pkg/user"
 	"strconv"
 
 )
@@ -36,15 +36,15 @@ return sess.Collection("equipments")
 func (a *Product) Store(sess db.Session) db.Store {// Collection is required in order to create a relation between the Product struct and the "products" table.
 return Products(sess)
 }
-func (a *Equipment) Store(sess db.Session) db.Store {// Collection is required in order to create a relation between the Equipment struct and the "equipments" table.
-return Equipments(sess)
-}
+//func (a *Equipment) Store(sess db.Session) db.Store {// Collection is required in order to create a relation between the Equipment struct and the "equipments" table.
+//return Equipments(sess)
+//}
 
-func RetSess() (sess db.Session){
-settings := user.FetchSettings()
-sess = mdb.Connect(settings)
-return sess
-}
+//func RetSess() (sess db.Session){
+//settings := user.FetchSettings()
+//sess = mdb.Connect(settings)
+//return sess
+//}
 
 
 func DropProductsTable(sess db.Session) error {
@@ -75,17 +75,19 @@ func DefineProducts(sess db.Session) {
 	//define Mproducts
 	MproductsCol := Products(sess)
 	Mproducts = []Product{}
-	err = MproductsCol.Find().All(&Mproducts) 	// Find().All() maps all the records from the Mproducts collection.
+	err = MproductsCol.Find("enable", true).All(&Mproducts) 	// Find().All() maps all the records from the Mproducts collection.
 	if err != nil {
 		log.Fatal("productsCol.Find: ", err)
 	}
 	//count Mproducts
-	for i := 0; i < len(Mproducts); i++ {
-		if Mproducts[i].Enable == true {
-			Lenproducts = Lenproducts + 1
-	}
-}
-fmt.Printf("%d Products\n", Lenproducts)
+//	for i := 0; i < len(Mproducts); i++ {
+//		if Mproducts[i].Enable == true {
+//			Lenproducts = Lenproducts + 1
+//	}
+//}
+
+Lenproducts = len(Mproducts)
+			fmt.Printf("%d Products\n", Lenproducts)
 
 	//define categories
 	var cat1 []string
@@ -101,7 +103,7 @@ DistProdCats(cat1)
 func DefineEquipments(sess db.Session) {
 	//define Mequipments
 	MequipmentsCol := Equipments(sess)
-	Mequipments = []Equipment{}
+	Mequipments = []Product{}
 	err = MequipmentsCol.Find().All(&Mequipments) 	// Find().All() maps all the records from the Mproducts collection.
 	if err != nil {
 		log.Fatal("equipmentsCol.Find: ", err)
@@ -230,8 +232,9 @@ if err != nil {
 }
 }
 //create a series of products with sequential part numbers
-func CreateSeriesP(sess db.Session, createseriesp int) {
-for i := 0; i < createseriesp; i++ {
+func CreateSeries(sess db.Session, table string, series int) {
+	if table == "products" {
+for i := 0; i < series; i++ {
 	    p := strconv.Itoa(i)
 			fmt.Printf("Creating product part number: %s\n", p)
 			p1 := Product{PartNo: p, Enable: false}
@@ -240,16 +243,16 @@ for i := 0; i < createseriesp; i++ {
 			    log.Fatal("sess.Save: ", err)
 			}
 }
-
-}//create a series of equipments with sequential part numbers
-func CreateSeriesE(sess db.Session, createseriese int) {
-for i := 0; i < createseriese; i++ {
-	    p := strconv.Itoa(i)
-			fmt.Printf("Creating equipment part number: %s\n", p)
-			p1 := Equipment{PartNo: p, Enable: false}
-			err := Equipments(sess).InsertReturning(&p1)
-			if err != nil {
-			    log.Fatal("sess.Save: ", err)
-			}
+}
+if table == "equipments" {
+	for i := 0; i < series; i++ {
+		    p := strconv.Itoa(i)
+				fmt.Printf("Creating product part number: %s\n", p)
+				p1 := Product{PartNo: p, Enable: false}
+				err := Equipments(sess).InsertReturning(&p1)
+				if err != nil {
+				    log.Fatal("sess.Save: ", err)
+				}
+	}
 }
 }
