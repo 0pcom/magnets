@@ -16,4 +16,11 @@ public
 statik
 private
 test
+test1
+csv
+vendor
+content/blog
+content/about*
+content/friend*
+content/policy*
 vendor
