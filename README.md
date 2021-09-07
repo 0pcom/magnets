@@ -9,6 +9,27 @@ a minimal theme variation is also running at:
 
 (Necessity is the mother of invention)
 
+
+## Table of Contents
+
+<!-- MarkdownTOC levels="1,2,3,4,5" autolink="true" bracket="round" -->
+- [Concept](#concept)
+- [Prerequisite](#prerequisite)
+- [CockroachDB Single Node](#cockroachdb-single-node)
+- [CockroachDB Cluster Setup](#cockroachdb-cluster-setup)
+  - [Starting the cockroachDB cluster](#starting-the-cockroachdb-cluster)
+- [Database Setup](#database-setup)
+- [Sync Golang Dependencies](#sync-golang-dependencies)
+- [Build the Frontend with Hugo](#build-the-frontend-with-hugo)
+- [Build the statik resource](#build-the-statik-resource)
+- [Application usage](#application-usage)
+- [Example Run](#example-run)
+- [Production](#production)
+- [Previous Documentation](#previous-documentation)
+
+<!-- /MarkdownTOC -->
+
+
 ## Concept
 
 Hugo is used to generate the html templates and page resources for the go web application.
@@ -27,7 +48,8 @@ The database used here is [cockroachdb](https://www.cockroachlabs.com/docs/v20.2
 
 [Snipcart.com](https://snipcart.com) provides the shopping cart and payment processing.
 
-## Prerequisite (makedepends)
+## Prerequisite
+(a.k.a. makedepends)
 
 Tested on Archlinux
 
@@ -63,7 +85,7 @@ A cockroach node is started. **Proceed to [database setup](#database-setup)**
 
 ## CockroachDB Cluster Setup
 
-(This is not required)
+(This is not a required step)
 
 Nodes act as access points to the database. Nodes can be started as-needed to give an access point (in this example) within the local network to the database. **Follow along with the [upstream documentation of this process](https://www.cockroachlabs.com/docs/stable/deploy-cockroachdb-on-premises.html). You will need to sync the clocks first!**
 
@@ -77,9 +99,9 @@ The certificates are generated, and compressed into an archive. These must be co
 
 In this example, it is assume that this repository is cloned to the GOPATH on the nodes, and that, for instance, `certs1.tar.gz` is extracted into the cloned repository folder and is renamed `certs` from `certs1`.
 
-## Starting the CockroachDB cluster
+### Starting the CockroachDB cluster
 
-(Not required; retained for internal reference.)
+(this is not a required step; retained for internal reference and for those who are ambitious.)
 
 on each node, beginning with the primary instance
 ```
@@ -109,9 +131,9 @@ in a new terminal or tab:
 make db-secure
 ```
 
-## Sync Dependencies
+## Sync Go Dependencies
 
-Sync the needed golang dependencies
+Sync the needed golang dependencies for running the web application
 ```
 go mod init
 go mod vendor -v
@@ -125,6 +147,8 @@ As previously mentioned, hugo is generating __a template for the golang web appl
 
 Any hugo theme can be used. Patience and a delicate touch are required when making theme-based changes.
 
+Any partial template in [layouts/partials](/layouts/partials) should be usable with another [hugo theme](https://themes.gohugo.io/), given that the corresponding entries in [config.toml](/config.toml) which are used by the partial are added to the config file
+
 Build the front end (or rebuild to integrate changes)
 ```
 hugo
@@ -132,17 +156,20 @@ hugo
 
 The generated html sources are now in the `public` directory.
 
-## Build the statik/statik.go file
+## Build the statik resource
+
+It is necessary to do something like this in order that any parts of the rendered template are not otherwise directly defined with a [route](/pkg/route/route.go) (such as various page resources) are available to each page of the web application. Routes must be defined for any file (produced by hugo) which contains template functions, or else the template functions will not render and will appear in plaintext.
+
 (requires the statik binary)
 ```
 statik src=./public
 go generate
 ```
 
-Note that the /img directory is not built into the binary but the files included in it (any referenced in the database) still appear in the web app as the folder is hosted.
+Note that the /img directory is not built into the binary but the files included in it (any referenced in the database) still appear in the web app; as the folder is hosted.
 
 
-## Running the application
+## Application usage
 
 ```
 $ go run cmd/magnets/magnets.go --help
@@ -252,7 +279,7 @@ Flags:
 
 ```
 
-## Example
+## Example Run
 
 Create the tables and a sequence of parts. Then, export this for editing:
 
