@@ -20,6 +20,7 @@ ignoreErrors = ["error-remote-getjson"]
     #suffix = "Example site"
 
 [params]
+    sitetitle = "magnetosphere.net"
     title = "magnetosphere.net"
     titledesc = "electronics surplus"
     # The subtitle to display under the title in the home page
@@ -28,7 +29,7 @@ ignoreErrors = ["error-remote-getjson"]
     itemtitle = "<title>{{.Name}} | magnetosphere.net</title>"
     categorytitle = "<title>{{.Category}} | magnetosphere.net</title>"
     categorydesc = "<meta name=\"description\" content=\"Browse {{.Table}} by category: {{.Category}} page: {{.PageNumber}}. Credit Cards, Paypal, and Cryptocurrency accepted; buy with bitcoin or skycoin.\"/>"
-    sitetitle = "<title>magnetosphere.net | we have the technology</title>"
+    #sitetitle = "<title>magnetosphere.net | we have the technology</title>"
     mainpagesubtitle = "we have the technology"
     equipmentdesc = "<meta name=\"description\" content=\"Shop electronics equipment and more. Credit Cards, Paypal, and Cryptocurrency accepted; buy with bitcoin or skycoin. Browse {{.Table}}, page: {{.PageNumber}}\"/>"
     maintitle = "magnetosphere.net"
@@ -50,20 +51,20 @@ ignoreErrors = ["error-remote-getjson"]
 # Thus, the constraint is that no param may reference or use another param by name
 # the funcmap functions are as follows:
 #
-#var FM = template.FuncMap{                 inputs:           returns:              use:
-#	"fdateMDY": monthDayYear,                 n/a               time                  time
-#	"snipcartapikey": snipcartApiKey,         n/a               key from env          snipcart
-#	"multiply": multiply,                     num,num           result                snipcart
-#	"correct": correct,                       num               formatted             snipcart
-#	"convertozgrams": convertozgrams,         num               grams from oz         snipcart
-#	"convertincm": convertincm,               num               in from cm            snipcart
-#	"listCategories": listCategories,         table             categories            menu
-#	"lenprods": lenprods,                     table,cat         len(products)         displays # of products
-#	"productList": productList,               table,cat,page#   []products{}          browse database
-#	"productList1": productList1,             table,cat         []products{}          browse database
-#	"productIndex": productIndex,             table,cat,page#   index#                pagination
-#	"page": page,                             table,cat,page#   page #                previous, next
-#	"findProduct1": findProduct1,             table,partNo      product{}             individual product page
+#var FM = template.FuncMap{                       returns:              use:
+#	"fdateMDY": monthDayYear,                       time                  time
+#	"snipcartapikey": snipcartApiKey,               key from env          snipcart
+#	"multiply": multiply,                           result                snipcart
+#	"correct": correct,                             formatted             snipcart
+#	"convertozgrams": convertozgrams,               grams from oz         snipcart
+#	"convertincm": convertincm,                     in from cm            snipcart
+#	"listCategories": listCategories,               categories            menu
+#	"lenprods": lenprods,                           len(products)         displays # of products
+#	"productList": productList,                     []products{}          browse database
+#	"productList1": productList1,                   []products{}          browse database
+#	"productIndex": productIndex,                   index#                pagination
+#	"page": page,                                   page #                previous, next
+#	"findProduct1": findProduct1,                   product{}             individual product page
 #}
 #
 #
@@ -75,29 +76,29 @@ ignoreErrors = ["error-remote-getjson"]
 #
 #
     lenprods = [      "{{lenprods}}"]
-    ifblog =          ["{{if eq .Partno \"blog\"}}",
+    ifblog =          ["{{if eq .PartNumber \"blog\"}}",
                        "<meta name=\"description\"",
                        " content=\"Magnetosphere.net blog. Revolvo Inritus.\"/>",
                        "{{end}}",]
-    ifabout =          ["{{if ne .Partno \"about\"}}",
+    ifabout =          ["{{if ne .PartNumber \"about\"}}",
                        "<meta name=\"description\"",
                        " content=\"About magnetosphere.net.\"/>",
                        "{{end}}",]
-    ifpolicy =          ["{{if ne .Partno \"policy\"}}",
+    ifpolicy =          ["{{if ne .PartNumber \"policy\"}}",
                        "<meta name=\"description\"",
                        " content=\"Magnetosphere.net shipping and order policies.\"/>",
                        "{{end}}",]
-    iffriend =          ["{{if ne .Partno \"friend\"}}",
+    iffriend =          ["{{if ne .PartNumber \"friend\"}}",
                        "<meta name=\"description\"",
                        " content=\"friends and helpful web resources - list of links from magnetosphere.net.\"/>",
                        "{{end}}",]
-    metadesc1 = [     "{{if ne .Partno \"\"}}",
+    metadesc1 = [     "{{if ne .PartNumber \"\"}}",
                       "{{if ne .View \"0\"}}",
                       "<meta name=\"description\"",
                        " content=\"Buy {{.Title}} {{.Category}}, Price: ${{.Price}}, In-stock: {{.Qty}}\"/>",
                        "{{end}}",
                        "{{end}}",]
-    metadesc = [       "{{if eq .Partno \"\"}}",
+    metadesc = [       "{{if eq .PartNumber \"\"}}",
                       "<meta name=\"description\"",
                       " content=\"Shop surplus electronics.",
                       " Credit Cards, Paypal, Crypto, Bitcoin, Skycoin accepted.",
@@ -138,58 +139,7 @@ ignoreErrors = ["error-remote-getjson"]
     subcat = [        "{{.SubCategory}}"]
     rangeProducts = [ "{{range $products}}",]
 
-    nextprevproductpage = [     "<p>",
-                                "{{if ne .PageNumber 0}}",
-                                "<a href=\"{{page \"first\" .Table .Category .PageNumber}}\"",
-                                " class=\"btn btn-info\"",
-                                " role=\"button\">",
-                                "◀◀",
-                                " &gt;",
-                                "<br>",
-                                "&lt;",
-                                " ({{page \"firstt\" .Table .Category .PageNumber}})",
-                                "</a>",
-                                " <a href=\"{{page \"prev\" .Table .Category .PageNumber}}\"",
-                                " class=\"btn btn-info\"",
-                                " role=\"button\">",
-                                "◀",
-                                " &gt;",
-                                "<br>",
-                                "&lt;",
-                                " ({{page \"prevv\" .Table .Category .PageNumber}})",
-                                "</a>",
-                                " <a href=\"{{page \"current\" .Table .Category .PageNumber}}\"",
-                                " class=\"btn btn-info\"",
-                                " role=\"button\">",
-                                "☻",
-                                " &gt;",
-                                "<br>",
-                                "&lt;",
-                                " ({{page \"currentt\" .Table .Category .PageNumber}})",
-                                "</a>",
-                                " {{end}} ",
-                                "{{if gt $index 9}}",
-                                "<a href=\"{{page \"next\"",
-                                " .Table .Category .PageNumber}}\"",
-                                " class=\"btn btn-info\"",
-                                " role=\"button\">",
-                                "▶",
-                                " &gt;",
-                                "<br>",
-                                "&lt;",
-                                " ({{page \"nextt\" .Table .Category .PageNumber}})",
-                                "</a>",
-                                " <a href=\"{{page \"last\" .Table .Category .PageNumber}}\"",
-                                " class=\"btn btn-info\"",
-                                " role=\"button\">",
-                                "▶▶",
-                                " &gt;",
-                                "<br>",
-                                "&lt;",
-                                " ({{page \"lastt\" .Table .Category .PageNumber}})",
-                                "</a>",
-                                "{{end}}",
-                                "</p>",]
+
     #rangeProducts = [           "{{range $products}}"]
     productsreadmore = [        "<a href=\"/post/{{.PartNo}}\"",
                                 " class=\"btn btn-info\"",
@@ -361,6 +311,9 @@ ignoreErrors = ["error-remote-getjson"]
     # Enables or disables the second flyby cursor. Default is false.
     loadonepass = false
 
+    ifview1 = ["{{if eq .View \"1\"}}"]
+
+
 [menu]
   # This displays buttons in the navbar to access your contents
   #[[menu.main]]
@@ -394,13 +347,6 @@ ignoreErrors = ["error-remote-getjson"]
     url = "/blog"       # The path can lead to a content folder too.
     weight = 40
 
-
-  #[[menu.main]]
-  #  identifier = "bitcoin"
-  #  name = "Bitcoin"
-  #  url = "https://pay.magnetosphere.net/apps/42U8i51gFZF7reRf71hZ26wa7Qx3/pos/"       # The path can lead to a content folder too.
-  #  weight = 40
-
   [[menu.main]]
     identifier = "time"
     name = "{{fdateMDY}}"
@@ -409,20 +355,138 @@ ignoreErrors = ["error-remote-getjson"]
 
   [[menu.main]]
     identifier = "snipcart1"
-    name = "<span class=\"snipcart-checkout\">cart:<span class=\"snipcart-items-count\"></span> <span class=\"snipcart-total-price\"></span></span>"
+    name = '{{if ne .PartNumber "blog"}}{{if ne .PartNumber "friend"}}<span class="snipcart-checkout">cart:<span class="snipcart-items-count"></span> <span class="snipcart-total-price"></span></span>{{end}}{{end}}'
     url = ""       # The path can lead to a content folder too.
     weight = 60
 
+#pagination navigation
+    [[menu.three]]
+      identifier =      'space0'
+      name =            '...'
+      url =             ''
+      weight =          15
+    [[menu.three]]
+      identifier =      'list'
+      name =            '{{if eq .View "2"}}Gallery{{end}}{{if eq .View "1"}}List View{{end}}'
+      url =             '{{if eq .View "2"}}<a href="/">{{end}}{{if eq .View "1"}}<a href="/list">{{end}}'
+      post =            "</a>"
+      weight =          10
+    [[menu.three]]
+      identifier =      'nav1'
+      name =            '{{if eq .View "1"}}<div style="color:black;">Page:</div>{{end}}'
+      url =             ''
+      weight =          20
+    [[menu.two]]
+      identifier =      'space1'
+      name =            ''
+      url =             ''
+      weight =          75
+    [[menu.two]]
+      identifier =      'space2'
+      name =            ''
+      url =             ''
+      weight =          35
+    [[menu.two]]
+      identifier =      'space3'
+      name =            ''
+      url =             ''
+      weight =          45
+    [[menu.two]]
+      identifier =      'space4'
+      name =            ''
+      url =             ''
+      weight =          55
+    [[menu.two]]
+      identifier =      'space5'
+      name =            ''
+      url =             ''
+      weight =          65
+    [[menu.two]]
+      identifier =      'first'
+      name =            '{{if gt .PageNumber 0}}&lt;&lt;{{page "firstt" .Table .Category .PageNumber}}{{else}}<div style="color:black;">&lt;&lt;{{page "firstt" .Table .Category .PageNumber}}...</div>{{end}}'
+      url =             '{{if gt .PageNumber 0}}<a href="{{page "first" .Table .Category .PageNumber}}">{{end}}'
+      post =            "{{if gt .PageNumber 0}}</a>{{end}}"
+      weight =          30
+    [[menu.two]]
+      identifier =      'prev'
+      name =            '{{if gt .PageNumber 0}}&lt;{{page "prevv" .Table .Category .PageNumber}}{{else}}<div style="color:black;">&lt;{{page "firstt" .Table .Category .PageNumber}}.</div>{{end}}'
+      url =             '{{if gt .PageNumber 0}}<a href="{{page "prev" .Table .Category .PageNumber}}">{{end}}'
+      post =            "{{if gt .PageNumber 0}}</a>{{end}}"
+      weight =          40
+    [[menu.two]]
+      identifier =      'current'
+      name =            '<div style="color:black;">*{{.PageNumber}}*</div>'
+      url =             ''
+      post =            ""
+      weight =          50
+    [[menu.two]]
+      identifier =      'next'
+      name =            '{{page "nextt" .Table .Category .PageNumber}}&gt;'
+      url =             '<a href="{{page "next" .Table .Category .PageNumber}}">'
+      post =            "</a>"
+      weight =          60
+    [[menu.two]]
+      identifier =      'last'
+      name =            '{{page "lastt" .Table .Category .PageNumber}}&gt;&gt;'
+      url =             '<a href="{{page "last" .Table .Category .PageNumber}}">'
+      post =            "</a>"
+      weight =          70
 
-  [[menu.two]]
-    identifier = 'main'
-    name = 'Gallery'
-    pre = ""
-    url = '/'
-    weight = -110
-  [[menu.two]]
-    name = 'Full List'
-    post = ""
-    pre = ""
-    url = '/list'
-    weight = -100
+#the old page navigation buttons
+      #    nextprevproductpage = [
+      #                                "<p>",
+      #                                "{{if ne .PageNumber 0}}",
+      #                                "{{if ne .PageNumber 1}}",
+      #                                "<a href=\"{{page \"first\" .Table .Category .PageNumber}}\"",
+      #                                " class=\"btn btn-info\"",
+      #                                " role=\"button\">",
+      #                                "first",
+      #                                " &gt;",
+      #                                "<br>",
+      #                                "&lt;",
+      #                                " ({{page \"firstt\" .Table .Category .PageNumber}})",
+      #                                "</a>",
+      #                                "{{end}}",
+      #                                " <a href=\"{{page \"prev\" .Table .Category .PageNumber}}\"",
+      #                                " class=\"btn btn-info\"",
+      #                                " role=\"button\">",
+      #                                "{{if eq .PageNumber 1}}first{{else}}prev{{end}}",
+      #                                " &gt;",
+      #                                "<br>",
+      #                                "&lt;",
+      #                                " ({{page \"prevv\" .Table .Category .PageNumber}})",
+      #                                "</a>",
+      #                                " <a href=\"{{page \"current\" .Table .Category .PageNumber}}\"",
+      #                                " class=\"btn btn-info\"",
+      #                                " class=\"right\"",
+      #                                " role=\"button\">",
+      #                                "*",
+      #                                " &gt;",
+      #                                "<br>",
+      #                                "&lt;",
+      #                                " ({{page \"currentt\" .Table .Category .PageNumber}})",
+      #                                "</a>",
+      #                                " {{end}} ",
+      #                                "{{if gt $index 9}}",
+      #                                "<a href=\"{{page \"next\"",
+      #                                " .Table .Category .PageNumber}}\"",
+      #                                " class=\"btn btn-info\"",
+      #                                " role=\"button\">",
+      #                                "next",
+      #                                " &gt;",
+      #                                "<br>",
+      #                                "&lt;",
+      #                                " ({{page \"nextt\" .Table .Category .PageNumber}})",
+      #                                "</a>",
+      #                                " <a href=\"{{page \"last\" .Table .Category .PageNumber}}\"",
+      #                                " class=\"btn btn-info\"",
+      #                                " role=\"button\">",
+      #                                "last",
+      #                                " &gt;",
+      #                                "<br>",
+      #                                "&lt;",
+      #                                " ({{page \"lastt\" .Table .Category .PageNumber}})",
+      #                                "</a>",
+      #                                "{{end}}",
+      #                                "<p/>",
+      #                                ]
