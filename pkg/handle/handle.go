@@ -44,14 +44,6 @@ func Page404Page (w http.ResponseWriter, r *http.Request) {
 	if err :=	tpl1.ExecuteTemplate(w, "404.html", nil); err != nil {	fmt.Printf("error: %s", err) }
 }
 
-//func helpmenu1() {
-//	fmt.Printf("Usage: magnets -dDctCyepirh\n")
-//	fmt.Printf("\tSuggested Demo: magnets -ctpr\n")
-//	flags.PrintDefaults()
-//}
-
-
-
 
 // // individual product page ENDPOINT: /post/{slug} // //
 func FindProduct(w http.ResponseWriter, r *http.Request) {	//, product string
@@ -188,7 +180,7 @@ fp := funcmap.Page{title, "", "products", "", "2", id} //no category specified h
 // // Blog Pages - main page ENDPOINT: magnetosphere.net/ OR: magnetosphere.net/p/{id:[0-9]+} // //
 func BlogPage(w http.ResponseWriter, r *http.Request) {
   var title01 string
-  title01 = "blog"
+  title01 = "blog index"
   fp := funcmap.Page{title01, "blog", "", "", "0", 0}
 	slug := mux.Vars(r)["slug"]
 	wd, err := os.Getwd()
@@ -198,14 +190,14 @@ func BlogPage(w http.ResponseWriter, r *http.Request) {
 	if err = tp1.ExecuteTemplate(w, "index.html", fp); err != nil {	fmt.Printf("error: %s", err) }
 	} else {
 	tp1 := template.Must(template.New("").Funcs(funcmap.FM).ParseFiles(wd + "/public/blog/" + slug + "/index.html"))
-	if err = tp1.ExecuteTemplate(w, "index.html", nil); err != nil {	fmt.Printf("error: %s", err) }
+	if err = tp1.ExecuteTemplate(w, "index.html", fp); err != nil {	fmt.Printf("error: %s", err) }
 }
 }
 // // Single Pages  // //
 // // About Page  // //
 func AboutPage(w http.ResponseWriter, r *http.Request) {
   var title01 string
-  title01 = "about"
+  title01 = "about the site"
   fp := funcmap.Page{title01, "about", "", "", "0", 0}
 	wd, err := os.Getwd()
 	if err != nil {	log.Fatal(err) }
@@ -215,7 +207,7 @@ func AboutPage(w http.ResponseWriter, r *http.Request) {
 // // friends Page  // //
 func FriendPage(w http.ResponseWriter, r *http.Request) {
   var title01 string
-  title01 = "friend"
+  title01 = "our friends"
   fp := funcmap.Page{title01, "friend", "", "", "0", 0}
 	wd, err := os.Getwd()
 	if err != nil {	log.Fatal(err)	}
@@ -225,7 +217,7 @@ func FriendPage(w http.ResponseWriter, r *http.Request) {
 // // Shipping / orders policy Page  // //
 func PolicyPage(w http.ResponseWriter, r *http.Request) {
   var title01 string
-  title01 = "policy"
+  title01 = "shipping and order policies"
   fp := funcmap.Page{title01, "policy", "", "", "0", 0}
 	wd, err := os.Getwd()
 	if err != nil {	log.Fatal(err)	}

@@ -3,7 +3,7 @@
     <div class="page-header">
       {{range .name1}}{{ . | safeHTML }}{{end}}
      </div>
-      <h2 class="header lead">{{range .desc1}}{{. | safeHTML }}{{end}}</h2>-->
+      <h2 class="header lead">{{range .desc1}}{{. | safeHTML }}{{end}}</h2>
     <ul>
 <div class="col s6">
     <div class="card horizontal">
@@ -17,10 +17,10 @@
           <div class="card-action">
             <div class class="center">
               <p>{{range .ifshippable}}{{ . | safeHTML }}{{end}}</p>
-            <p>{{range .desc1}}{{ . | safeHTML }}{{end}}</p>
-            <p>Price: ${{range .price}}{{ . | safeHTML }}{{end}}</p>
             <p>In stock: {{range .quantity}}{{ . | safeHTML }}{{end}}</p>
+            <p>Price: ${{range .price}}{{ . | safeHTML }}{{end}}</p>
             <p>{{range .productbutton0}}{{ . | safeHTML }}{{end}}</p>
+            <p>{{range .desc1}}{{ . | safeHTML }}{{end}}</p>
               <p>PartNo: {{range .partno}}{{ . | safeHTML }}{{end}}</p>
               {{range .cat1}}{{ . | safeHTML }}{{end}}
               {{range .subcat1}}{{ . | safeHTML }}{{end}}

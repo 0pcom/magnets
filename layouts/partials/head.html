@@ -1,7 +1,14 @@
 <head>
     <!--title>{{ .Site.Title }}</title -->
-{{with .Site.Params}}
-    <title>{{range .dynamictitle}}{{. | safeHTML}}{{end}} | {{.title}} {{.titledesc}}</title>
+
+    <title>
+      {{if eq .Title ""}}
+      {{with .Site.Params}}
+      {{range .dynamictitle}}{{. | safeHTML}}{{end}} | {{.title}} {{.titledesc}}{{end}}
+      {{end}}
+      {{if ne .Title ""}}
+      {{.Title}} | {{.Site.Params.title}} {{.Site.Params.titledesc}}{{end}}</title>
+    {{with .Site.Params}}
     {{range .ifabout}}{{ . | safeHTML }}{{end}}
     {{range .ifpolicy}}{{ . | safeHTML }}{{end}}
     {{range .iffriend}}{{ . | safeHTML }}{{end}}
@@ -11,7 +18,7 @@
     {{end}}
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
     <meta content="utf-8" http-equiv="encoding">
-    <meta name="viewport" content="width=device-width, initial-scale=1.5">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="format-detection" content="telephone=no" />
     <meta name="theme-color" content="#000084" />
     <meta name="robots" content="index,follow" />

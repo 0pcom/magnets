@@ -69,9 +69,9 @@ func page(directive string, table string, cat string, pageno int) string {
 var pagestr string
 var pre string
 if table == "products" && cat == ""{		pre = "/p/"}
-if table == "products" && cat != ""{		pre = fmt.Sprintf("/cat/%s", cat)}
+if table == "products" && cat != ""{		pre = fmt.Sprintf("/cat/%s/", cat)}
 if table == "equipments" && cat == ""{	pre = "/equipment/p/"}
-if table == "equipments" && cat != ""{	pre = fmt.Sprintf("/equipment/cat/%s", cat)}
+if table == "equipments" && cat != ""{	pre = fmt.Sprintf("/equipment/cat/%s/", cat)}
 
 if directive == "first"{		pagestr = fmt.Sprintf("%s%s", pre, strconv.Itoa(0))}
 if directive == "firstt"{		pagestr = strconv.Itoa(0)}
@@ -99,18 +99,12 @@ func snipcartApiKey() string {
 //returned from there is the data which is rendered on the page
 type Page struct {
 	Title string
-	Partno string
+	PartNumber string
 	Table string //specifies the table; products or equipments
   Category string //category
 	View string
   PageNumber int	//pagination
 }
-type SubPage struct {
-	Title string
-	Table string
-  PartNumber string
-}
-
 
 // // function called from the template to get products by page // //
 func productList(table string, category string, view string, pagenumber int) []inv.Product {
