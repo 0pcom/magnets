@@ -8,11 +8,12 @@ certs1
 certs2
 certs3
 cockroach-data
-content/blog
+content/blog/*.html
 content/about*
 content/friend*
 content/policy*
 csv
+docs
 go.mod
 go.sum
 img
