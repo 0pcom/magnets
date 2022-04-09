@@ -2,7 +2,7 @@
 *.tar.gz
 *.csv
 *.bak
-Caddyfile
+Caddyfile*
 certs
 certs1
 certs2
