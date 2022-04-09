@@ -1,180 +1,118 @@
 #baseURL = "http://127.0.0.1:8040/"
-baseURL = "https://magnetosphere.net"
-title = "MAGNETOSPHERE.NET"
-languageCode = "en"
-DefaultContentLanguage = "en" # Change this to change the site's language
-#theme = "hugo.386"
-preserveTaxonomyNames = true
-ignoreErrors = ["error-remote-getjson"]
+baseURL =                          "https://magnetosphere.net"
+port =                             8040
+title =                            "we have the technology | magnetosphere electronic surplus"
+languageCode =                     "en"
+DefaultContentLanguage =           "en"
+preserveTaxonomyNames =            true
+ignoreErrors =                  [  "error-remote-getjson"]
+disableHugoGeneratorInject =       true
+enableRobotsTXT = true
 
-[params]
-    ifenable = "{{if .Enable}}"
-    range = "{{range .}}"
-    end = "{{end}}"
-    else = "{{else}}"
-    partno = "{{.PartNo}}"
-    name1 = "{{.Name}}"
-    imageee = "{{.Image1}}"
-    price = "{{.Price}}"
-    description1 = "{{.Description1}}"
-    url = "/post/{{.PartNo}}"
-    cat = "{{.Category}}"
-    subcat = "{{.SubCategory}}"
-    vol = "{{.VoltsRating}}"
-    val = "{{.Value}}"
-    valu = "{{.ValUnit}}"
-    amp = "{{.AmpsRating}}"
-    tol = "{{.Tolerance}}"
-    typ = "{{.Type}}"
-    ptyp = "{{.PackageType}}"
-    tech = "{{.Technology}}"
-    mat = "{{.Materials}}"
-    wat = "{{.WattsRating}}"
-    tmp = "{{.TempRating}}"
-    tmpu = "{{.TempUnit}}"
-    cond = "{{.Condition}}"
-    data = "{{.Datasheet}}"
-    docu = "{{.Documentation}}"
-    note = "{{.Note}}"
-    warn = "{{.Warning}}"
-    desc2 = "{{.Description2}}"
-    ifnecat = "{{if ne .Category \"\"}}"
-    ifnesubcat = "{{if ne .SubCategory \"\"}}"
-    ifnevr = "{{if ne .VoltsRating 0.0 }}"
-    ifneval = "{{if ne .Value 0.0 }}"
-    ifneamp = "{{if ne .AmpsRating 0.0 }}"
-    ifnetol = "{{if ne .Tolerance 0.0 }}"
-    ifnetyp = "{{if ne .Type \"\"}}"
-    ifneptyp = "{{if ne .PackageType \"\"}}"
-    ifnetech = "{{if ne .Technology \"\"}}"
-    ifnemat = "{{if ne .Materials \"\"}}"
-    ifnewat = "{{if ne .WattsRating 0.0 }}"
-    ifnetemp = "{{if ne .TempRating 0.0 }}"
-    ifnecond = "{{if ne .Condition \"\"}}"
-    ifnedat = "{{if ne .Datasheet \"\"}}"
-    ifnedoc = "{{if ne .Docs \"\"}}"
-    ifnenot = "{{if ne .Note \"\"}}"
-    ifnewrn = "{{if ne .Warning \"\"}}"
-    ifnedesc2 = "{{if ne .Description2 \"\"}}"
-    image = "<a href=\"/img/{{.Image1}}\"><img src=\"/img/{{.Image1}}\" class=\"center\"></a>"
-    name = "<a href=\"/post/{{.PartNo}}\"><h2 class=\"header\">{{ .Name }}</h2></a>"
-    readmore = "<p><a href=\"/post/{{.PartNo}}\">Read More</a></p>"
-    button = "<button class=\"snipcart-add-item waves-effect waves-light btn\" data-item-id=\"{{.PartNo}}\" data-item-name=\"{{.PartNo}}\" data-item-image=\"/img/{{.Image1}}\" data-item-price=\"{{.Price}}\" data-item-url=\"/post/{{.PartNo}}\" data-item-description=\"{{.Name}}\" data-item-min-quantity=\"{{.MinOrder}}\" data-item-max-quantity=\"{{.MaxOrder}}\" data-item-has-taxes-included=\"false\" >Add to cart</button>"
-
-    # The name to display as main title in the home page
-    mainpagetitle = "MAGNETOSPHERE.NET"
-
-    # The subtitle to display under the title in the home page
-    mainpagesubtitle = "we have the technology"
-
-    # The description of your website. It will be displayed in the home page
-    mainpagedesc = ""
-
-    # The name to display in the copyright section in the footer
-    copyrightname = "magnetosphere.net"
-
-    # The url to use as link in the copyright name in the footer. Leave empty to use none.
-    copyrighturl = "https://magnetosphere.net"
-    copyrightsuffix = "all rights reserved"
-    # Show the "built on Hugo" disclaimer
-    #showhugo = true
-
-    # Urls for social networks
-    #facebook = "https://facebook.com"
-    #twitter = "https://twitter.com"
-    #linkedin = "https://linkedin.com"
-    #github = "https://github.com"
-    #gitlab = "https://gitlab.com"
-
-    # Enables or disables the loading animations. false activates them. Default is false.
-    loadfastload = false
-
-    # Sets the speed for the page loading effect. Default is 1.0.
-    loadspeedfactor = 1.0
-
-    # Enables or disables the second flyby cursor. Default is false.
-    loadonepass = false
+[sitemap]
+  changefreq = 'monthly'
+  filename = 'sitemap.xml'
+  priority = 0.5
 
 [params.copyright]
-    name = "magnetosphere.net"
-
+    name =                         "magnetosphere.net"
+    name1 =                        "magnetosphereelectronicsurplus.com"
     # The url to use as link in the copyright name in the footer. Leave empty to use none.
-    url = "https://magnetosphere.net"
+    url =                          "https://magnetosphere.net"
+    url1 =                         "https://magnetosphereelectronicsurplus.com"
 
     # Text to go before copyright information
     #prefix = "[hugo.386 theme by Max le Fou](https://gitlab.com/maxlefou/hugo.386)"
-
     # Text to go between copyright and hugo disclaimer (if enabled)
     #suffix = "Example site"
 
+[params]
+    baseURL =                      "https://magnetosphere.net"
+    sitetitle =                    "magnetosphere"
+    title =                        "magnetosphere"
+    titledesc =                    "electronic surplus"
+    # The subtitle to display under the title in the home page
+    # The name to display as main title in the home page
+    mainpagetitle =                "<title>we have the technology | magnetosphere electronic surplus</title>"
+    itemtitle =                    "<title>{{.Name}} | magnetosphere electronic surplus</title>"
+    categorytitle =                "<title>{{$category}} | magnetosphere elctronic surplus</title>"
+    categorydesc =                 "<meta name='description' content='Browse {{$table}} by category: {{$category}} page: {{$pagenumber}}. Credit Cards, Paypal, and Cryptocurrency accepted; buy with bitcoin or skycoin.'/>"
+    #sitetitle = "<title>magnetosphere.net | we have the technology</title>"
+    mainpagesubtitle =             "{{if eq $category ``}}we have the technology{{else}}{{if eq $subcategory ``}}{{$category}}{{else}}{{$subcategory}}{{end}}{{end}}"
+    maintitle =                    "magnetosphere electronic surplus"
+    # The description of your website. It will be displayed in the home page
+    # The name to display in the copyright section in the footer
+    copyrightname =                "magnetosphere.net magnetosphereelectronicsurplus.com"
+    # The url to use as link in the copyright name in the footer. Leave empty to use none.
+    copyrighturl =                 "/"
+    copyrightsuffix =              "all rights reserved"
+    googlesiteverification =    [  "{{if eq $site `magnetosphere.net`}}",
+                                   "<meta name='google-site-verification' content='yyNAbOUku-cKbCsko4BzXL5QhHb2SoO8r1KWJH37bF8' />",
+                                   "{{end}}",
+                                   "{{if eq $site `magnetosphereelectronicsurplus.com`}}",
+                                   "<meta name='google-site-verification' content='2c_8zkofaYUQwXJXRBKrkkbU6pcmt7NqJc-CNI3yr9c' />",
+                                   "{{end}}",
+                                   ]
+
+    end =                       [  "{{end}}"]
+    else =                      [  "{{else}}"]
+
+
+
+    # Enables or disables the loading animations. false activates them. Default is false.
+    loadfastload =                 true
+    # Sets the speed for the page loading effect. Default is 1.0.
+    loadspeedfactor =              1.0
+    # Enables or disables the second flyby cursor. Default is false.
+    loadonepass =                  false
+
 [menu]
-  # This displays buttons in the navbar to access your contents
+# This displays buttons in the navbar to access your contents
   [[menu.main]]
-    identifier = "about" # An unique identifier for the button
-    name = "About"       # A display name for the button
-    url = "/about"      # The path to the content. It can lead to a single page (like here)
-    weight = 10          # A number to order the buttons in the navbar
-
-  [[menu.main]]
-    identifier = "shipping"
-    name = "Shipping"
-    url = "/shipping"       # The path can lead to a content folder too.
-    weight = 20
+    identifier =                   "products"
+    name =                         "Products"
+    url =                          "/p/0"
+    weight =                       5
 
   [[menu.main]]
-    identifier = "friend"
-    name = "Friends"
-    url = "/friend"       # The path can lead to a content folder too.
-    weight = 30
-
+    identifier =                   "about"
+    name =                         "About"
+    pre =                          "<span>"
+    post =                         "</span>"
+    url =                          "/about"
+    weight = 10
   [[menu.main]]
-    identifier = "bitcoin"
-    name = "Bitcoin"
-    url = "https://pay.magnetosphere.net/apps/42U8i51gFZF7reRf71hZ26wa7Qx3/pos/"       # The path can lead to a content folder too.
-    weight = 40
-
+    identifier =                   "policies"
+    name =                         "Policies"
+    pre =                          "<span>"
+    post =                         "</span>"
+    url =                          "/policy"
+    weight =                       20
   [[menu.main]]
-    identifier = "time"
-    name = "{{fdateMDY}}"
-    url = ""       # The path can lead to a content folder too.
-    weight = 50
-
+    identifier =                   "friend"
+    name =                         "Friends"
+    pre =                          "<span>"
+    post =                         "</span>"
+    url =                          "/friend"
+    weight =                       30
   [[menu.main]]
-    identifier = "snipcart1"
-    name = "<span class=\"snipcart-checkout\">cart:<span class=\"snipcart-items-count\"></span> <span class=\"snipcart-total-price\"></span></span>"
-    url = ""       # The path can lead to a content folder too.
-    weight = 60
-
-
-#    <a href=\"https://pay.magnetosphere.net/apps/42U8i51gFZF7reRf71hZ26wa7Qx3/pos/\">shop with bitcoin here</a>
-#[taxonomies]
-#category = "categories"
-#tag = "tags"
-
-
-#[privacy]
-
-#  [privacy.vimeo]
-#    disabled = false
-#    simple = true
-
-#  [privacy.twitter]
-#    disabled = false
-#    enableDNT = true
-#    simple = true
-
-#  [privacy.instagram]
-#    disabled = false
-#    simple = true
-
-#  [privacy.youtube]
-#    disabled = false
-#    privacyEnhanced = true
-
-#[services]
-
-#  [services.instagram]
-#    disableInlineCSS = true
-
-#  [services.twitter]
-#    disableInlineCSS = true
+    identifier =                   "blog"
+    name =                         "Blog"
+    pre =                          "<span>"
+    post =                         "</span>"
+    url =                          "/blog"
+    weight =                       40
+  [[menu.main]]
+    identifier =                   "time"
+    name =                         "{{$time}}"
+    pre =                          "<span>"
+    post =                         "</span>"
+    url =                          ""
+    weight =                       50
+#  [[menu.main]]
+#    identifier =                   "view"
+#    name =                         "{{$view}}"
+#    pre =                          "<span>"
+#    post =                         "</span>"
+#    url =                          ""
+#    weight =                       60

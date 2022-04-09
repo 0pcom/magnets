@@ -1,12 +1,117 @@
+{{ printf "{{$title := .Title}}" | safeHTML}}{{ printf "{{$partnumber := .PartNumber}}" | safeHTML}}{{ printf "{{$table := .Table}}" | safeHTML}}{{ printf "{{$category := .Category}}" | safeHTML}}{{ printf "{{$subcategory := .SubCategory}}" | safeHTML}}{{ printf "{{$view := .View}}" | safeHTML}}{{ printf "{{$pagenumber := .PageNumber}}" | safeHTML}}{{ printf "{{$site := .Site}}" | safeHTML}}{{ printf "{{$time := fdateMDY}}" | safeHTML}}
 <head>
-    <title>{{ .Site.Title }}</title>
-    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-    <meta content="utf-8" http-equiv="encoding">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="format-detection" content="telephone=no" />
-    <meta name="theme-color" content="#000084" />
-    <link rel="icon" href="{{ .Site.BaseURL }}/favicon.ico">
-    <link rel="canonical" href="{{ .Site.BaseURL }}">
-    {{/* Don't ask why it's like this. This original theme is a mess... */}}
-    <!-- <noscript><style>body { visibility: visible }</style></noscript> -->
+<meta charset="UTF-8">
+<title>{{if eq .Title ""}}{{ printf "{{$title}}" | safeHTML}} | {{.Site.Params.title}} {{.Site.Params.titledesc}}{{end}}{{if ne .Title ""}}{{.Title}} | {{.Site.Params.title}} {{.Site.Params.titledesc}}{{end}}</title>
+{{ printf "{{if eq .PartNumber `about`}}" | safeHTML}}
+{{ printf "<meta name='description'" | safeHTML}}
+{{ printf " content='About magnetosphere.net.'/>" | safeHTML}}
+{{ printf "{{end}}" | safeHTML}}
+{{ printf "{{if eq .PartNumber `policy`}}" | safeHTML}}
+{{ printf "<meta name='description'" | safeHTML}}
+{{ printf " content='Magnetosphere.net shipping and order policies.'/>" | safeHTML}}
+{{ printf "{{end}}" | safeHTML}}
+{{ printf "{{if eq .PartNumber `friend`}}" | safeHTML}}
+{{ printf "<meta name='description' content='friends and helpful web resources - list of links from magnetosphere.net.'/>" | safeHTML}}
+{{ printf "{{end}}" | safeHTML}}
+{{ printf "{{if eq .PartNumber `blog`}}" | safeHTML}}
+{{ printf "<meta name='description'" | safeHTML}}
+{{ printf " content='Magnetosphere.net blog. Revolvo Inritus.'/>" | safeHTML}}
+{{ printf "{{end}}" | safeHTML}}
+{{ printf "{{if eq $view `0`}}" | safeHTML}}
+{{ printf " <meta property='og:site_name' content='Magnetosphere Electronic Surplus'/>\n" | safeHTML}}
+{{ printf " <meta property='og:url' content='https://{{$site}}/post/{{.PartNumber}}'/>\n" | safeHTML}}
+{{ printf "{{$product := findProduct1 $table $partnumber}}" | safeHTML}}
+{{ printf "{{range $product}}" | safeHTML}}
+{{ printf " <meta property='og:title' content='{{.Name}}'/>\n" | safeHTML}}
+{{ printf " <meta property='og:type' content='product'/>\n" | safeHTML}}
+{{ printf " <meta property='og:description' content='{{.Description1}}'/>\n" | safeHTML}}
+{{ printf " <meta property='og:price:amount' content='{{.Price}}'/>\n" | safeHTML}}
+{{ printf " <meta property='og:price:currency' content='USD'/>\n" | safeHTML}}
+{{ printf " <meta property='og:image' content='{{.Image1}}'/>\n" | safeHTML}}
+{{ printf " <meta name='description'" | safeHTML}}
+{{ printf " content='Buy {{.Name}}" | safeHTML}}
+{{ printf " {{.Category}}," | safeHTML}}
+{{ printf " Price: ${{.Price}}," | safeHTML}}
+{{ printf " In-stock: {{.Qty}}'/>\n" | safeHTML}}
+{{ printf "<!-- JSON-LD markup -->\n" | safeHTML}}
+{{ printf "<script type='application/ld+json'>\n" | safeHTML}}
+{{ printf "{\n" | safeHTML}}
+{{ printf "\"@context\" : \"http://schema.org\" | safeHTML}}\n" | safeHTML}}
+{{ printf "\"@type\" : \"Product\" | safeHTML}}\n" | safeHTML}}
+{{ printf "\"name\" : \"{{.Name}}\" | safeHTML}}\n" | safeHTML}}
+{{ printf "\"image\" : \"https://{{$site}}/img/{{.Category}}/{{.Image1}}\" | safeHTML}}\n" | safeHTML}}
+{{ printf "\"description\" : \"{{.Description1}}\" | safeHTML}}\n" | safeHTML}}
+{{ printf "\"sku\" : \"{{.PartNo}}\" | safeHTML}}\n" | safeHTML}}
+{{ printf "\"productID\" : \"{{.PartNo}}\" | safeHTML}}\n" | safeHTML}}
+{{ printf "{{if ne .MfgPartNo ``}}" | safeHTML}}
+{{ printf "\"mpn\": \"{{.MfgPartNo}}\" | safeHTML}}\n" | safeHTML}}
+{{ printf "{{end}}" | safeHTML}}
+{{ printf "{{if ne .MfgName ``}}" | safeHTML}}
+{{ printf "\"brand\": {\n" | safeHTML}}
+{{ printf "\"@type\": \"Brand\" | safeHTML}}\n" | safeHTML}}
+{{ printf "\"name\": \"{{.MfgName}}\"\n" | safeHTML}}
+{{ printf "},\n" | safeHTML}}
+{{ printf "{{end}}" | safeHTML}}
+{{ printf "{{if eq .MfgName ``}}" | safeHTML}}
+{{ printf "\"brand\": {\n" | safeHTML}}
+{{ printf "\"@type\": \"Brand\" | safeHTML}}\n" | safeHTML}}
+{{ printf "\"name\": \"Magnetosphere\"\n" | safeHTML}}
+{{ printf "},\n" | safeHTML}}
+{{ printf "{{end}}" | safeHTML}}
+{{ printf "\"offers\" : {\n" | safeHTML}}
+{{ printf "\"@type\" : \"Offer\" | safeHTML}}\n" | safeHTML}}
+{{ printf "\"priceCurrency\": \"USD\" | safeHTML}}\n" | safeHTML}}
+{{ printf "\"url\" : \"https://{{$site}}/post/{{$partnumber}}\" | safeHTML}}\n" | safeHTML}}
+{{ printf "\"price\" : \"{{.Price}}\" | safeHTML}}\n" | safeHTML}}
+{{ printf "\"priceValidUntil\": \"2022-12-31\" | safeHTML}}\n" | safeHTML}}
+{{ printf "{{if ne .Condition `used`}}" | safeHTML}}
+{{ printf "\"itemCondition\": \"https://schema.org/NewCondition\" | safeHTML}}\n" | safeHTML}}
+{{ printf "{{end}}" | safeHTML}}
+{{ printf "{{if eq .Condition `used`}}" | safeHTML}}
+{{ printf "\"itemCondition\": \"https://schema.org/UsedCondition\" | safeHTML}}\n" | safeHTML}}
+{{ printf "{{end}}" | safeHTML}}
+{{ printf "\"availability\" : \"https://schema.org/InStock\"\n" | safeHTML}}
+{{ printf "}\n" | safeHTML}}
+{{ printf "} \n" | safeHTML}}
+{{ printf "</script>\n" | safeHTML}}
+{{ printf "{{end}}" | safeHTML}}
+{{ printf "{{end}}" | safeHTML}}
+{{ printf "{{if eq $view `1`}}" | safeHTML}}
+{{ printf "<meta property='og:site_name' content='Magnetosphere Electronic Surplus'/>\n" | safeHTML}}
+{{ printf "<meta property='og:url' content='https://{{$site}}/'/>\n" | safeHTML}}
+{{ printf "<meta property='og:title' content='{{$title}}'/>\n" | safeHTML}}
+{{ printf "<meta property='og:type' content='website'/>\n" | safeHTML}}
+{{ printf "<meta name='description'" | safeHTML}}
+{{ printf " content='Browse" | safeHTML}}
+{{ printf "{{if ne $category ``}} {{$category}}{{end}}" | safeHTML}}
+{{ printf "{{if ne $subcategory ``}} {{$subcategory}}{{end}}" | safeHTML}}
+{{ printf " {{$table}}" | safeHTML}}
+{{ printf " page: {{$pagenumber}}" | safeHTML}}
+{{ printf " | magnetosphere electronic surplus' />\n" | safeHTML}}
+{{ printf "<!-- JSON-LD markup -->\n" | safeHTML}}
+{{ printf "<script type='application/ld+json'>\n" | safeHTML}}
+{{ printf "{\n" | safeHTML}}
+{{ printf "\"@context\" : \"http://schema.org\" | safeHTML}}\n" | safeHTML}}
+{{ printf "\"@type\" : \"LocalBusiness\" | safeHTML}}\n" | safeHTML}}
+{{ printf "\"name\" : \"magnetosphere electronic surplus\" | safeHTML}}\n" | safeHTML}}
+{{ printf "\"url\" : \"https://{{$site}}/\"\n" | safeHTML}}
+{{ printf "}\n" | safeHTML}}
+{{ printf "</script>\n" | safeHTML}}
+{{ printf "{{end}}" | safeHTML}}
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="format-detection" content="telephone=no" />
+<meta name="theme-color" content="#000084" />
+<meta name="robots" content="index,follow" />
+<meta name="googlebot" content="index,follow" />
+{{ printf "{{if eq $site `magnetosphere.net`}}" | safeHTML}}
+{{ printf "<meta name='google-site-verification' content='yyNAbOUku-cKbCsko4BzXL5QhHb2SoO8r1KWJH37bF8' />" | safeHTML}}
+{{ printf "{{end}}" | safeHTML}}
+{{ printf "{{if eq $site `magnetosphereelectronicsurplus.com`}}" | safeHTML}}
+{{ printf "<meta name='google-site-verification' content='2c_8zkofaYUQwXJXRBKrkkbU6pcmt7NqJc-CNI3yr9c' />" | safeHTML}}
+{{ printf "{{end}}" | safeHTML}}
+<link rel="icon" href="{{ .Site.BaseURL }}/favicon.ico"/>
+<link rel="canonical" href="{{ .Site.BaseURL }}"/><!-- <noscript><style>body { visibility: visible }</style></noscript> -->
+<link rel="preconnect" href="https://app.snipcart.com">
+<link rel="preconnect" href="https://cdn.snipcart.com">
+{{- partial "scripts.html" . -}}
 </head>

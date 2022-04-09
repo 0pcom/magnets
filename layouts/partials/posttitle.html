@@ -1,0 +1,7 @@
+{{ printf "{{$product := findProduct1 $table $partnumber}}" | safeHTML }}
+{{ printf "{{range $product}}" | safeHTML }}
+<div class="row-fluid navmargin">
+<div class="page-header">
+<div style='margin:0 auto; text-align:center; width:300px;'><h1>{{ printf "{{.Name}}" | safeHTML }}</h1></div>
+</div>
+</div>

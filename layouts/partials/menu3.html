@@ -1,0 +1,16 @@
+<nav class="navbar navbar-inverse">
+  <div class="navbar-inner">
+    <div class="container"> <!--button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"></button--> <!--div class="nav-collapse collapse"-->
+      <div style='margin:0 auto; text-align:center; width:auto;'>
+      <ul class="nav">
+        <li>
+          {{printf "{{if eq $category ``}}{{if eq $view `2`}}<a href='/'><span>Gallery</span></a>{{end}}{{if eq $view `1`}}<a href='/list'><span>List View</span></a>{{end}}{{end}}" | safeHTML }}
+        </li>
+        <li>
+          {{ printf "{{if eq $view `1`}}{{$shownav := (page1 `last` $table $category $subcategory $pagenumber)}}{{if ne $shownav 0}}<div style='color:black;'><span>Page:</span></div>{{end}}{{end}}" | safeHTML}}
+        </li>
+      </ul>
+      </div>
+    </div>
+  </div>
+</nav>

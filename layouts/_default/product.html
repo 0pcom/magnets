@@ -1,14 +1,8 @@
 {{ define "main" }}
-
-<div class="row-fluid navmargin">
-    <div class="page-header">
-        <h1>{{ .Title }}</h1>
-    </div>
-    <p class="lead">{{ .Params.description }}</p>
-    <ul>
-    {{ partial "post.html" .Site.Params }}
-    </ul>
-    <h4><a href="{{ .Site.BaseURL }}">{{ i18n "backtohome" }}</a></h4>
+{{ partial "posttitle.html" .Site.Params }}
+<div class="row-fluid">
+{{ partial "post.html" .Site.Params }}
+{{- partial "catsubcat.html" . -}}
 </div>
-
-{{ end }}
+<h4><a href="{{ .Site.BaseURL }}">{{ i18n "backtohome" }}</a></h4>
+{{- partial "footer.html" . -}}{{ end }}

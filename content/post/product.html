@@ -1,6 +1,6 @@
 +++
-title = "{{.PartNo}}"
-description = "{{.Name}}"
+title = "{{$product := findProduct1 .Table .PartNumber}}{{range $product}}{{.Name}}{{end}}"
+description = "{{.Description1}}"
 date = "2021-04-02"
 author = "0pcom"
 layout = "product"

@@ -1,53 +1,144 @@
-
-{{.ifenable | safeHTML}}
+<div class="span9 bs-docs-sidebar">
+<div style='margin:0 auto; text-align:center; width:auto;'><h2 class="header lead">{{ printf "{{.Description1}}" | safeHTML }}</h2></div>
+<p></p>
+<hr class="soften">
+<p></p>
 <div class="col s6">
-    {{.name | safeHTML}}
-    <div class="card horizontal">
-        <div class="card-image">
-          {{.image | safeHTML}}
-        </div>
-        <br>
-        <div class="card-stacked">
-        <div class="card-content">
-          <div class="card-action">
-            <div class class="center">
-            <p>{{.description1 | safeHTML}}
-                {{.button | safeHTML}}
-            </p>
-              <p>PartNo: {{.partno | safeHTML}}</p>
-              {{.ifnecat | safeHTML}}<p>Category: {{.cat | safeHTML}}</p>{{.end | safeHTML}}
-              {{.ifnesubcat | safeHTML}}<p>Subcategory: {{.subcat | safeHTML}}</p>{{.end | safeHTML}}
-              {{.ifnevr | safeHTML}}<p>Voltage: {{.vol | safeHTML}}V</p>{{.end}}
-              {{.ifneval | safeHTML}}<p>Value: {{.val | safeHTML}}{{.valu | safeHTML}}</p>{{.end | safeHTML}}
-              {{.ifneamp | safeHTML}}<p>Amperage: {{.amp | safeHTML}}A</p>{{.end | safeHTML}}
-              {{.ifnetol | safeHTML}}<p>Tolerance: {{.tol | safeHTML}}</p>{{.end | safeHTML}}
-              {{.ifnetyp | safeHTML}}<p>Type: {{.typ | safeHTML}}</p>{{.end | safeHTML}}
-              {{.ifneptyp | safeHTML}}<p>Package Type: {{.ptyp | safeHTML}}</p>{{.end | safeHTML}}
-              {{.ifnetech | safeHTML}}<p>Technology: {{.tech | safeHTML}}</p>{{.end | safeHTML}}
-              {{.ifnemat | safeHTML}}<p>Materials: {{.mat | safeHTML}}</p>{{.end | safeHTML}}
-              {{.ifnewat | safeHTML}}<p>Watts Rating: {{.wat | safeHTML}}</p>{{.end | safeHTML}}
-              {{.ifnetemp | safeHTML}}<p>Temp Rating: {{.tmp}}{{.tmpu | safeHTML}}</p>{{.end | safeHTML}}
-              {{.ifnecond | safeHTML}}<p>Condition: {{.cond | safeHTML}}</p>{{.end | safeHTML}}
-              {{.ifnedat | safeHTML}}<p>Datasheet: {{.data | safeHTML}}</p>{{.end | safeHTML}}
-              {{.ifnedoc | safeHTML}}<p>Documentation: {{.docu | safeHTML}}</p>{{.end | safeHTML}}
-              {{.ifnenot | safeHTML}}<p>Note: {{.note | safeHTML}}</p>{{.end | safeHTML}}
-              {{.ifnewrn | safeHTML}}<p>Warning: {{.warn | safeHTML}}</p>{{.end | safeHTML}}
-              {{.ifnedesc2 | safeHTML}}<p>Long Description: {{.desc2 | safeHTML}}</p>{{.end | safeHTML}}
-            </div>
-            </div>
-        </div>
-        </div>
-    </div>
+<div class="card horizontal">
+{{ printf "{{if ne .Image1 ``}}" | safeHTML }}
+{{ printf "<div class='card-image'>" | safeHTML }}
+{{ printf "<a href='/img/{{if ne .Category ``}}{{.Category}}/{{end}}{{.Image1}}'>" | safeHTML }}
+{{ printf "<img src='/img/{{if ne .Category ``}}{{.Category}}/{{end}}{{.Image1}}' alt='{{.Name}}' class='center'>" | safeHTML }}
+{{ printf "</a>" | safeHTML }}
+{{ printf "</div>" | safeHTML }}
+{{ printf "{{end}}" | safeHTML }}
+{{ printf "{{if ne .Image2 ``}}" | safeHTML }}
+{{ printf "<div class='card-image'>" | safeHTML }}
+{{ printf "<a href='/img/{{if ne .Category ``}}{{.Category}}/{{end}}{{.Image2}}'>" | safeHTML }}
+{{ printf "<img src='/img/{{if ne .Category ``}}{{.Category}}/{{end}}{{.Image2}}' alt='{{.Name}}' class='center'>" | safeHTML }}
+{{ printf "</a>" | safeHTML }}
+{{ printf "</div>" | safeHTML }}
+{{ printf "{{end}}" | safeHTML }}
+{{ printf "{{if ne .Image3 ``}}" | safeHTML }}
+{{ printf "<div class='card-image'>" | safeHTML }}
+{{ printf "<a href='/img/{{if ne .Category ``}}{{.Category}}/{{end}}{{.Image3}}'>" | safeHTML }}
+{{ printf "<img src='/img/{{if ne .Category ``}}{{.Category}}/{{end}}{{.Image3}}' alt='{{.Name}}' class='center'>" | safeHTML }}
+{{ printf "</a>" | safeHTML }}
+{{ printf "</div>" | safeHTML }}
+{{ printf "{{end}}" | safeHTML }}
 </div>
-{{.else}}
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis in felis id leo viverra pretium. Fusce ultricies convallis porttitor. Nam auctor sit amet tortor ut mollis. Curabitur quis metus vel magna dignissim viverra. Etiam vitae facilisis ipsum. Sed rutrum felis sem, eget auctor odio molestie sit amet. Sed vel cursus lorem. Proin rutrum a enim in ornare. Nullam ante velit, porta vel sapien in, commodo consequat quam. Aliquam dapibus libero ipsum, sit amet molestie metus aliquet at. Mauris lacinia id nisi convallis cursus. Duis vitae tincidunt quam, et aliquam quam. Interdum et malesuada fames ac ante ipsum primis in faucibus. Aenean imperdiet dolor quam, id semper neque auctor sit amet. Quisque ut venenatis ex.</p>
-<p></p>
-<p>Phasellus nulla tortor, cursus non metus at, aliquam lacinia eros. Aliquam vel enim semper, rhoncus lacus at, placerat odio. Nullam ut risus non tellus auctor malesuada. Donec non congue lacus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In sed tortor nunc. Cras feugiat posuere lacus, vitae lobortis sapien tincidunt in.</p>
-<p></p>
-<p>Etiam auctor elit ut nulla scelerisque, non faucibus dolor tempus. Phasellus eleifend vehicula sem ut ornare. Integer aliquet pulvinar libero fringilla tincidunt. Sed sollicitudin gravida ex, eget luctus arcu condimentum eget. Mauris porta, ex scelerisque sodales euismod, neque ipsum semper leo, vitae consequat nulla turpis id nulla. Pellentesque placerat tincidunt enim, eget ultricies metus fermentum id. Morbi consequat risus mauris, quis ultricies ipsum tincidunt non.</p>
-<p></p>
-<p>Praesent porta, ligula sed aliquam rhoncus, erat ipsum laoreet tellus, id auctor nisl ipsum quis enim. Praesent id convallis erat. Vestibulum quis interdum nulla. Ut vitae lectus odio. Pellentesque vitae porttitor ligula. Aliquam et orci id arcu vehicula consectetur. Maecenas porta orci in velit hendrerit, ac euismod turpis dictum.</p>
-<p></p>
-<p>Nam dictum eros vel blandit lacinia. Curabitur ornare efficitur elit, sed posuere est lobortis ut. Nulla arcu dui, facilisis sed lectus eget, vulputate fringilla lacus. Fusce sodales nec odio in aliquam. Proin sit amet molestie diam. Curabitur in orci sem. Aenean elit velit, mattis non vulputate eget, accumsan non odio. Mauris lobortis, ipsum non congue iaculis, lectus lorem porta justo, a vulputate magna erat id magna. Curabitur risus lectus, iaculis sit amet scelerisque sit amet, suscipit non dolor. Integer porttitor eu sapien semper euismod. Integer vitae magna eros. Sed id purus enim. </p>
-<p></p>
-{{.end | safeHTML}}
+<br>
+<div class="card-stacked">
+<div class="card-content">
+<div class="card-action">
+<div class="center">
+<p>{{ printf "{{if eq .Shippable false}}" | safeHTML }}
+{{ printf "This item is only available for local pickup" | safeHTML }}
+{{ printf "{{if ne .Location ``}}" | safeHTML }}
+{{ printf "in {{ .Location }}." | safeHTML }}
+{{ printf "Enter your phone number during checkout" | safeHTML }}
+{{ printf "and we will contact you by phone to schedule pick-up" | safeHTML }}
+{{ printf "{{end}}" | safeHTML }}
+{{ printf "{{end}}" | safeHTML }}</p>
+<p>In stock: {{ printf "{{.Qty}}" | safeHTML }}</p>
+<p>Price: ${{ printf "{{.Price}}" | safeHTML }}</p>
+<p>
+{{ printf "<button" | safeHTML }}
+{{ printf " class='snipcart-add-item waves-effect waves-light btn'" | safeHTML }}
+{{ printf " data-item-id='{{.PartNo}}'" | safeHTML }}
+{{ printf " data-item-name='{{.PartNo}}'" | safeHTML }}
+{{ printf " data-item-image='/img/{{.Category}}/{{.Image1}}'" | safeHTML }}
+{{ printf " data-item-price='{{.Price}}'" | safeHTML }}
+{{ printf " data-item-url='/post/{{.PartNo}}'" | safeHTML }}
+{{ printf " data-item-description='{{.Name}}'" | safeHTML }}
+{{ printf " data-item-min-quantity='{{.MinOrder}}'" | safeHTML }}
+{{ printf " data-item-quantity='{{.DefaultQty}}'" | safeHTML }}
+{{ printf " data-item-quantity-step='{{.StepQty}}'" | safeHTML }}
+{{ printf " data-item-shippable='{{.Shippable}}'" | safeHTML }}
+{{ printf " data-item-max-quantity='{{.MaxOrder}}'" | safeHTML }}
+{{ printf " data-item-weight='{{convertozgrams .WeightOz}}'" | safeHTML }}
+{{ printf " data-item-length='{{convertincm .Length `length`}}'" | safeHTML }}
+{{ printf " data-item-width='{{convertincm .Width `width`}}'" | safeHTML }}
+{{ printf " data-item-height='{{convertincm .Height `heigth`}}'" | safeHTML }}
+{{ printf " data-item-has-taxes-included='false'>" | safeHTML }}
+{{ printf "Add to cart" | safeHTML }}
+{{ printf "</button>" | safeHTML }}
+</p>
+<p>{{ printf "{{.Description1}}" | safeHTML }}</p>
+<p>PartNo: {{ printf "{{.PartNo}}" | safeHTML }}</p>
+{{ printf "{{if ne .MfgName ``}}" | safeHTML }}
+{{ printf "<p>Brand: {{.MfgName}}</p>" | safeHTML }}
+{{ printf "{{end}}" | safeHTML }}
+{{ printf "{{if ne .MfgPartNo ``}}" | safeHTML }}
+{{ printf "<p>MPN: {{.MfgPartNo}}</p>" | safeHTML }}
+{{ printf "{{end}}" | safeHTML }}
+{{ printf "{{if ne .Category ``}}" | safeHTML }}
+{{ printf "<p>Category: <a href='/cat/{{.Category}}'>{{.Category}}</a></p>" | safeHTML }}
+{{ printf "{{end}}" | safeHTML }}
+{{ printf "{{if ne $subcategory ``}}" | safeHTML }}
+{{ printf "<p>Subcategory: <a href='/cat/{{.Category}}/{{$subcategory}}'>{{$subcategory}}</a></p>" | safeHTML }}
+{{ printf "{{end}}" | safeHTML }}
+{{ printf "{{if ne .VoltsRating 0.0}}" | safeHTML }}
+{{ printf "<p>Voltage: {{.VoltsRating}}</p>" | safeHTML }}
+{{ printf "{{end}}" | safeHTML }}
+{{ printf "{{if ne .Value 0.0 }}" | safeHTML }}
+{{ printf "<p>Value: {{.Value}}{{.ValUnit}}</p>" | safeHTML }}
+{{ printf "{{end}}" | safeHTML }}
+{{ printf "{{if ne .AmpsRating 0.0}}" | safeHTML }}
+{{ printf "<p>Amperage: {{.AmpsRating}}</p>" | safeHTML }}
+{{ printf "{{end}}" | safeHTML }}
+{{ printf "{{if ne .Tolerance 0.0}}" | safeHTML }}
+{{ printf "<p>Tolerance: {{multiply .Tolerance 100}}%</p>" | safeHTML }}
+{{ printf "{{end}}" | safeHTML }}
+{{ printf "{{if ne .Type ``}}" | safeHTML }}
+{{ printf "<p>Type: {{.Type}}</p>" | safeHTML }}
+{{ printf "{{end}}" | safeHTML }}
+{{ printf "{{if ne .PackageType ``}}" | safeHTML }}
+{{ printf "<p>Package Type: {{.PackageType}}</p>" | safeHTML }}
+{{ printf "{{end}}" | safeHTML }}
+{{ printf "{{if ne .Technology ``}}" | safeHTML }}
+{{ printf "<p>Technology: {{.Technology}}</p>" | safeHTML }}
+{{ printf "{{end}}" | safeHTML }}
+{{ printf "{{if ne .Materials ``}}" | safeHTML }}
+{{ printf "<p>Materials: {{.Materials}}</p>" | safeHTML }}
+{{ printf "{{end}}" | safeHTML }}
+{{ printf "{{if ne .WattsRating 0.0}}" | safeHTML }}
+{{ printf "<p>Watts Rating: {{.WattsRating}}</p>" | safeHTML }}
+{{ printf "{{end}}" | safeHTML }}
+{{ printf "{{if ne .Year 0}}" | safeHTML }}
+{{ printf "<p>Year: {{.Year}}</p>" | safeHTML }}
+{{ printf "{{end}}" | safeHTML }}
+{{ printf "{{if ne .CableLength 0.0}}" | safeHTML }}
+{{ printf "<p>Cable Length: {{.CableLength}}inches</p>" | safeHTML }}
+{{ printf "{{end}}" | safeHTML }}
+{{ printf "{{if ne .WeightOz 0.0}}" | safeHTML }}
+{{ printf "<p>Weight: {{.WeightOz}}oz</p>" | safeHTML }}
+{{ printf "{{end}}" | safeHTML }}
+{{ printf "{{if ne .TempRating 0.0}}" | safeHTML }}
+{{ printf "<p>Temp Rating: {{.TempRating}}</p>" | safeHTML }}
+{{ printf "{{end}}" | safeHTML }}
+{{ printf "{{if ne .Condition ``}}" | safeHTML }}
+{{ printf "<p>Condition: {{.Condition}}</p>" | safeHTML }}
+{{ printf "{{ end }}" | safeHTML }}
+{{ printf "{{if ne .Datasheet ``}}" | safeHTML }}
+{{ printf "<p>Datasheet: <a href='/img/pdf/{{.Datasheet}}'>{{.Datasheet}}</a></p>" | safeHTML }}
+{{ printf "{{ end }}" | safeHTML }}
+{{ printf "{{if ne .Docs ``}}" | safeHTML }}
+{{ printf "<p>Documentation: {{.Docs}}" | safeHTML }}
+{{ printf "{{end}}" | safeHTML }}
+{{ printf "{{if ne .Note ``}}" | safeHTML }}
+{{ printf "<p>Note: {{.Note}}</p>" | safeHTML }}
+{{ printf "{{end}}" | safeHTML }}
+{{ printf "{{if ne .Warning ``}}" | safeHTML }}
+{{ printf "<p>Warning: {{.Warning}}</p>" | safeHTML }}
+{{ printf "{{end}}" | safeHTML }}
+{{ printf "{{if ne .Description2 ``}}" | safeHTML }}
+{{ printf "<p>Additional Description: {{.Description2}}</p>" | safeHTML }}
+{{ printf "{{end}}" | safeHTML }}
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+{{ printf "{{end}}" | safeHTML }}

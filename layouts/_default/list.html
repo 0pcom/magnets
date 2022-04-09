@@ -1,4 +1,5 @@
 {{ define "main" }}
+<div id="content" class="container">
 <article class="row-fluid navmargin">
     <header class="page-header">
         <h1>{{.Title}}</h1>
@@ -10,23 +11,10 @@
 <!-- Ranges through content/posts/*.md -->
 {{ range .Pages }}
     <li>
-        <a href="{{.Permalink}}"> {{.Title}}</a>
-          {{/* if le .Qty 0 */}}
-          <span>Out of stock</span>
-          {{/* else */}}
-          <button
-          class="snipcart-add-item"
-          data-item-id="{{/* .PartNo */}}"
-          data-item-name="{{/* .Name */}}"
-          data-item-price="{{/* .Price */}}"
-          data-item-image="/img/{{/* .Image1 */}}"
-          data-item-url="/product/{{/* .PartNo */}}"
-          data-item-max-quantity="{{/* .MaxQty */}}"
-          data-item-description="{{/* .Description1 */}}">
-          Add to cart
-        </button>
-        {{/* end */}}
+        <a href="{{.Permalink}}">{{.Date.Format "2006-01-02"}} | {{.Title}}</a>
     </li>
 {{ end }}
 </ul>
+</div>
+{{- partial "footer.html" . -}}
 {{ end }}

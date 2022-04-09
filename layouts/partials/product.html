@@ -1,25 +1,116 @@
-    {{.range}}
-    {{.ifenable}}
-    <div class="col s6">
-      {{ .name | safeHTML }}
-        <div class="card horizontal">
-            <div class="card-image">
-              {{ .image | safeHTML }}
-            </div>
-            <br>
-            <div class="card-stacked">
-            <div class="card-content">
-              <div class="card-action">
-                <div class class="center">
-                <p>{{ .description1 }}
-                  {{.button | safeHTML}}
-                </p>
-                {{ .readmore | safeHTML }}
-                </div>
-                </div>
-            </div>
-            </div>
-        </div>
-    </div>
-    {{.end}}
-    {{.end}}
+{{ printf "{{if eq $view `1`}}" | safeHTML}}
+{{ printf "{{$index := productIndex $table $category $subcategory $pagenumber}}" | safeHTML}}
+{{ printf "{{$products := productList $table $category $subcategory $view $pagenumber}}" | safeHTML}}
+<hr>
+{{ printf "{{range $products}}" | safeHTML }}
+<div class="col s6">
+<div style='margin:0 auto; text-align:center; width:auto;'>
+{{ printf "{{.Name}}" | safeHTML }}
+</div>
+<div class="card horizontal">
+{{ printf "{{if ne .Image1 ``}}" | safeHTML }}
+{{ printf "<div class='card-image'>" | safeHTML }}
+{{ printf "<a href='/img/{{if ne .Category ``}}{{.Category}}/{{end}}{{.Image1}}'>" | safeHTML }}
+{{ printf "<img src='/img/{{if ne .Category ``}}{{.Category}}/{{end}}{{.Image1}}' alt='{{.Name}}' class='center'>" | safeHTML }}
+{{ printf "</a>" | safeHTML }}
+{{ printf "</div>" | safeHTML }}
+{{ printf "{{end}}" | safeHTML }}
+<br>
+<div class="card-stacked">
+<div class="card-content">
+<div class="card-action">
+<div class="center">
+<p>{{ printf "{{.Description1}}" | safeHTML }}</p>
+<p>{{ printf "<a href='/post/{{.PartNo}}' class='btn btn-info' role='button'>Read More</a>" | safeHTML }}</p>
+<p>Price: ${{ printf "{{.Price}}" | safeHTML }}</p>
+<p>In stock: {{ printf "{{.Qty}}" | safeHTML }}</p>
+<p>
+{{ printf "<button" | safeHTML }}
+{{ printf " class='snipcart-add-item waves-effect waves-light btn'" | safeHTML }}
+{{ printf " data-item-id='{{.PartNo}}'" | safeHTML }}
+{{ printf " data-item-name='{{.PartNo}}'" | safeHTML }}
+{{ printf " data-item-image='/img/{{.Category}}/{{.Image1}}'" | safeHTML }}
+{{ printf " data-item-price='{{.Price}}'" | safeHTML }}
+{{ printf " data-item-url='/post/{{.PartNo}}'" | safeHTML }}
+{{ printf " data-item-description='{{.Name}}'" | safeHTML }}
+{{ printf " data-item-min-quantity='{{.MinOrder}}'" | safeHTML }}
+{{ printf " data-item-quantity='{{.DefaultQty}}'" | safeHTML }}
+{{ printf " data-item-quantity-step='{{.StepQty}}'" | safeHTML }}
+{{ printf " data-item-shippable='{{.Shippable}}'" | safeHTML }}
+{{ printf " data-item-max-quantity='{{.MaxOrder}}'" | safeHTML }}
+{{ printf " data-item-weight='{{convertozgrams .WeightOz}}'" | safeHTML }}
+{{ printf " data-item-length='{{convertincm .Length `length`}}'" | safeHTML }}
+{{ printf " data-item-width='{{convertincm .Width `width`}}'" | safeHTML }}
+{{ printf " data-item-height='{{convertincm .Height `heigth`}}'" | safeHTML }}
+{{ printf " data-item-has-taxes-included='false'>" | safeHTML }}
+{{ printf "Add to cart" | safeHTML }}
+{{ printf "</button>" | safeHTML }}
+</p>
+<p>
+{{ printf "{{ if eq $category ``}}" | safeHTML }}
+{{ printf "<a href='/cat/{{.Category}}'" | safeHTML }}
+{{ printf " class='btn btn-info'" | safeHTML }}
+{{ printf " role='button'>" | safeHTML }}
+{{ printf "Browse: {{.Category}}" | safeHTML }}
+{{ printf "</a>" | safeHTML }}
+{{ printf "{{end}}" | safeHTML }}
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<hr>
+{{ printf "{{end}}" | safeHTML }}
+{{ printf "{{end}}" | safeHTML }}
+{{ printf "{{if eq $view `2`}}" | safeHTML }}
+{{ printf "{{$index := productIndex $table $category $subcategory $pagenumber}}" | safeHTML}}
+{{ printf "{{$products := productList $table $category $subcategory $view $pagenumber}}" | safeHTML}}
+{{ printf "{{range $products}}" | safeHTML }}
+<hr>
+<div class="col s6">
+<div style='margin:0 auto; text-align:center; width:auto;'>
+{{ printf "{{.Name}}" | safeHTML }}
+</div>
+<div class="card horizontal">
+<br>
+<div class="card-stacked">
+<div class="card-content">
+<div class="card-action">
+<div class="center">
+<p>{{ printf "{{.Description1}}" | safeHTML }}</p>
+<p>{{ printf "<a href='/post/{{.PartNo}}' class='btn btn-info' role='button'>Read More</a>" | safeHTML }}</p>
+<p>Price: ${{ printf "{{.Price}}" | safeHTML }}</p>
+<p>In stock: {{ printf "{{.Qty}}" | safeHTML }}</p>
+<p>
+{{ printf "<button" | safeHTML }}
+{{ printf " class='snipcart-add-item waves-effect waves-light btn'" | safeHTML }}
+{{ printf " data-item-id='{{.PartNo}}'" | safeHTML }}
+{{ printf " data-item-name='{{.PartNo}}'" | safeHTML }}
+{{ printf " data-item-image='/img/{{.Category}}/{{.Image1}}'" | safeHTML }}
+{{ printf " data-item-price='{{.Price}}'" | safeHTML }}
+{{ printf " data-item-url='/post/{{.PartNo}}'" | safeHTML }}
+{{ printf " data-item-description='{{.Name}}'" | safeHTML }}
+{{ printf " data-item-min-quantity='{{.MinOrder}}'" | safeHTML }}
+{{ printf " data-item-quantity='{{.DefaultQty}}'" | safeHTML }}
+{{ printf " data-item-quantity-step='{{.StepQty}}'" | safeHTML }}
+{{ printf " data-item-shippable='{{.Shippable}}'" | safeHTML }}
+{{ printf " data-item-max-quantity='{{.MaxOrder}}'" | safeHTML }}
+{{ printf " data-item-weight='{{convertozgrams .WeightOz}}'" | safeHTML }}
+{{ printf " data-item-length='{{convertincm .Length `length`}}'" | safeHTML }}
+{{ printf " data-item-width='{{convertincm .Width `width`}}'" | safeHTML }}
+{{ printf " data-item-height='{{convertincm .Height `heigth`}}'" | safeHTML }}
+{{ printf " data-item-has-taxes-included='false'>" | safeHTML }}
+{{ printf "Add to cart" | safeHTML }}
+{{ printf "</button>" | safeHTML }}
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<hr>
+{{ printf "{{end}}" | safeHTML }}
+{{ printf "{{end}}" | safeHTML }}

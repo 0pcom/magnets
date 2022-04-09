@@ -1,0 +1,13 @@
+<div class="span9 bs-docs-sidebar">
+<div style='margin:0 auto; text-align:center; width:auto;'><p class="lead">{{.Site.Params.mainpagesubtitle | safeHTML}}</p></div>
+<p></p>
+<hr class="soften">
+<p></p>
+{{- partial "menu3.html" . -}}
+{{- partial "menu2.html" . -}}
+{{ printf "{{if eq .Category ``}}" | safeHTML}}
+ <h1>{{i18n "postslist" }}: {{ printf "{{lenprods}}" | safeHTML}}</h1>{{ printf "{{end}}" | safeHTML }}
+ <br>
+{{- partial "product.html" . -}}
+{{- partial "menu2.html" . -}}
+ </div>

@@ -130,5 +130,8 @@ db-secure:
 db-insecure:
 	cockroach sql --insecure -e 'CREATE USER IF NOT EXISTS madmin WITH PASSWORD "g00dyear"; CREATE DATABASE IF NOT EXISTS product; GRANT ALL ON DATABASE product TO madmin;'
 
-export:
-	cockroach sql --certs-dir=certs -e "SELECT * from product.products;" --format=csv > export01.csv
+export-products:
+	cockroach sql --certs-dir=certs -e "SELECT * from product.products;" --format=csv > productsexport01.csv
+
+export-equipments:
+	cockroach sql --certs-dir=certs -e "SELECT * from product.equipments;" --format=csv > equipmentsexport01.csv

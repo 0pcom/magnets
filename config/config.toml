@@ -1,0 +1,392 @@
+#baseURL = "http://127.0.0.1:8040/"
+baseURL = "https://magnetosphere.net"
+port = 8040
+title = "we have the technology | magnetosphere.net"
+languageCode = "en"
+DefaultContentLanguage = "en" # Change this to change the site's language
+#theme = "hugo.386"
+preserveTaxonomyNames = true
+ignoreErrors = ["error-remote-getjson"]
+
+configdir = 'config'
+
+
+[params.copyright]
+    name = "magnetosphere.net"
+    # The url to use as link in the copyright name in the footer. Leave empty to use none.
+    url = "https://magnetosphere.net"
+    # Text to go before copyright information
+    #prefix = "[hugo.386 theme by Max le Fou](https://gitlab.com/maxlefou/hugo.386)"
+    # Text to go between copyright and hugo disclaimer (if enabled)
+    #suffix = "Example site"
+
+[params]
+    title = "magnetosphere.net"
+    # The subtitle to display under the title in the home page
+    # The name to display as main title in the home page
+    mainpagetitle = "<title>we have the technology | magnetosphere.net</title>"
+    itemtitle = "<title>{{.Name}} | magnetosphere.net</title>"
+    categorytitle = "<title>{{.Category}} | magnetosphere.net</title>"
+    categorydesc = "<meta name=\"description\" content=\"Browse {{.Table}} by category: {{.Category}} page: {{.PageNumber}}. Credit Cards, Paypal, and Cryptocurrency accepted; buy with bitcoin or skycoin.\"/>"
+    sitetitle = "<title>magnetosphere.net | we have the technology</title>"
+    mainpagesubtitle = "we have the technology"
+    equipmentdesc = "<meta name=\"description\" content=\"Shop electronics equipment and more. Credit Cards, Paypal, and Cryptocurrency accepted; buy with bitcoin or skycoin. Browse {{.Table}}, page: {{.PageNumber}}\"/>"
+    maintitle = "magnetosphere.net"
+    # The description of your website. It will be displayed in the home page
+    maindesc = "<meta name=\"description\" content=\"Shop a wide variety of electronics parts, components, equipment and more. Credit Cards, Paypal, and Cryptocurrency accepted; buy with bitcoin or skycoin. Browse {{.Table}}, page: {{.PageNumber}}\"/>"
+    # The name to display in the copyright section in the footer
+    copyrightname = "magnetosphere.net"
+    # The url to use as link in the copyright name in the footer. Leave empty to use none.
+    copyrighturl = "https://magnetosphere.net"
+    copyrightsuffix = "all rights reserved"
+##### BELOW THIS LINE ######
+#################################
+##### BEGIN SHARED CONFIGURATION ######
+#
+#   Theory of operation -
+# hugo generates the html template files for the 'magnets' web application
+# the bulk of these params are just stand-in for fields in the database
+# funcmap.go contains the template functions; the calls to which are defined here
+# The order and context of these calls are defined in the various partial templates
+# Thus, the constraint is that no param may reference or use another param by name
+# the funcmap functions are as follows:
+#
+#var FM = template.FuncMap{                 inputs:           returns:              use:
+#	"fdateMDY": monthDayYear,                 n/a               time                  time
+#	"snipcartapikey": snipcartApiKey,         n/a               key from env          snipcart
+#	"multiply": multiply,                     num,num           result                snipcart
+#	"correct": correct,                       num               formatted             snipcart
+#	"convertozgrams": convertozgrams,         num               grams from oz         snipcart
+#	"convertincm": convertincm,               num               in from cm            snipcart
+#	"listCategories": listCategories,         table             categories            menu
+#	"lenprods": lenprods,                     table,cat         len(products)         displays # of products
+#	"productList": productList,               table,cat,page#   []products{}          browse database
+#	"productIndex": productIndex,             table,cat,page#   index#                pagination
+#	"page": page,                             table,cat,page#   page #                previous, next
+#	"findProduct1": findProduct1,             table,partNo      product{}             individual product page
+#}
+
+#
+#
+
+
+    #ifenable = "{{if .Enable}}"
+    #range = "{{range .}}"
+    end = [       "{{end}}"]
+    else = [         "{{else}}"]
+    partno = [       "{{.PartNo}}"]
+    productpartno = ["{{.PartNo}}"]
+    ifname = [       "{{if ne .Name \"\"}}"]
+    namelink = [     "<a href=\"/post/{{.PartNo}}\">",
+                      "{{.Name}}",
+                      "</a>",]
+    name2 = [        "{{$product.Name}}"]
+    imageee = [      "{{.Image1}}"]
+    price = [        "{{correct .Price}}"]
+    quantity = [     "{{ .Qty}}"]
+    ifshippable = [ "{{if eq .Shippable false}}",
+                    " This item is only available for local pickup",
+                    " {{if ne .Location \"\"}}",
+                    " in {{ .Location }}.",
+                    " Enter your phone number during checkout and we will contact you by phone to schedule pick-up",
+                    "{{end}}",
+                    "{{end}}",]
+    desc1 = [        "{{.Description1}}"]
+    url = [          "/post/{{.PartNo}}"]
+    cat = [          "{{.Category}}"]
+    subcat = [       "{{.SubCategory}}"]
+
+    rangeProducts = [ "{{range $products}}"]
+
+
+    nextprevproductpage = [     "<p>",
+                                "{{if ne .PageNumber 0}}",
+                                "<a href=\"{{page \"first\" .Table .Category .PageNumber}}\"",
+                                " class=\"btn btn-info\"",
+                                " role=\"button\">",
+                                "◀◀",
+                                " &gt;",
+                                "<br>",
+                                "&lt;",
+                                " ({{page \"firstt\" .Table .Category .PageNumber}})",
+                                "</a>",
+                                " <a href=\"{{page \"prev\" .Table .Category .PageNumber}}\"",
+                                " class=\"btn btn-info\"",
+                                " role=\"button\">",
+                                "◀",
+                                " &gt;",
+                                "<br>",
+                                "&lt;",
+                                " ({{page \"prevv\" .Table .Category .PageNumber}})",
+                                "</a>",
+                                " <a href=\"{{page \"current\" .Table .Category .PageNumber}}\"",
+                                " class=\"btn btn-info\"",
+                                " role=\"button\">",
+                                "☻",
+                                " &gt;",
+                                "<br>",
+                                "&lt;",
+                                " ({{page \"currentt\" .Table .Category .PageNumber}})",
+                                "</a>",
+                                " {{end}} ",
+                                "{{if gt $index 9}}",
+                                "<a href=\"{{page \"next\"",
+                                " .Table .Category .PageNumber}}\"",
+                                " class=\"btn btn-info\"",
+                                " role=\"button\">",
+                                "▶",
+                                " &gt;",
+                                "<br>",
+                                "&lt;",
+                                " ({{page \"nextt\" .Table .Category .PageNumber}})",
+                                "</a>",
+                                " <a href=\"{{page \"last\" .Table .Category .PageNumber}}\"",
+                                " class=\"btn btn-info\"",
+                                " role=\"button\">",
+                                "▶▶",
+                                " &gt;",
+                                "<br>",
+                                "&lt;",
+                                " ({{page \"lastt\" .Table .Category .PageNumber}})",
+                                "</a>",
+                                "{{end}}",
+                                "</p>",]
+    rangeProducts = [           "{{range $products}}"]
+    productsreadmore = [        "<a href=\"/post/{{.PartNo}}\"",
+                                " class=\"btn btn-info\"",
+                                " role=\"button\">",
+                                "Read More",
+                                "</a>",]
+    productbutton0 = [          "<button",
+                                " class=\"snipcart-add-item waves-effect waves-light btn\"",
+                                " data-item-id=\"{{.PartNo}}\"",
+                                " data-item-name=\"{{.PartNo}}\"",
+                                " data-item-image=\"/img/{{.Image1}}\"",
+                                " data-item-price=\"{{.Price}}\"",
+                                " data-item-url=\"/post/{{.PartNo}}\"",
+                                " data-item-description=\"{{.Name}}\"",
+                                " data-item-min-quantity=\"{{.MinOrder}}\"",
+                                " data-item-quantity=\"{{.DefaultQty}}\"",
+                                " data-item-quantity-step=\"{{.StepQty}}\"",
+                                " data-item-shippable=\"{{.Shippable}}\"",
+                                " data-item-max-quantity=\"{{.MaxOrder}}\"",
+                                " data-item-weight=\"{{convertozgrams .WeightOz}}\"",
+                                " {{if ne .Length 0.0 }} data-item-length=\"{{convertincm .Length}}\"{{end}}",
+                                "{{if ne .Width 0.0 }} data-item-width=\"{{convertincm .Width}}\"{{end}}",
+                                "{{if ne .Height 0.0 }} data-item-height=\"{{convertincm .Height}}\"{{end}}",
+                                " data-item-has-taxes-included=\"false\">",
+                                "Add to cart!",
+                                "</button>",]
+    productsPage1 = [           "{{ $index := productIndex .Table .Category .PageNumber}}",
+                                "{{$products := productList .Table .Category .PageNumber}}",]
+    oneProductPage = [          "{{$product := findProduct1 .Table .PartNumber}}",
+                                "{{range $product}}",]
+    name1 = [                   "<h1>{{.Name}}</h1>",]
+    img11 = [                   "{{if ne .Image1 \"\"}}",
+                                "<div class=\"card-image\">",
+                                "<a href=\"/img/{{.Image1}}\">",
+                                "<img src=\"/img/{{.Image1}}\"",
+                                " alt=\"{{.Name}}\"",
+                                " class=\"center\">",
+                                "</a>",
+                                "</div>",
+                                "{{end}}",]
+    img21 = [                   "{{if ne .Image2 \"\"}}",
+                                "<div class=\"card-image\">",
+                                "<a href=\"/img/{{.Image2}}\">",
+                                "<img src=\"/img/{{.Image2}}\"",
+                                " alt=\"{{.Name}}\"",
+                                " class=\"center\">",
+                                "</a>",
+                                "</div>",
+                                "{{end}}",]
+    img31 = [                   "{{if ne .Image3 \"\"}}",
+                                "<div class=\"card-image\">",
+                                "<a href=\"/img/{{.Image3}}\">",
+                                "<img src=\"/img/{{.Image3}}\"",
+                                " alt=\"{{.Name}}\"",
+                                " class=\"center\">",
+                                "</a>",
+                                "</div>",
+                                "{{end}}",]
+    cat1 = [                    "{{if ne .Category \"\"}}",
+                                "<p>Category: {{.Category}}</p>",
+                                "{{end}}",]
+    subcat1 = [                 "{{if ne .SubCategory \"\"}}",
+                                "<p>Subcategory: {{.SubCategory}}</p>",
+                                "{{end}}",]
+    vol1 = [                    "{{if ne .VoltsRating 0.0}}",
+                                "<p>Voltage: {{.VoltsRating}}</p>",
+                                "{{end}}",]
+    val1 = [                    "{{if ne .Value 0.0 }}",
+                                "<p>Value: {{.Value}}{{.ValUnit}}</p>",
+                                "{{end}}",]
+    amp1 = [                    "{{if ne .AmpsRating 0.0}}",
+                                "<p>Amperage: {{.AmpsRating}}</p>",
+                                "{{end}}",]
+    tol1 = [                    "{{if ne .Tolerance 0.0}}",
+                                "<p>Tolerance: {{multiply .Tolerance 100}}%</p>",
+                                "{{end}}",]
+    typ1 = [                    "{{if ne .Type \"\"}}",
+                                "<p>Type: {{.Type}}</p>",
+                                "{{end}}",]
+    ptyp1 = [                   "{{if ne .PackageType \"\"}}",
+                                "<p>Package Type: {{.PackageType}}</p>",
+                                "{{end}}",]
+    tech1 = [                   "{{if ne .Technology \"\"}}",
+                                "<p>Technology: {{.Technology}}</p>",
+                                "{{end}}",]
+    mat1 = [                    "{{if ne .Materials \"\"}}",
+                                "<p>Materials: {{.Materials}}</p>",
+                                "{{end}}",]
+    wat1 = [                    "{{if ne .WattsRating 0.0}}",
+                                "<p>Watts Rating: {{.WattsRating}}</p>",
+                                "{{end}}",]
+    year1 = [                   "{{if ne .Year 0}}",
+                                "<p>Year: {{.Year}}</p>",
+                                "{{end}}",]
+    cab1 = [                    "{{if ne .CableLength 0.0}}",
+                                "<p>Cable Length: {{.CableLength}}inches</p>",
+                                "{{end}}",]
+    weightoz1 = [               "{{if ne .WeightOz 0.0}}",
+                                "<p>Weight: {{.WeightOz}}oz</p>",
+                                "{{end}}",]
+    tmp1 = [                    "{{if ne .TempRating 0.0}}",
+                                "<p>Temp Rating: {{.TempRating}}{{.TempUnit}}</p>",
+                                "{{end}}",]
+    cond1 = [                   "{{if ne .Condition \"\"}}",
+                                "<p>Condition: {{.Condition}}</p>",
+                                "{{ end }}",]
+    data1 = [                   "{{if ne .Datasheet \"\"}}",
+                                "<p>Datasheet: <a href=\"/img/pdf/{{.Datasheet}}\">{{.Datasheet}}</a></p>",
+                                "{{ end }}",]
+    docu1 = [                   "{{if ne .Docs \"\"}}",
+                                "<p>Documentation: {{.Docs}}",
+                                "{{end}}",]
+    note1 = [                   "{{if ne .Note \"\"}}",
+                                "<p>Note: {{.Note}}</p>",
+                                "{{end}}",]
+    warn1 = [                   "{{if ne .Warning \"\"}}",
+                                "<p>Warning: {{.Warning}}</p>",
+                                "{{end}}",]
+    desc21 = [                  "{{if ne .Description2 \"\"}}",
+                                "<p>Additional Description: {{.Description2}}</p>",
+                                "{{end}}",]
+    metadesc1 = [               "<meta name=\"description\" content=\"Buy {{.Description1}}, Price: ${{.Price}}, In-stock: {{.Qty}}\"/>"]
+    pname = [                   "<a href=\"/post/{{.PartNo}}\"><h2 class=\"header\">{{ .Name }}</h2></a>"]
+    ename = [                   "<a href=\"/equipment/post/{{.PartNo}}\"><h2 class=\"header\">{{ .Name }}</h2></a>"]
+
+
+    Cats = "{{$cats := listCategories .Table}}{{range $cats}}"
+    RangeCats = ""
+    productsCategories = "<a href=\"/cat/{{.Name}}\">{{.Name}} ({{.Count}})</a>"
+    equipmentsCategories = "<a href=\"/equipment/cat/{{.Name}}\">{{.Name}} ({{.Count}})</a>" #{{.equipmentsCategories | safeHTML}}
+
+    CategoriesUL = "<ul class=\"nav nav-list bs-docs-sidenav\">"
+    cateq = "{{if eq .Category \"\"}}"
+    catne = "{{if ne .Category \"\"}}"
+    productsByPage = "{{$products := productListPage .PageNumber}}"
+    indexproductsByPage = ""
+    indexPage1 = "{{ $index := indexPage1 .PageNumber}}"
+    lenprods = "{{lenprods}}"
+    ifnextpage = "{{if gt $index 9}}"
+    PartNumber = "{{.PartNumber}}"
+    equipmentsByPage = "{{$products := equipmentListPage .PageNumber}}"
+
+
+    metap = "<meta name=\"description\" content=\"Browse products by category: {{.Category}}. Page: {{.PageNumber}}.\"/>"
+    metae = "<meta name=\"description\" content=\"Browse equipment by category: {{.Category}}. Page: {{.PageNumber}}.\"/>"
+
+    paymentcards = "<img src=\"/img/assets/visa_card.png\" alt=\"Visa is accepted payment\"> <img src=\"/img/assets/master_card.png\" alt=\"MasterCard is accepted payment\"> <img src=\"/img/assets/discover_network_card.png\" alt=\"Discover card is accepted payment\"> <img src=\"/img/assets/american_express_card.png\" alt=\"American Express is accepted payment\"> <img src=\"/img/assets/paypal.png\" alt=\"Paypal is accepted payment\"> <img src=\"/img/assets/bitcoin_text_logo.png\" alt=\"Bitcoin cryptocurrency btc crypto is accepted payment\"> <img src=\"/img/assets/sky_card.png\" alt=\"Skycoin cryptocurrency sky crypto is accepted payment\"> <img src=\"/img/assets/ness_card.png\" alt=\"Privateness cryptocurrency ness crypto is accepted payment\">"
+    visacard = "<img src=\"/img/assets/visa_card.png\" alt=\"Visa is accepted payment\" >"
+    mastercard = "<img src=\"/img/assets/master_card.png\" alt=\"MasterCard is accepted payment\" class=\"center\">"
+    discovercard = "<img src=\"/img/assets/discover_network_card.png\" alt=\"Discover card is accepted payment\" class=\"center\">"
+    amexcard = "<img src=\"/img/assets/american_express_card.png\" alt=\"American Express is accepted payment\" class=\"center\">"
+    paypalcard = "<img src=\"/img/assets/paypal.png\" alt=\"Paypal is accepted payment\" class=\"center\">"
+    btccard = "<img src=\"/img/assets/bitcoin_text_logo.png\" alt=\"Bitcoin cryptocurrency btc crypto is accepted payment\" class=\"center\">"
+    skycard = "<img src=\"/img/assets/sky_card.png\" alt=\"Skycoin cryptocurrency sky crypto is accepted payment\" class=\"center\">"
+    nesscard = "<img src=\"/img/assets/ness_card.png\" alt=\"Privateness cryptocurrency ness crypto is accepted payment\" class=\"center\">"
+
+    cart = "<cart isSideCart=\"true\" editingCart=\"true\"> </cart>"
+
+    # Show the "built on Hugo" disclaimer
+    #showhugo = true
+    # Urls for social networks
+    #facebook = "https://facebook.com"
+    #twitter = "https://twitter.com"
+    #linkedin = "https://linkedin.com"
+    #github = "https://github.com"
+    #gitlab = "https://gitlab.com"
+
+    # Enables or disables the loading animations. false activates them. Default is false.
+    loadfastload = true #false
+    # Sets the speed for the page loading effect. Default is 1.0.
+    loadspeedfactor = 1.0
+    # Enables or disables the second flyby cursor. Default is false.
+    loadonepass = false
+
+[menu]
+  # This displays buttons in the navbar to access your contents
+  [[menu.main]]
+    identifier = "equipment"
+    name = "Equipment"
+    url = "/equipment"
+    weight = 5
+
+  [[menu.main]]
+    identifier = "about" # An unique identifier for the button
+    name = "About"       # A display name for the button
+    url = "/about"      # The path to the content. It can lead to a single page (like here)
+    weight = 10          # A number to order the buttons in the navbar
+
+
+  [[menu.main]]
+    identifier = "policies"
+    name = "Policies"
+    url = "/policy"       # The path can lead to a content folder too.
+    weight = 20
+
+  [[menu.main]]
+    identifier = "friend"
+    name = "Friends"
+    url = "/friend"       # The path can lead to a content folder too.
+    weight = 30
+
+  [[menu.main]]
+    identifier = "blog"
+    name = "Blog"
+    url = "/blog"       # The path can lead to a content folder too.
+    weight = 40
+
+
+  #[[menu.main]]
+  #  identifier = "bitcoin"
+  #  name = "Bitcoin"
+  #  url = "https://pay.magnetosphere.net/apps/42U8i51gFZF7reRf71hZ26wa7Qx3/pos/"       # The path can lead to a content folder too.
+  #  weight = 40
+
+  [[menu.main]]
+    identifier = "time"
+    name = "{{fdateMDY}}"
+    url = ""       # The path can lead to a content folder too.
+    weight = 50
+
+  [[menu.main]]
+    identifier = "snipcart1"
+    name = "<span class=\"snipcart-checkout\">cart:<span class=\"snipcart-items-count\"></span> <span class=\"snipcart-total-price\"></span></span>"
+    url = ""       # The path can lead to a content folder too.
+    weight = 60
+
+
+  [[menu.two]]
+    identifier = 'main'
+    name = 'Gallery'
+    pre = ""
+    url = '/'
+    weight = -110
+  [[menu.two]]
+    name = 'Full List'
+    post = ""
+    pre = ""
+    url = '/list'
+    weight = -100

@@ -10,6 +10,9 @@ other = "Products"
 [postslist]
 other = "Products"
 
+[bloglist]
+other = "blog"
+
 [categories]
 other = "Categories"
 

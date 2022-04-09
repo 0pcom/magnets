@@ -1,5 +1,9 @@
-{{range first 10 ($.Site.GetPage "taxonomyTerm" "categories").Pages }}
 <li>
-    <a href="{{ .Permalink }}">{{.Title}}</a>
+{{ printf "<a href='/'>all ({{lenprods}})</a>" | safeHTML }}
 </li>
-{{ end }}
+{{ printf "{{$cats := listCategories $table}}" | safeHTML }}
+{{ printf "{{range $cats}}" | safeHTML }}
+<li>
+{{ printf "<a href='/cat/{{.Name}}'>{{.Name}} ({{.Count}})</a>" | safeHTML }}
+</li>
+{{ printf "{{end}}" | safeHTML }}

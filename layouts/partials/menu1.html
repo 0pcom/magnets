@@ -1,0 +1,25 @@
+{{printf "{{if ne $view `3`}}" | safeHTML}}
+<nav class="navbar navbar-inverse navbar-fixed-bottom">
+<div class="navbar-inner">
+<div class="container">
+<ul class="nav">
+<li>
+{{printf "{{$apikey := snipcartapikey}}" | safeHTML}}
+{{printf "<div hidden id='snipcart' data-api-key='{{$apikey}}' data-config-modal-style='side' style='display: none;'>" | safeHTML}}
+{{printf "</div>" | safeHTML}}
+{{printf "<div style='color:red'>" | safeHTML}}
+{{printf "<span class='snipcart-checkout'>" | safeHTML}}
+{{printf "cart:" | safeHTML}}
+{{printf "<span class='snipcart-items-count'>" | safeHTML}}
+{{printf "</span> " | safeHTML}}
+{{printf "<span class='snipcart-total-price'></span>" | safeHTML}}
+{{printf "</span>" | safeHTML}}
+{{printf "</div>" | safeHTML}}
+<br>
+<div style="color:red;">{{printf "cookies are only used for the shopping cart." | safeHTML}}</div>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+{{printf "{{end}}" | safeHTML}}
