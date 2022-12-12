@@ -14,7 +14,7 @@ import (
 
 //  haltingstate.net/
 func Haltingstate(w http.ResponseWriter, r *http.Request) {
-  fmt.Fprintf(w,"<!doctype html><html lang=en><head></head><body><div style='width:50%'>")
+  fmt.Fprintf(w,"<!doctype html><html lang=en><head></head><body style='background-color:black;color:white;'><br><br>")
      file, err := os.ReadFile("result.json")
      if err != nil {
        fmt.Fprintf(w,"error reading file: %v", err)
@@ -49,19 +49,17 @@ func Haltingstate(w http.ResponseWriter, r *http.Request) {
      shcmd :=`/usr/bin/bash -c`
      cmd := fmt.Sprintf(`%s "_var=\"%s\" ; _var=\"${_var#*\[map\[text\:}\" ; _var=\"${_var/type:link]/\n}\" ; _var=\"${_var%]}\" ; echo ${_var}"`, shcmd, fmt.Sprintf("%s", data.Messages[i].Text))
      res, err := script.Exec(cmd).String()
-     if err != nil {
-     fmt.Fprintf(w,"an error during script.Exec:\n<br> %v\n<br>", err)
-     fmt.Fprintf(w,"try reloading\n<br>")
-     fmt.Fprintf(w, "<img src='img/haltingstate.jpg'>")
-     } else {
-     fmt.Fprintf(w,"<a href=/ title='https://t.me/Skycoin/%d'>https://t.me/Skycoin/%d\n</a><br>", data.Messages[i].ID, data.Messages[i].ID)
+     fmt.Fprintf(w,"<a href='https://t.me/Skycoin/%d' title='https://t.me/Skycoin/%d'>https://t.me/Skycoin/%d</a>\n<br>", data.Messages[i].ID, data.Messages[i].ID, data.Messages[i].ID)
      fmt.Fprintf(w,"%s\n<br>", data.Messages[i].Date)
-     fmt.Fprintf(w,"\n<br>%s\n<br>", res)
-     fmt.Fprintf(w,"-%s\n<br>\n<br>", data.Messages[i].From)
+     if err != nil {
+       fmt.Fprintf(w,"<br><p style='color:red'>error during script.Exec:\n<br> %v\n<br>", err)
+       fmt.Fprintf(w,"try reloading\n<br></p>")
+       fmt.Fprintf(w, "<img src='img/haltingstate.jpg'><br>")
+     } else {
+       fmt.Fprintf(w,"\n<br>%s\n<br>\n<br>", res)
      }
-     fmt.Fprintf(w,"</div></body></html>")
-
-
+     fmt.Fprintf(w,"-%s\n<br>\n<br>", data.Messages[i].From)
+     fmt.Fprintf(w,"</body></html>")
 }
 
 
