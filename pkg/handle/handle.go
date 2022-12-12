@@ -14,7 +14,7 @@ import (
 
 //  haltingstate.net/
 func Haltingstate(w http.ResponseWriter, r *http.Request) {
-  fmt.Fprintf(w,"<!doctype html><html lang=en><head></head><body style='background-color:black;color:white;'><br><br>")
+  fmt.Fprintf(w,"<!doctype html><html lang=en><head></head><body style='background-color:black;color:white;'><br>")
      file, err := os.ReadFile("result.json")
      if err != nil {
        fmt.Fprintf(w,"error reading file: %v", err)
