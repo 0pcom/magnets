@@ -1,8 +1,0 @@
-{{ define "main" }}
-{{ partial "posttitle.html" .Site.Params }}
-<div class="row-fluid">
-{{ partial "post.html" .Site.Params }}
-{{- partial "catsubcat.html" . -}}
-</div>
-<h4><a href="{{ .Site.BaseURL }}">{{ i18n "backtohome" }}</a></h4>
-{{- partial "footer.html" . -}}{{ end }}

@@ -1,8 +1,0 @@
-{{ printf "{{$subcats := listSubCategories $category $table}}" | safeHTML}}
-{{ printf "{{if ne (len $subcats) 0}}" | safeHTML}}
-{{ printf "{{range $subcats}}" | safeHTML}}
-<li>
-{{ printf "<a href='/cat/{{$category}}/{{.Name}}'>{{.Name}} ({{.Count}})</a>" | safeHTML}}
-</li>
-{{ printf "{{end}}" | safeHTML}}
-{{ printf "{{end}}" | safeHTML}}
