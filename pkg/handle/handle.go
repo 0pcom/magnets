@@ -17,16 +17,18 @@ func Haltingstate(w http.ResponseWriter, r *http.Request) {
   fmt.Fprintf(w,"<!doctype html><html lang=en><head></head><body style='background-color:black;color:white;'><br>")
      file, err := os.ReadFile("result.json")
      if err != nil {
-       fmt.Fprintf(w,"error reading file: %v", err)
-       os.Exit(1)
+       fmt.Fprintf(w,"<br><p style='color:red'>error reading chat history export:\n<br> %v\n<br>", err)
+       fmt.Fprintf(w,"try reloading\n<br>")
+       fmt.Fprintf(w, "<img src='img/haltingstate.jpg'><br></p>")
      }
 
      data := TgHist{}
 
      err = json.Unmarshal([]byte(file), &data)
      if err != nil {
-       fmt.Fprintf(w,"error unmarshalling json: %v", err)
-       os.Exit(1)
+       fmt.Fprintf(w,"<br><p style='color:red'>error unmarshalling json:\n<br> %v\n<br>", err)
+       fmt.Fprintf(w,"try reloading\n<br>")
+       fmt.Fprintf(w, "<img src='img/haltingstate.jpg'><br></p>")
      }
      rand.Seed(time.Now().UnixNano())
      min := 0
