@@ -52,7 +52,7 @@ func Haltingstate(w http.ResponseWriter, r *http.Request) {
 			 fmt.Fprintf(w, "%v",err)
 		 }
 		 //
-		 cmd := fmt.Sprintf(`%s "ansifilter --html -i /tmp/haltingstate -o /tmp/haltingstate0 ; tail -n +5 /tmp/haltingstate0 | head -n -1 | tee /tmp/haltingstate0"`, shcmd)
+		 cmd := fmt.Sprintf(`%s "ansifilter --html -i /tmp/haltingstate -o /tmp/haltingstate0 ; tail -n +5 /tmp/haltingstate0 | head -n -3 | tee /tmp/haltingstate0"`, shcmd)
 		 res, err := script.Exec(cmd).String()
 		 fmt.Fprintf(w,"<a href='https://t.me/Skycoin/%d' title='https://t.me/Skycoin/%d'>https://t.me/Skycoin/%d</a>\n<br>", data.Messages[i].ID, data.Messages[i].ID, data.Messages[i].ID )
 		 fmt.Fprintf(w,"%s\n<br>", data.Messages[i].Date)
