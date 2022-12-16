@@ -1,0 +1,13 @@
+[Unit]
+Description=haltingstate
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/bash -c 'cd /home/*/go/src/github.com/0pcom/haltingstate ; go run cmd/haltingstate/haltingstate.go run'
+Restart=on-failure
+RestartSec=20
+TimeoutSec=30
+
+[Install]
+WantedBy=multi-user.target
