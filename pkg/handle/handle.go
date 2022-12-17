@@ -70,7 +70,25 @@ func Haltingstate(w http.ResponseWriter, r *http.Request) {
 			 fmt.Fprintf(w,"</body></html>")
 		 }
 	 }
-
+/*
+//  haltingstate.net/
+func VoiceMessages(w http.ResponseWriter, r *http.Request) {
+ fmt.Fprintf(w,"<!doctype html><html lang=en><head></head><body style='background-color:black;color:white;'><br>")
+ shcmd :=`/usr/bin/bash -c`
+ //cmd := fmt.Sprintf(`%s 'for i in ls voice_messages ; do  echo "<figure>\n <figcaption>${i}</figcaption>\n<audio controls src=\"${i}\"><a href=\"${i}\">Download audio</a></audio></figure>" ; done '`, shcmd)
+ cmd := fmt.Sprintf(`%s 'cat index.html'`, shcmd)
+ res, err := script.Exec(cmd).String()
+ fmt.Fprintf(w,"%s", res)
+ if err != nil {
+	fmt.Fprintf(w,"<br><p style='color:red'>error during script.Exec:\n<br> %v\n<br>", err)
+	fmt.Fprintf(w,"command:\n<br>")
+	fmt.Fprintf(w, cmd)
+	fmt.Fprintf(w,"\n<br>")
+	fmt.Fprintf(w, "<img src='img/haltingstate.jpg'><br>")
+  }
+ fmt.Fprintf(w,"</body></html>")
+}
+*/
 
 
 

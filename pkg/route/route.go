@@ -24,6 +24,7 @@ go func() {   log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", webPort), Serve))
 func newRouter() *mux.Router {
   r := mux.NewRouter()
   r.PathPrefix("/img/").Handler(http.StripPrefix("/img/", http.FileServer(http.Dir("./img")))) //images
+  r.PathPrefix("/voice/").Handler(http.StripPrefix("/voice/", http.FileServer(http.Dir("./voice_messages")))) //images
   r.Handle("/", handlers.LoggingHandler(os.Stdout, http.HandlerFunc(handle.Haltingstate))).Methods("GET") //site root
   return r
 }
